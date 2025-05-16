@@ -11,9 +11,9 @@ namespace VetClinic
 
         public void LoadView(UserControl view)
         {
-            this.Controls.Clear();
+            viewPanel.Controls.Clear();
             view.Dock = DockStyle.Fill;
-            this.Controls.Add(view);
+            viewPanel.Controls.Add(view);
         }
 
     }
