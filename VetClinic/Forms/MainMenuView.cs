@@ -7,9 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VetClinic.Utils;
 using Npgsql;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Reflection;
+using System.Security.Cryptography.Xml;
+using System.Xml.Linq;
 
 namespace VetClinic
 {
@@ -29,33 +31,57 @@ namespace VetClinic
         {
             LoadDataToGrid();
             LoadDataToChart();
+            LoadMedQuantityChart();
         }
+
 
         public void LoadDataToGrid()
         {
-            string connStr = ConfigHelper.GetConnectionString();
 
-            using var conn = new NpgsqlConnection(connStr);
-            try
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
+
+            var wizyty = context.Wizyty.ToList();
+
+            VisitScheduleGrid.DataSource = wizyty;
+        }
+
+        public void LoadMedQuantityChart()
+        {
+
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
+
+            Series medinfo = new Series("Liczba wizyt")
             {
-                conn.Open();
-                string query = "SELECT * FROM wizyty";
+                ChartType = SeriesChartType.Bar,
+                XValueType = ChartValueType.String,
+            };
 
-                using var da = new NpgsqlDataAdapter(query, conn);
-                var table = new DataTable();
-                da.Fill(table);
+            var leki = context.Leki.ToList();
+            leki.Sort((a, b) => b.Ilosc.CompareTo(a.Ilosc));
 
-                VisitScheduleGrid.DataSource = table;
-                conn.Close();
-            }
-            catch (Exception ex)
+            int n = 1;
+            foreach (var lek in leki)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                int pointIndex = medinfo.Points.AddXY(n, lek.Ilosc);
+                medinfo.Points[pointIndex].Label = $"{lek.Nazwa}";
+                n++;
             }
+
+            medCount.Series.Clear();
+            medCount.Series.Add(medinfo);
+
+            medCount.ChartAreas[0].AxisX.CustomLabels.Clear();
+            medCount.ChartAreas[0].AxisX.LabelStyle.Angle = -60;
+
+            medCount.Legends.Clear();
+
         }
 
         public void LoadDataToChart()
         {
+            /*
             string connStr = ConfigHelper.GetConnectionString();
 
             List<(DateTime Month, int Count)> visitCounts = new();
@@ -106,7 +132,10 @@ namespace VetClinic
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
+            */
         }
+
+
 
 
     }

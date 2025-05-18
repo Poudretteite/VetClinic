@@ -28,56 +28,100 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             visitChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             StatsFlowLayout = new FlowLayoutPanel();
             StatsLabel = new Label();
+            petCount = new Label();
+            visitCount = new Label();
+            medCount = new System.Windows.Forms.DataVisualization.Charting.Chart();
             VisitScheduleGrid = new DataGridView();
             mainTableLayout = new TableLayoutPanel();
-            label1 = new Label();
+            visitGridTitle = new Label();
             ((System.ComponentModel.ISupportInitialize)visitChart).BeginInit();
             StatsFlowLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)medCount).BeginInit();
             ((System.ComponentModel.ISupportInitialize)VisitScheduleGrid).BeginInit();
             mainTableLayout.SuspendLayout();
             SuspendLayout();
             // 
             // visitChart
             // 
-            chartArea2.Name = "ChartArea1";
-            visitChart.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            visitChart.ChartAreas.Add(chartArea1);
             visitChart.Dock = DockStyle.Fill;
-            legend2.Name = "Legend1";
-            visitChart.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            visitChart.Legends.Add(legend1);
             visitChart.Location = new Point(75, 3);
             visitChart.Name = "visitChart";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            visitChart.Series.Add(series2);
+            visitChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Chocolate;
             visitChart.Size = new Size(430, 144);
             visitChart.TabIndex = 2;
             visitChart.Text = "Ilość wizyt w ostatnich miesiącach";
             // 
             // StatsFlowLayout
             // 
+            StatsFlowLayout.BackgroundImageLayout = ImageLayout.None;
             StatsFlowLayout.Controls.Add(StatsLabel);
+            StatsFlowLayout.Controls.Add(petCount);
+            StatsFlowLayout.Controls.Add(visitCount);
             StatsFlowLayout.Dock = DockStyle.Fill;
+            StatsFlowLayout.FlowDirection = FlowDirection.TopDown;
             StatsFlowLayout.Location = new Point(511, 3);
             StatsFlowLayout.Name = "StatsFlowLayout";
-            StatsFlowLayout.Size = new Size(286, 144);
+            mainTableLayout.SetRowSpan(StatsFlowLayout, 2);
+            StatsFlowLayout.Size = new Size(286, 174);
             StatsFlowLayout.TabIndex = 1;
             // 
             // StatsLabel
             // 
             StatsLabel.AutoSize = true;
-            StatsLabel.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            StatsLabel.Font = new Font("Arial Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            StatsLabel.ForeColor = Color.FromArgb(215, 122, 97);
             StatsLabel.Location = new Point(3, 0);
             StatsLabel.Name = "StatsLabel";
-            StatsLabel.Size = new Size(63, 15);
+            StatsLabel.Size = new Size(118, 27);
             StatsLabel.TabIndex = 0;
             StatsLabel.Text = "Statystyki";
+            // 
+            // petCount
+            // 
+            petCount.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            petCount.AutoSize = true;
+            petCount.Font = new Font("Arial", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            petCount.Location = new Point(3, 27);
+            petCount.Name = "petCount";
+            petCount.Size = new Size(175, 16);
+            petCount.TabIndex = 1;
+            petCount.Text = "Liczba zwierząt: ";
+            // 
+            // visitCount
+            // 
+            visitCount.AutoSize = true;
+            visitCount.Font = new Font("Arial", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            visitCount.Location = new Point(3, 43);
+            visitCount.Name = "visitCount";
+            visitCount.Size = new Size(175, 16);
+            visitCount.TabIndex = 2;
+            visitCount.Text = "Liczba zakończonych wizyt: ";
+            // 
+            // medCount
+            // 
+            chartArea2.Name = "ChartArea1";
+            medCount.ChartAreas.Add(chartArea2);
+            medCount.Dock = DockStyle.Fill;
+            legend2.Name = "Legend1";
+            medCount.Legends.Add(legend2);
+            medCount.Location = new Point(511, 183);
+            medCount.Name = "medCount";
+            medCount.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Chocolate;
+            mainTableLayout.SetRowSpan(medCount, 2);
+            medCount.Size = new Size(286, 354);
+            medCount.TabIndex = 3;
+            medCount.Text = "Ilość leków";
             // 
             // VisitScheduleGrid
             // 
@@ -91,6 +135,7 @@
             VisitScheduleGrid.Name = "VisitScheduleGrid";
             VisitScheduleGrid.ReadOnly = true;
             VisitScheduleGrid.RowHeadersVisible = false;
+            mainTableLayout.SetRowSpan(VisitScheduleGrid, 2);
             VisitScheduleGrid.Size = new Size(430, 354);
             VisitScheduleGrid.TabIndex = 0;
             // 
@@ -103,29 +148,32 @@
             mainTableLayout.Controls.Add(visitChart, 1, 0);
             mainTableLayout.Controls.Add(StatsFlowLayout, 2, 0);
             mainTableLayout.Controls.Add(VisitScheduleGrid, 1, 2);
-            mainTableLayout.Controls.Add(label1, 1, 1);
+            mainTableLayout.Controls.Add(visitGridTitle, 1, 1);
+            mainTableLayout.Controls.Add(medCount, 2, 2);
             mainTableLayout.Dock = DockStyle.Fill;
             mainTableLayout.Location = new Point(0, 0);
             mainTableLayout.Name = "mainTableLayout";
-            mainTableLayout.RowCount = 4;
+            mainTableLayout.RowCount = 5;
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             mainTableLayout.Size = new Size(800, 600);
             mainTableLayout.TabIndex = 3;
             // 
-            // label1
+            // visitGridTitle
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Fill;
-            label1.Font = new Font("Arial", 12F, FontStyle.Bold, GraphicsUnit.Point, 238);
-            label1.Location = new Point(75, 150);
-            label1.Name = "label1";
-            label1.Size = new Size(430, 30);
-            label1.TabIndex = 3;
-            label1.Text = "Najbliższe wizyty";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
+            visitGridTitle.AutoSize = true;
+            visitGridTitle.Dock = DockStyle.Fill;
+            visitGridTitle.Font = new Font("Arial Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            visitGridTitle.ForeColor = Color.FromArgb(215, 122, 97);
+            visitGridTitle.Location = new Point(75, 150);
+            visitGridTitle.Name = "visitGridTitle";
+            visitGridTitle.Size = new Size(430, 30);
+            visitGridTitle.TabIndex = 3;
+            visitGridTitle.Text = "Najbliższe wizyty";
+            visitGridTitle.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // MainMenuView
             // 
@@ -138,6 +186,7 @@
             ((System.ComponentModel.ISupportInitialize)visitChart).EndInit();
             StatsFlowLayout.ResumeLayout(false);
             StatsFlowLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)medCount).EndInit();
             ((System.ComponentModel.ISupportInitialize)VisitScheduleGrid).EndInit();
             mainTableLayout.ResumeLayout(false);
             mainTableLayout.PerformLayout();
@@ -150,6 +199,9 @@
         private FlowLayoutPanel StatsFlowLayout;
         private Label StatsLabel;
         private TableLayoutPanel mainTableLayout;
-        private Label label1;
+        private Label visitGridTitle;
+        private Label petCount;
+        private Label visitCount;
+        private System.Windows.Forms.DataVisualization.Charting.Chart medCount;
     }
 }

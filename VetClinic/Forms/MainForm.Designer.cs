@@ -108,6 +108,7 @@
             visitButton.Text = "Wizyty";
             visitButton.TextAlign = ContentAlignment.MiddleLeft;
             visitButton.UseVisualStyleBackColor = true;
+            visitButton.Click += visitButton_Click;
             // 
             // animalButton
             // 
@@ -124,6 +125,7 @@
             animalButton.Text = "Zwierzęta";
             animalButton.TextAlign = ContentAlignment.MiddleLeft;
             animalButton.UseVisualStyleBackColor = true;
+            animalButton.Click += animalButton_Click;
             // 
             // ownerButton
             // 
@@ -140,6 +142,7 @@
             ownerButton.Text = "Właściciele";
             ownerButton.TextAlign = ContentAlignment.MiddleLeft;
             ownerButton.UseVisualStyleBackColor = true;
+            ownerButton.Click += ownerButton_Click;
             // 
             // vetButton
             // 
@@ -156,6 +159,7 @@
             vetButton.Text = "Lekarze";
             vetButton.TextAlign = ContentAlignment.MiddleLeft;
             vetButton.UseVisualStyleBackColor = true;
+            vetButton.Click += vetButton_Click;
             // 
             // orderButton
             // 
@@ -172,6 +176,7 @@
             orderButton.Text = "Zamówienia";
             orderButton.TextAlign = ContentAlignment.MiddleLeft;
             orderButton.UseVisualStyleBackColor = true;
+            orderButton.Click += orderButton_Click;
             // 
             // medButton
             // 
@@ -188,6 +193,7 @@
             medButton.Text = "Leki";
             medButton.TextAlign = ContentAlignment.MiddleLeft;
             medButton.UseVisualStyleBackColor = true;
+            medButton.Click += medButton_Click;
             // 
             // MainPageButton
             // 
@@ -206,6 +212,7 @@
             MainPageButton.Text = "Strona główna";
             MainPageButton.TextAlign = ContentAlignment.MiddleLeft;
             MainPageButton.UseVisualStyleBackColor = false;
+            MainPageButton.Click += MainPageButton_Click;
             // 
             // viewPanel
             // 
@@ -221,7 +228,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(884, 561);
             Controls.Add(tableLayoutPanel1);
-            MinimumSize = new Size(500, 450);
+            MinimumSize = new Size(600, 450);
             Name = "MainForm";
             Text = "Klinika Weterynaryjna";
             tableLayoutPanel1.ResumeLayout(false);
