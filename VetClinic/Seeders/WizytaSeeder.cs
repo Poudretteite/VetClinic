@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -11,48 +12,97 @@ namespace VetClinic.Seeders
 {
     internal class WizytaSeeder
     {
-        internal static IEnumerable<Wizyta> GetSeedData()
+        internal static IEnumerable<Wizyta> GetSeedData(List<Lek> wszystkieLeki, int maxWizytPrzeszle, int maxWizytPrzyszle)
         {
             var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
+            using var context = factory.CreateDbContext(Array.Empty<string>());
 
             var faker = new Faker();
-            var Wizyty = new List<Wizyta>();
-            // Specjalizacja lekarza musi zgadzać się z typem zwierzęcia
-            // Tryb wizyty musi zgadzać się z trybem pracy lekarza
-            // Lekarz nie może mieć dwóch wizyt w czasie krótszym niż godzina
-            // Nie może być wizyt poza godzinami 10 - 18
+            var wizyty = new List<Wizyta>();
+            var wszystkieZwierzeta = context.Zwierzeta.ToList();
+            var wszyscyLekarze = context.Lekarze.ToList();
 
-            int i;
-            for (i = 1; i < 40; i++)
+            var lekarzWizyty = new Dictionary<int, List<DateTime>>();
+            int idCounter = 1;
+            int maxAttempts = 300;
+
+            int attempts = 0;
+
+            Wizyta GenerateVisit(DateTime startDate, DateTime endDate, bool isFuture)
             {
-                int zwierzeid = faker.Random.Int(0, 40);
-                string zwierzetyp = context.Zwierzeta.First(z => z.Id == zwierzeid).Typ;
+                var zwierze = faker.PickRandom(wszystkieZwierzeta);
+                string typ = zwierze.Typ;
 
-                int lekarzid = context.Lekarze.First(l => l.Specjalizacja == zwierzetyp).Id;
+                var lekarz = wszyscyLekarze.FirstOrDefault(l => l.Specjalizacja == typ);
+                if (lekarz == null) return null;
 
-                var day = DateTime.SpecifyKind(faker.Date.Between(DateTime.Today.Subtract(TimeSpan.FromDays(200)), DateTime.Today), DateTimeKind.Utc);
+                string tryb = (typ == "Zwierzeta dzikie" || typ == "Zwierzeta gospodarskie")
+                    ? Constants.Tryby[0]
+                    : Constants.Tryby[1];
 
-                string tryb = Constants.Tryby[1];
-
-                if (zwierzetyp == "Zwierzeta dzikie" || zwierzetyp == "Zwierzeta gospodarskie")
+                DateTime data;
+                int safetyCounter = 0;
+                do
                 {
-                    tryb = Constants.Tryby[0];
+                    data = faker.Date.Between(startDate, endDate);
+                    safetyCounter++;
+                    if (safetyCounter > 100) return null;
                 }
+                while (data.DayOfWeek == DayOfWeek.Saturday || data.DayOfWeek == DayOfWeek.Sunday);
 
-                Wizyty.Add(new Wizyta()
+                int hour = faker.Random.Int(10, 17);
+                data = new DateTime(data.Year, data.Month, data.Day, hour, 0, 0, DateTimeKind.Utc);
+
+                if (!lekarzWizyty.ContainsKey(lekarz.Id))
+                    lekarzWizyty[lekarz.Id] = new List<DateTime>();
+
+                if (lekarzWizyty[lekarz.Id].Any(d => Math.Abs((d - data).TotalMinutes) < 60))
+                    return null;
+
+                var wizyta = new Wizyta
                 {
-                    Id = i,
-                    ZwierzeId = zwierzeid,
+                    Id = idCounter++,
+                    ZwierzeId = zwierze.Id,
+                    LekarzId = lekarz.Id,
                     Tryb = tryb,
-                    LekarzId = lekarzid,
                     Opis = faker.PickRandom(Constants.Diagnoses),
-                    Data = day
-                });
+                    Data = data,
+                    Leki = faker.PickRandom(wszystkieLeki, faker.Random.Int(1, 3)).Distinct().ToList()
+                };
+
+                return wizyta;
             }
 
-            return Wizyty;
+            while (wizyty.Count < maxWizytPrzeszle && attempts < maxAttempts)
+            {
+                attempts++;
 
+                var wizyta = GenerateVisit(DateTime.UtcNow.AddDays(-200), DateTime.UtcNow, false);
+                if (wizyta == null)
+                    continue;
+
+                wizyty.Add(wizyta);
+                lekarzWizyty[wizyta.LekarzId].Add(wizyta.Data);
             }
+
+            attempts = 0;
+            int Count2 = 0;
+            while (Count2 < maxWizytPrzyszle && attempts < maxAttempts)
+            {
+                attempts++;
+
+                var wizyta = GenerateVisit(DateTime.UtcNow, DateTime.UtcNow.AddDays(30), true);
+                if (wizyta == null)
+                    continue;
+
+                wizyty.Add(wizyta);
+                lekarzWizyty[wizyta.LekarzId].Add(wizyta.Data);
+                Count2++;
+            }
+
+            return wizyty;
+        }
+
     }
+
 }

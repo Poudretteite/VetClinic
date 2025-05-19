@@ -22,7 +22,21 @@ namespace VetClinic
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(connectionString).EnableSensitiveDataLogging();
+
+            return new AppDbContext(optionsBuilder.Options);
+        }
+
+        public AppDbContext CreateDbContext_v2(string[] args)
+        {
+            var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+            var connectionString = configuration.GetConnectionString("SecondaryConnection");
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            optionsBuilder.UseNpgsql(connectionString).EnableSensitiveDataLogging();
 
             return new AppDbContext(optionsBuilder.Options);
         }

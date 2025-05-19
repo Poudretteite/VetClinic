@@ -10,12 +10,12 @@ namespace VetClinic.Seeders
 {
     internal class ZamowienieSeeder
     {
-        internal static IEnumerable<Zamowienie> GetSeedData()
+        internal static IEnumerable<Zamowienie> GetSeedData(int liczbaRekordow)
         {
             var faker = new Faker();
             var Zamowienia = new List<Zamowienie>();
 
-            for (int i = 1; i <= 20; i++)
+            for (int i = 1; i <= liczbaRekordow; i++)
             {
                 Zamowienia.Add(new Zamowienie
                 {

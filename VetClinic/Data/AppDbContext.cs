@@ -27,9 +27,13 @@ namespace VetClinic.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Wizyta>()
-                .HasMany(w => w.Leki)
-                .WithMany(l => l.Wizyty)
-                .UsingEntity(j => j.ToTable("Wizyta_Lek"));
+            .HasMany(w => w.Leki)
+            .WithMany(l => l.Wizyty)
+            .UsingEntity<Dictionary<string, object>>(
+                "WizytaLek",
+                j => j.HasOne<Lek>().WithMany().HasForeignKey("LekId"),
+                j => j.HasOne<Wizyta>().WithMany().HasForeignKey("WizytaId"),
+                j => j.ToTable("WizytaLek"));
         }
 
     }

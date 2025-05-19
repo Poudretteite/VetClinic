@@ -159,24 +159,24 @@ namespace VetClinic.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Wizyta_Lek",
+                name: "WizytaLek",
                 columns: table => new
                 {
-                    LekiId = table.Column<int>(type: "integer", nullable: false),
-                    WizytyId = table.Column<int>(type: "integer", nullable: false)
+                    LekId = table.Column<int>(type: "integer", nullable: false),
+                    WizytaId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wizyta_Lek", x => new { x.LekiId, x.WizytyId });
+                    table.PrimaryKey("PK_WizytaLek", x => new { x.LekId, x.WizytaId });
                     table.ForeignKey(
-                        name: "FK_Wizyta_Lek_leki_LekiId",
-                        column: x => x.LekiId,
+                        name: "FK_WizytaLek_leki_LekId",
+                        column: x => x.LekId,
                         principalTable: "leki",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Wizyta_Lek_wizyty_WizytyId",
-                        column: x => x.WizytyId,
+                        name: "FK_WizytaLek_wizyty_WizytaId",
+                        column: x => x.WizytaId,
                         principalTable: "wizyty",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -188,9 +188,9 @@ namespace VetClinic.Migrations
                 column: "AdresId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wizyta_Lek_WizytyId",
-                table: "Wizyta_Lek",
-                column: "WizytyId");
+                name: "IX_WizytaLek_WizytaId",
+                table: "WizytaLek",
+                column: "WizytaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_wizyty_LekarzId",
@@ -217,7 +217,7 @@ namespace VetClinic.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Wizyta_Lek");
+                name: "WizytaLek");
 
             migrationBuilder.DropTable(
                 name: "zamowienia");

@@ -11,13 +11,13 @@ namespace VetClinic.Seeders
 {
     internal static class OsobaSeeder
     {
-        internal static IEnumerable<Osoba> GetSeedData()
+        internal static IEnumerable<Osoba> GetSeedData(int liczbaRekordow)
         {
             var faker = new Faker();
             var osoby = new List<Osoba>();
             int[] lekarzIds = { 1, 3, 6, 9, 12 };
 
-            for (int i = 1; i <= 30; i++)
+            for (int i = 1; i <= liczbaRekordow; i++)
             {
                 if (lekarzIds.Contains(i)) continue;
 

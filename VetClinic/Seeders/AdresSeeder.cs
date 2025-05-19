@@ -10,12 +10,12 @@ namespace VetClinic.Seeders
 {
     internal static class AdresSeeder
     {
-        internal static IEnumerable<Adres> GetSeedData()
+        internal static IEnumerable<Adres> GetSeedData(int liczbaRekordow)
         {
             var faker = new Faker();
             var Adresy = new List<Adres>();
 
-            for (int i = 1; i <= 20; i++)
+            for (int i = 1; i <= liczbaRekordow; i++)
             {
                 Adresy.Add(new Adres
                 {

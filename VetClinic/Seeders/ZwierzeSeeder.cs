@@ -10,15 +10,16 @@ namespace VetClinic.Seeders
 {
     internal class ZwierzeSeeder
     {
-        internal static IEnumerable<Zwierze> GetSeedData()
+        internal static IEnumerable<Zwierze> GetSeedData(int liczbaRekordow)
         {
             var faker = new Faker();
             var Zwierzeta = new List<Zwierze>();
-            string typ = faker.PickRandom(Constants.AnimalType);
-            string gatunek = faker.PickRandom(Constants.AnimalSpeciesByType[typ]);
 
-            for (var i = 1; i <= 40; i++)
+            for (var i = 1; i <= liczbaRekordow; i++)
             {
+                string typ = faker.PickRandom(Constants.AnimalType);
+                string gatunek = faker.PickRandom(Constants.AnimalSpeciesByType[typ]);
+
                 Zwierzeta.Add(new Zwierze()
                 {
                     Id = i,

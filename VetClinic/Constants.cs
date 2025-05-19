@@ -35,7 +35,7 @@ namespace VetClinic
         },
             ["Ptaki egzotyczne"] = new List<string>
         {
-            "Papuga", "Kanarek", "Zeberek", "Ary", "Kakadu", "Pingwin"
+            "Papuga falista", "Kanarek", "Zeberek", "Papuga nimfa", "Kakadu", "Pingwin"
         },
             ["Gady i plazy"] = new List<string>
         {

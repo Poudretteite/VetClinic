@@ -21,6 +21,6 @@ namespace VetClinic.Models
         [Required]
         public int Ilosc {  get; set; }
 
-        public ICollection<Wizyta> Wizyty {  get; set; } = new List<Wizyta>();
+        public ICollection<Wizyta> Wizyty { get; set; } = new List<Wizyta>();
     }
 }

@@ -12,7 +12,7 @@ using VetClinic.Data;
 namespace VetClinic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250518232846_Init")]
+    [Migration("20250519132509_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -24,21 +24,6 @@ namespace VetClinic.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("LekWizyta", b =>
-                {
-                    b.Property<int>("LekiId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WizytyId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("LekiId", "WizytyId");
-
-                    b.HasIndex("WizytyId");
-
-                    b.ToTable("Wizyta_Lek", (string)null);
-                });
 
             modelBuilder.Entity("VetClinic.Models.Adres", b =>
                 {
@@ -226,6 +211,21 @@ namespace VetClinic.Migrations
                     b.ToTable("zwierzeta");
                 });
 
+            modelBuilder.Entity("WizytaLek", b =>
+                {
+                    b.Property<int>("LekId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WizytaId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("LekId", "WizytaId");
+
+                    b.HasIndex("WizytaId");
+
+                    b.ToTable("WizytaLek", (string)null);
+                });
+
             modelBuilder.Entity("VetClinic.Models.Lekarz", b =>
                 {
                     b.HasBaseType("VetClinic.Models.Osoba");
@@ -241,21 +241,6 @@ namespace VetClinic.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.ToTable("lekarze");
-                });
-
-            modelBuilder.Entity("LekWizyta", b =>
-                {
-                    b.HasOne("VetClinic.Models.Lek", null)
-                        .WithMany()
-                        .HasForeignKey("LekiId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VetClinic.Models.Wizyta", null)
-                        .WithMany()
-                        .HasForeignKey("WizytyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("VetClinic.Models.Osoba", b =>
@@ -308,6 +293,21 @@ namespace VetClinic.Migrations
                         .IsRequired();
 
                     b.Navigation("Wlasciciel");
+                });
+
+            modelBuilder.Entity("WizytaLek", b =>
+                {
+                    b.HasOne("VetClinic.Models.Lek", null)
+                        .WithMany()
+                        .HasForeignKey("LekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("VetClinic.Models.Wizyta", null)
+                        .WithMany()
+                        .HasForeignKey("WizytaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("VetClinic.Models.Lekarz", b =>
