@@ -44,5 +44,10 @@ namespace VetClinic.Models
         [ForeignKey("AdresId")]
         public Adres Adres {  get; set; }
 
+        public override string ToString()
+        {
+            return $"{Imie} {Nazwisko}";
+        }
+
     }
 }

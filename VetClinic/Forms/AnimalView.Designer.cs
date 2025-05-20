@@ -31,6 +31,11 @@
             mainTableLayout = new TableLayoutPanel();
             animalTabControl = new TabControl();
             animalVisitDataGrid = new DataGridView();
+            searchBox = new TextBox();
+            animalEditButton = new Button();
+            animalDeleteButton = new Button();
+            animalAddButton = new Button();
+            animalDataForm = new Panel();
             animalDataLayout = new FlowLayoutPanel();
             animalNameLabel = new Label();
             animalTypeLabel = new Label();
@@ -38,28 +43,28 @@
             animalOwnerDataLabel = new Label();
             animalOwnerNameLabel = new Label();
             animalOwnerLink = new LinkLabel();
-            searchBox = new TextBox();
-            animalDeleteButton = new Button();
-            animalEditButton = new Button();
             mainTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)animalVisitDataGrid).BeginInit();
+            animalDataForm.SuspendLayout();
             animalDataLayout.SuspendLayout();
             SuspendLayout();
             // 
             // mainTableLayout
             // 
-            mainTableLayout.ColumnCount = 4;
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.22222F));
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.2222233F));
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 22.2222233F));
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
+            mainTableLayout.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            mainTableLayout.ColumnCount = 5;
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
             mainTableLayout.Controls.Add(animalTabControl, 0, 1);
-            mainTableLayout.Controls.Add(animalVisitDataGrid, 2, 2);
-            mainTableLayout.Controls.Add(animalDataLayout, 2, 1);
+            mainTableLayout.Controls.Add(animalVisitDataGrid, 1, 2);
             mainTableLayout.Controls.Add(searchBox, 0, 0);
-            mainTableLayout.Controls.Add(animalEditButton, 2, 0);
-            mainTableLayout.Controls.Add(animalDeleteButton, 3, 0);
-            mainTableLayout.Dock = DockStyle.Fill;
+            mainTableLayout.Controls.Add(animalEditButton, 1, 0);
+            mainTableLayout.Controls.Add(animalDeleteButton, 2, 0);
+            mainTableLayout.Controls.Add(animalAddButton, 4, 0);
+            mainTableLayout.Controls.Add(animalDataForm, 1, 1);
             mainTableLayout.Font = new Font("Arial", 9F);
             mainTableLayout.Location = new Point(0, 0);
             mainTableLayout.Margin = new Padding(3, 4, 3, 4);
@@ -70,46 +75,101 @@
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 26.31579F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 39.4736862F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             mainTableLayout.Size = new Size(914, 800);
             mainTableLayout.TabIndex = 1;
             // 
             // animalTabControl
             // 
-            mainTableLayout.SetColumnSpan(animalTabControl, 2);
             animalTabControl.Dock = DockStyle.Fill;
             animalTabControl.Location = new Point(3, 64);
             animalTabControl.Name = "animalTabControl";
             mainTableLayout.SetRowSpan(animalTabControl, 3);
             animalTabControl.SelectedIndex = 0;
-            animalTabControl.Size = new Size(400, 711);
+            animalTabControl.Size = new Size(451, 711);
             animalTabControl.TabIndex = 2;
             // 
             // animalVisitDataGrid
             // 
             animalVisitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            mainTableLayout.SetColumnSpan(animalVisitDataGrid, 2);
+            mainTableLayout.SetColumnSpan(animalVisitDataGrid, 4);
             animalVisitDataGrid.Dock = DockStyle.Fill;
-            animalVisitDataGrid.Location = new Point(409, 269);
+            animalVisitDataGrid.Location = new Point(460, 269);
             animalVisitDataGrid.Name = "animalVisitDataGrid";
             animalVisitDataGrid.RowHeadersWidth = 51;
             mainTableLayout.SetRowSpan(animalVisitDataGrid, 3);
-            animalVisitDataGrid.Size = new Size(502, 528);
+            animalVisitDataGrid.Size = new Size(451, 528);
             animalVisitDataGrid.TabIndex = 3;
+            // 
+            // searchBox
+            // 
+            searchBox.Dock = DockStyle.Top;
+            searchBox.Location = new Point(3, 3);
+            searchBox.Name = "searchBox";
+            searchBox.PlaceholderText = "Wyszukaj zwierze po imieniu lub gatunku...";
+            searchBox.Size = new Size(451, 25);
+            searchBox.TabIndex = 5;
+            searchBox.TextChanged += searchBox_TextChanged;
+            // 
+            // animalEditButton
+            // 
+            animalEditButton.BackColor = Color.FromArgb(219, 211, 216);
+            animalEditButton.FlatStyle = FlatStyle.Flat;
+            animalEditButton.Location = new Point(460, 3);
+            animalEditButton.Name = "animalEditButton";
+            animalEditButton.Size = new Size(100, 50);
+            animalEditButton.TabIndex = 7;
+            animalEditButton.Text = "Edytuj";
+            animalEditButton.UseVisualStyleBackColor = false;
+            animalEditButton.Click += animalEditButton_Click;
+            // 
+            // animalDeleteButton
+            // 
+            animalDeleteButton.BackColor = Color.Salmon;
+            animalDeleteButton.FlatStyle = FlatStyle.Flat;
+            animalDeleteButton.Location = new Point(574, 3);
+            animalDeleteButton.Name = "animalDeleteButton";
+            animalDeleteButton.Size = new Size(100, 50);
+            animalDeleteButton.TabIndex = 6;
+            animalDeleteButton.Text = "Usuń";
+            animalDeleteButton.UseVisualStyleBackColor = false;
+            animalDeleteButton.Click += animalDeleteButton_Click;
+            // 
+            // animalAddButton
+            // 
+            animalAddButton.BackColor = Color.FromArgb(219, 211, 216);
+            animalAddButton.FlatStyle = FlatStyle.Flat;
+            animalAddButton.Location = new Point(802, 3);
+            animalAddButton.Name = "animalAddButton";
+            animalAddButton.Size = new Size(100, 50);
+            animalAddButton.TabIndex = 8;
+            animalAddButton.Text = "Dodaj";
+            animalAddButton.UseVisualStyleBackColor = false;
+            animalAddButton.Click += animalAddButton_Click;
+            // 
+            // animalDataForm
+            // 
+            mainTableLayout.SetColumnSpan(animalDataForm, 4);
+            animalDataForm.Controls.Add(animalDataLayout);
+            animalDataForm.Dock = DockStyle.Fill;
+            animalDataForm.Location = new Point(460, 64);
+            animalDataForm.Name = "animalDataForm";
+            animalDataForm.Size = new Size(451, 199);
+            animalDataForm.TabIndex = 9;
             // 
             // animalDataLayout
             // 
-            mainTableLayout.SetColumnSpan(animalDataLayout, 2);
             animalDataLayout.Controls.Add(animalNameLabel);
             animalDataLayout.Controls.Add(animalTypeLabel);
             animalDataLayout.Controls.Add(animalSpeciesLabel);
             animalDataLayout.Controls.Add(animalOwnerDataLabel);
             animalDataLayout.Controls.Add(animalOwnerNameLabel);
             animalDataLayout.Controls.Add(animalOwnerLink);
-            animalDataLayout.Dock = DockStyle.Fill;
             animalDataLayout.FlowDirection = FlowDirection.TopDown;
-            animalDataLayout.Location = new Point(409, 64);
+            animalDataLayout.Location = new Point(3, 5);
             animalDataLayout.Name = "animalDataLayout";
-            animalDataLayout.Size = new Size(502, 199);
+            animalDataLayout.Size = new Size(451, 194);
             animalDataLayout.TabIndex = 4;
             // 
             // animalNameLabel
@@ -184,41 +244,6 @@
             animalOwnerLink.VisitedLinkColor = Color.FromArgb(215, 122, 97);
             animalOwnerLink.LinkClicked += animalOwnerLink_LinkClicked;
             // 
-            // searchBox
-            // 
-            mainTableLayout.SetColumnSpan(searchBox, 2);
-            searchBox.Dock = DockStyle.Top;
-            searchBox.Location = new Point(3, 3);
-            searchBox.Name = "searchBox";
-            searchBox.PlaceholderText = "Wyszukaj zwierze po imieniu lub gatunku...";
-            searchBox.Size = new Size(400, 25);
-            searchBox.TabIndex = 5;
-            searchBox.TextChanged += searchBox_TextChanged;
-            // 
-            // animalDeleteButton
-            // 
-            animalDeleteButton.BackColor = Color.Salmon;
-            animalDeleteButton.FlatStyle = FlatStyle.Flat;
-            animalDeleteButton.Location = new Point(612, 3);
-            animalDeleteButton.Name = "animalDeleteButton";
-            animalDeleteButton.Size = new Size(100, 50);
-            animalDeleteButton.TabIndex = 6;
-            animalDeleteButton.Text = "Usuń";
-            animalDeleteButton.UseVisualStyleBackColor = false;
-            animalDeleteButton.Click += animalDeleteButton_Click;
-            // 
-            // animalEditButton
-            // 
-            animalEditButton.BackColor = Color.FromArgb(219, 211, 216);
-            animalEditButton.FlatStyle = FlatStyle.Flat;
-            animalEditButton.Location = new Point(409, 3);
-            animalEditButton.Name = "animalEditButton";
-            animalEditButton.Size = new Size(100, 50);
-            animalEditButton.TabIndex = 7;
-            animalEditButton.Text = "Edytuj";
-            animalEditButton.UseVisualStyleBackColor = false;
-            animalEditButton.Click += animalEditButton_Click;
-            // 
             // AnimalView
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -230,6 +255,7 @@
             mainTableLayout.ResumeLayout(false);
             mainTableLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)animalVisitDataGrid).EndInit();
+            animalDataForm.ResumeLayout(false);
             animalDataLayout.ResumeLayout(false);
             animalDataLayout.PerformLayout();
             ResumeLayout(false);
@@ -249,5 +275,7 @@
         private TextBox searchBox;
         private Button animalDeleteButton;
         private Button animalEditButton;
+        private Button animalAddButton;
+        private Panel animalDataForm;
     }
 }

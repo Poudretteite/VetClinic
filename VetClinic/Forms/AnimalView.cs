@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VetClinic.Forms;
 using VetClinic.Models;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -231,6 +233,15 @@ namespace VetClinic
         private void animalOwnerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
 
+        }
+
+        private void animalAddButton_Click(object sender, EventArgs e)
+        {
+
+            animalDataForm.Controls.Clear();
+            var view = new AnimalAddForm(this._mainForm);
+            view.Dock = DockStyle.Fill;
+            animalDataForm.Controls.Add(view);
         }
     }
 }
