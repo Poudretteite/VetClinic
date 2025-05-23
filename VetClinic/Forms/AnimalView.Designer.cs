@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             mainTableLayout = new TableLayoutPanel();
             animalAddVisitButtton = new Button();
             animalTabControl = new TabControl();
@@ -45,10 +46,12 @@
             animalOwnerLink = new LinkLabel();
             animalAddButton = new Button();
             animalDeleteButton = new Button();
+            initBindingSource = new BindingSource(components);
             mainTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)animalVisitDataGrid).BeginInit();
             animalDataForm.SuspendLayout();
             animalDataLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)initBindingSource).BeginInit();
             SuspendLayout();
             // 
             // mainTableLayout
@@ -110,12 +113,16 @@
             // 
             // animalVisitDataGrid
             // 
+            animalVisitDataGrid.AllowUserToAddRows = false;
+            animalVisitDataGrid.AllowUserToDeleteRows = false;
+            animalVisitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             animalVisitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             mainTableLayout.SetColumnSpan(animalVisitDataGrid, 4);
             animalVisitDataGrid.Dock = DockStyle.Fill;
             animalVisitDataGrid.Location = new Point(403, 243);
             animalVisitDataGrid.Margin = new Padding(3, 2, 3, 2);
             animalVisitDataGrid.Name = "animalVisitDataGrid";
+            animalVisitDataGrid.RowHeadersVisible = false;
             animalVisitDataGrid.RowHeadersWidth = 51;
             mainTableLayout.SetRowSpan(animalVisitDataGrid, 3);
             animalVisitDataGrid.Size = new Size(394, 355);
@@ -285,6 +292,10 @@
             animalDeleteButton.UseVisualStyleBackColor = false;
             animalDeleteButton.Click += animalDeleteButton_Click;
             // 
+            // initBindingSource
+            // 
+            initBindingSource.DataSource = typeof(Migrations.Init);
+            // 
             // AnimalView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -298,6 +309,7 @@
             animalDataForm.ResumeLayout(false);
             animalDataLayout.ResumeLayout(false);
             animalDataLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)initBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -319,5 +331,6 @@
         private Panel animalDataForm;
         private Label animalAge;
         private Button animalAddVisitButtton;
+        private BindingSource initBindingSource;
     }
 }

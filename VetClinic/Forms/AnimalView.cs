@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -253,8 +254,34 @@ namespace VetClinic
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            var wizyty = context.Wizyty.Where(w => w.ZwierzeId == selectedId).ToList();
+            var wizyty = context.Wizyty
+            .Where(w => w.ZwierzeId == selectedId)
+            .Include(w => w.Lekarz)
+            .Select(w => new
+            {
+                Data = w.Data.ToString("yyyy-MM-dd"),
+                Opis = w.Opis,
+                Lekarz = w.Lekarz.Imie + " " + w.Lekarz.Nazwisko
+            })
+            .ToList();
+
+            animalVisitDataGrid.DataSource = null;
+            animalVisitDataGrid.Rows.Clear();
+            animalVisitDataGrid.Columns.Clear();
+
+            if (wizyty.Count == 0)
+            {
+                animalVisitDataGrid.Columns.Add("Info", "Informacja");
+                animalVisitDataGrid.Rows.Add("Brak wizyt dla wybranego zwierzęcia.");
+                animalVisitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                return;
+            }
+
             animalVisitDataGrid.DataSource = wizyty;
+
+            animalVisitDataGrid.Columns[0].HeaderText = "Data wizyty";
+            animalVisitDataGrid.Columns[1].HeaderText = "Opis";
+            animalVisitDataGrid.Columns[2].HeaderText = "Lekarz prowadzący";
         }
 
         private void animalOwnerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
