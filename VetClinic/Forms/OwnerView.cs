@@ -18,5 +18,20 @@ namespace VetClinic.Forms
             InitializeComponent();
             _mainForm = mainForm;
         }
+
+        private void ownerEditButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ownerDeleteButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ownerAddButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

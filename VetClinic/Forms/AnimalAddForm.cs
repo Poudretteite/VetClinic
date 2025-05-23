@@ -33,7 +33,7 @@ namespace VetClinic.Forms
         {
             resultBox = new ListBox
             {
-                Location = Location = new Point(ownerSearchBox.Left, ownerSearchBox.Bottom + 2),
+                Location = Location = new Point(ownerSearchBox.Left, ownerSearchBox.Bottom),
                 Width = 200,
                 Height = 100,
                 Visible = false
@@ -51,7 +51,7 @@ namespace VetClinic.Forms
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            var wlasciciele = context.Osoby.ToList();
+            var wlasciciele = context.Osoby.Take(10);
 
             string searchText = ownerSearchBox.Text.ToLower();
             var filtered = wlasciciele
@@ -131,5 +131,34 @@ namespace VetClinic.Forms
             }
         }
 
+        private void acceptButton_Click(object sender, EventArgs e)
+        {
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
+            int maxId = context.Zwierzeta.Max(z => z.Id);
+
+            var newAnimal = new Zwierze()
+            {
+                Id = maxId + 1,
+                Imie = NameBox.Text,
+                Typ = chosenTyp,
+                Gatunek = chosenGatunek,
+                Wiek = (int)ageBox.Value,
+                WlascicielId = selectedOwner.Id
+            };
+
+            context.Zwierzeta.Add(newAnimal);
+            context.SaveChanges();
+
+            MainForm.animalview.panelReturn();
+            MainForm.animalview.LoadToAnimalTabControl();
+
+
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            MainForm.animalview.panelReturn();
+        }
     }
 }

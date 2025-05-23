@@ -19,8 +19,8 @@ namespace VetClinic
 
         public static readonly string[] Tryby = new[]
         {
-            "terenowy",
-            "kliniczny"
+            "Terenowy",
+            "Kliniczny"
         };
 
         public static readonly Dictionary<string, List<string>> AnimalSpeciesByType = new()

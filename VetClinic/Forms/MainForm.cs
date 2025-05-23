@@ -4,6 +4,7 @@ namespace VetClinic
 {
     public partial class MainForm : Form
     {
+        public static AnimalView animalview = null;
 
         public MainForm()
         {
@@ -32,7 +33,7 @@ namespace VetClinic
 
         private void animalButton_Click(object sender, EventArgs e)
         {
-            var animalview = new AnimalView(this);
+            animalview = new AnimalView(this);
             LoadView(animalview);
         }
 

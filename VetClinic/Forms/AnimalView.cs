@@ -42,7 +42,7 @@ namespace VetClinic
         }
 
 
-        private void LoadToAnimalTabControl()
+        public void LoadToAnimalTabControl()
         {
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
@@ -192,12 +192,12 @@ namespace VetClinic
 
         }
 
-        private void RefreshCurrentTab()
+        public void RefreshCurrentTab()
         {
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            var selectedTab = animalTabControl.SelectedTab;
+            TabPage selectedTab = animalTabControl.SelectedTab;
             if (selectedTab == null) return;
 
             if (selectedTab == searchTab)
@@ -237,11 +237,21 @@ namespace VetClinic
 
         private void animalAddButton_Click(object sender, EventArgs e)
         {
-
             animalDataForm.Controls.Clear();
             var view = new AnimalAddForm(this._mainForm);
             view.Dock = DockStyle.Fill;
             animalDataForm.Controls.Add(view);
+        }
+
+        public void panelReturn()
+        {
+            animalDataForm.Controls.Clear();
+            animalDataForm.Controls.Add(animalDataLayout);
+        }
+
+        private void animalAddVisitButtton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

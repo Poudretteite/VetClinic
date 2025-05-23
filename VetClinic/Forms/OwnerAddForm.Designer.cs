@@ -1,0 +1,115 @@
+﻿namespace VetClinic.Forms
+{
+    partial class OwnerAddForm
+    {
+        /// <summary> 
+        /// Wymagana zmienna projektanta.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Wyczyść wszystkie używane zasoby.
+        /// </summary>
+        /// <param name="disposing">prawda, jeżeli zarządzane zasoby powinny zostać zlikwidowane; Fałsz w przeciwnym wypadku.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Kod wygenerowany przez Projektanta składników
+
+        /// <summary> 
+        /// Metoda wymagana do obsługi projektanta — nie należy modyfikować 
+        /// jej zawartości w edytorze kodu.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            ownerAddMainLayout = new FlowLayoutPanel();
+            ownerNameTextBox = new TextBox();
+            ownerSurnameTextBox = new TextBox();
+            ownerBirthDayPicker = new DateTimePicker();
+            ownerEmailTextbox = new TextBox();
+            ownerPhoneTextBox = new TextBox();
+            ownerAddMainLayout.SuspendLayout();
+            SuspendLayout();
+            // 
+            // ownerAddMainLayout
+            // 
+            ownerAddMainLayout.Controls.Add(ownerNameTextBox);
+            ownerAddMainLayout.Controls.Add(ownerSurnameTextBox);
+            ownerAddMainLayout.Controls.Add(ownerBirthDayPicker);
+            ownerAddMainLayout.Controls.Add(ownerEmailTextbox);
+            ownerAddMainLayout.Controls.Add(ownerPhoneTextBox);
+            ownerAddMainLayout.Dock = DockStyle.Fill;
+            ownerAddMainLayout.FlowDirection = FlowDirection.TopDown;
+            ownerAddMainLayout.Location = new Point(0, 0);
+            ownerAddMainLayout.Name = "ownerAddMainLayout";
+            ownerAddMainLayout.Size = new Size(150, 150);
+            ownerAddMainLayout.TabIndex = 0;
+            // 
+            // ownerNameTextBox
+            // 
+            ownerNameTextBox.Location = new Point(3, 3);
+            ownerNameTextBox.Name = "ownerNameTextBox";
+            ownerNameTextBox.PlaceholderText = "Podaj imię...";
+            ownerNameTextBox.Size = new Size(144, 23);
+            ownerNameTextBox.TabIndex = 5;
+            // 
+            // ownerSurnameTextBox
+            // 
+            ownerSurnameTextBox.Location = new Point(3, 32);
+            ownerSurnameTextBox.Name = "ownerSurnameTextBox";
+            ownerSurnameTextBox.PlaceholderText = "Podaj nazwisko...";
+            ownerSurnameTextBox.Size = new Size(144, 23);
+            ownerSurnameTextBox.TabIndex = 6;
+            // 
+            // ownerBirthDayPicker
+            // 
+            ownerBirthDayPicker.Location = new Point(3, 61);
+            ownerBirthDayPicker.MaxDate = new DateTime(2025, 12, 31, 0, 0, 0, 0);
+            ownerBirthDayPicker.MinDate = new DateTime(2025, 5, 23, 0, 0, 0, 0);
+            ownerBirthDayPicker.Name = "ownerBirthDayPicker";
+            ownerBirthDayPicker.Size = new Size(200, 23);
+            ownerBirthDayPicker.TabIndex = 7;
+            // 
+            // ownerEmailTextbox
+            // 
+            ownerEmailTextbox.Location = new Point(3, 90);
+            ownerEmailTextbox.Name = "ownerEmailTextbox";
+            ownerEmailTextbox.PlaceholderText = "Podaj email...";
+            ownerEmailTextbox.Size = new Size(144, 23);
+            ownerEmailTextbox.TabIndex = 8;
+            // 
+            // ownerPhoneTextBox
+            // 
+            ownerPhoneTextBox.Location = new Point(3, 119);
+            ownerPhoneTextBox.Name = "ownerPhoneTextBox";
+            ownerPhoneTextBox.PlaceholderText = "Podaj numer telefonu...";
+            ownerPhoneTextBox.Size = new Size(144, 23);
+            ownerPhoneTextBox.TabIndex = 9;
+            // 
+            // OwnerAddForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(ownerAddMainLayout);
+            Name = "OwnerAddForm";
+            ownerAddMainLayout.ResumeLayout(false);
+            ownerAddMainLayout.PerformLayout();
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private FlowLayoutPanel ownerAddMainLayout;
+        private TextBox ownerNameTextBox;
+        private TextBox ownerSurnameTextBox;
+        private DateTimePicker ownerBirthDayPicker;
+        private TextBox ownerEmailTextbox;
+        private TextBox ownerPhoneTextBox;
+    }
+}
