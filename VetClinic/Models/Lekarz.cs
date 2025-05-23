@@ -18,5 +18,10 @@ namespace VetClinic.Models
         [Required]
         [StringLength(50)]
         public string Tryb {  get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}. {Imie} {Nazwisko} - {Specjalizacja}";
+        }
     }
 }

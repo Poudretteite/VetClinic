@@ -15,8 +15,23 @@ namespace VetClinic.Forms
         private readonly MainForm _mainForm;
         public DoctorView(MainForm mainForm)
         {
-            _mainForm = mainForm;   
+            _mainForm = mainForm;
             InitializeComponent();
+        }
+
+        private void doctorAddButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void doctorEditButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void doctorDeleteButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

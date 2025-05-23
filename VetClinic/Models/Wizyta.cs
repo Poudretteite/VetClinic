@@ -15,21 +15,16 @@ namespace VetClinic.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public int ZwierzeId { get; set; }
+        public int? ZwierzeId { get; set; }
 
         [ForeignKey("ZwierzeId")]
-        public Zwierze Zwierze { get; set; }
+        public virtual Zwierze Zwierze { get; set; }
 
         [Required]
         public int LekarzId { get; set; }
 
         [ForeignKey("LekarzId")]
         public Lekarz Lekarz { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string Tryb { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

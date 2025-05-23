@@ -35,10 +35,6 @@ namespace VetClinic.Models
         public string Telefon { get; set; }
 
         [Required]
-        [Column(TypeName = "boolean")]
-        public bool Lekarz {  get; set; }
-
-        [Required]
         public int AdresId {  get; set; }
 
         [ForeignKey("AdresId")]
@@ -46,7 +42,7 @@ namespace VetClinic.Models
 
         public override string ToString()
         {
-            return $"{Imie} {Nazwisko}";
+            return $"{Id}. {Imie} {Nazwisko}";
         }
 
     }

@@ -53,7 +53,6 @@ namespace VetClinic.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     Data_ur = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Telefon = table.Column<string>(type: "text", nullable: false),
-                    Lekarz = table.Column<bool>(type: "boolean", nullable: false),
                     AdresId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -135,10 +134,9 @@ namespace VetClinic.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ZwierzeId = table.Column<int>(type: "integer", nullable: false),
+                    ZwierzeId = table.Column<int>(type: "integer", nullable: true),
                     LekarzId = table.Column<int>(type: "integer", nullable: false),
-                    Tryb = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Data = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Data = table.Column<DateTime>(type: "date", nullable: false),
                     Opis = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -155,7 +153,7 @@ namespace VetClinic.Migrations
                         column: x => x.ZwierzeId,
                         principalTable: "zwierzeta",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

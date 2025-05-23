@@ -34,10 +34,12 @@
             doctorBirthDayPicker = new DateTimePicker();
             doctorEmailTextbox = new TextBox();
             doctorPhoneTextBox = new TextBox();
-            doctorSpecializationChoice = new ComboBox();
-            doctorWorkPlaceChoice = new ComboBox();
             doctorSpecializationChoiceLabel = new Label();
+            doctorSpecializationChoice = new ComboBox();
             doctorWorkPlaceChoiceLabel = new Label();
+            doctorWorkPlaceChoice = new ComboBox();
+            acceptButton = new Button();
+            cancelButton = new Button();
             doctorFormLayoutPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -52,6 +54,8 @@
             doctorFormLayoutPanel.Controls.Add(doctorSpecializationChoice);
             doctorFormLayoutPanel.Controls.Add(doctorWorkPlaceChoiceLabel);
             doctorFormLayoutPanel.Controls.Add(doctorWorkPlaceChoice);
+            doctorFormLayoutPanel.Controls.Add(acceptButton);
+            doctorFormLayoutPanel.Controls.Add(cancelButton);
             doctorFormLayoutPanel.Dock = DockStyle.Fill;
             doctorFormLayoutPanel.FlowDirection = FlowDirection.TopDown;
             doctorFormLayoutPanel.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
@@ -79,11 +83,12 @@
             // doctorBirthDayPicker
             // 
             doctorBirthDayPicker.Location = new Point(3, 57);
-            doctorBirthDayPicker.MaxDate = new DateTime(2025, 12, 31, 0, 0, 0, 0);
-            doctorBirthDayPicker.MinDate = new DateTime(2025, 5, 23, 0, 0, 0, 0);
+            doctorBirthDayPicker.MaxDate = new DateTime(2007, 12, 31, 0, 0, 0, 0);
+            doctorBirthDayPicker.MinDate = new DateTime(1900, 1, 1, 0, 0, 0, 0);
             doctorBirthDayPicker.Name = "doctorBirthDayPicker";
             doctorBirthDayPicker.Size = new Size(200, 21);
             doctorBirthDayPicker.TabIndex = 2;
+            doctorBirthDayPicker.Value = new DateTime(2007, 12, 31, 0, 0, 0, 0);
             // 
             // doctorEmailTextbox
             // 
@@ -101,22 +106,6 @@
             doctorPhoneTextBox.Size = new Size(144, 21);
             doctorPhoneTextBox.TabIndex = 4;
             // 
-            // doctorSpecializationChoice
-            // 
-            doctorSpecializationChoice.FormattingEnabled = true;
-            doctorSpecializationChoice.Location = new Point(3, 153);
-            doctorSpecializationChoice.Name = "doctorSpecializationChoice";
-            doctorSpecializationChoice.Size = new Size(144, 23);
-            doctorSpecializationChoice.TabIndex = 6;
-            // 
-            // doctorWorkPlaceChoice
-            // 
-            doctorWorkPlaceChoice.FormattingEnabled = true;
-            doctorWorkPlaceChoice.Location = new Point(3, 197);
-            doctorWorkPlaceChoice.Name = "doctorWorkPlaceChoice";
-            doctorWorkPlaceChoice.Size = new Size(144, 23);
-            doctorWorkPlaceChoice.TabIndex = 5;
-            // 
             // doctorSpecializationChoiceLabel
             // 
             doctorSpecializationChoiceLabel.AutoSize = true;
@@ -127,6 +116,14 @@
             doctorSpecializationChoiceLabel.TabIndex = 7;
             doctorSpecializationChoiceLabel.Text = "Wybierz specjalizację:";
             // 
+            // doctorSpecializationChoice
+            // 
+            doctorSpecializationChoice.FormattingEnabled = true;
+            doctorSpecializationChoice.Location = new Point(3, 153);
+            doctorSpecializationChoice.Name = "doctorSpecializationChoice";
+            doctorSpecializationChoice.Size = new Size(144, 23);
+            doctorSpecializationChoice.TabIndex = 6;
+            // 
             // doctorWorkPlaceChoiceLabel
             // 
             doctorWorkPlaceChoiceLabel.AutoSize = true;
@@ -135,6 +132,34 @@
             doctorWorkPlaceChoiceLabel.Size = new Size(106, 15);
             doctorWorkPlaceChoiceLabel.TabIndex = 8;
             doctorWorkPlaceChoiceLabel.Text = "Wybierz tryb pracy:";
+            // 
+            // doctorWorkPlaceChoice
+            // 
+            doctorWorkPlaceChoice.FormattingEnabled = true;
+            doctorWorkPlaceChoice.Location = new Point(3, 197);
+            doctorWorkPlaceChoice.Name = "doctorWorkPlaceChoice";
+            doctorWorkPlaceChoice.Size = new Size(144, 23);
+            doctorWorkPlaceChoice.TabIndex = 5;
+            // 
+            // acceptButton
+            // 
+            acceptButton.Location = new Point(3, 225);
+            acceptButton.Margin = new Padding(3, 2, 3, 2);
+            acceptButton.Name = "acceptButton";
+            acceptButton.Size = new Size(82, 22);
+            acceptButton.TabIndex = 9;
+            acceptButton.Text = "Zatwierdź";
+            acceptButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            cancelButton.Location = new Point(3, 251);
+            cancelButton.Margin = new Padding(3, 2, 3, 2);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(82, 22);
+            cancelButton.TabIndex = 10;
+            cancelButton.Text = "Anuluj";
+            cancelButton.UseVisualStyleBackColor = true;
             // 
             // DoctorAddForm
             // 
@@ -160,5 +185,7 @@
         private ComboBox doctorWorkPlaceChoice;
         private Label doctorSpecializationChoiceLabel;
         private Label doctorWorkPlaceChoiceLabel;
+        private Button acceptButton;
+        private Button cancelButton;
     }
 }

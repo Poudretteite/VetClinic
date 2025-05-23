@@ -20,7 +20,8 @@ namespace VetClinic
         private int tabIndex = 0;
         private TabPage searchTab;
         private ListBox searchList;
-        private int selectedId;
+        public int selectedId;
+        public int mode;
 
         public AnimalView(MainForm mainForm)
         {
@@ -47,18 +48,15 @@ namespace VetClinic
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            var defaultSelected = 0;
-            var typy = Constants.AnimalType;
-
-            foreach (var typ in typy)
+            foreach (var typ in Constants.AnimalType)
             {
-                var newTab = new TabPage($"{typ}");
+                var newTab = new TabPage(typ);
                 var list = new ListBox();
                 list.SelectedIndexChanged += ListBox_SelectedIndexChanged;
                 var zwierzeta = context.Zwierzeta.Where(z => z.Typ == typ).ToList();
                 if (zwierzeta.Count > 0)
                 {
-                    foreach (var zwierze in zwierzeta)
+                    foreach (var zwierze in zwierzeta.OrderBy(z => z.Id))
                     {
                         list.Items.Add($"{zwierze.Id}. {zwierze.Imie}  -  {zwierze.Gatunek}");
                     }
@@ -76,6 +74,8 @@ namespace VetClinic
                 }
                 animalTabControl.TabPages.Add(newTab);
             }
+
+            animalTabControl.TabPages[0].Controls.OfType<ListBox>().First().SelectedIndex = 0;
         }
 
         private int? GetSelectedAnimalId()
@@ -130,10 +130,14 @@ namespace VetClinic
             int? selectedId = GetSelectedAnimalId();
             if (selectedId == null)
             {
-                MessageBox.Show("Wybierz zwierzę z listy.");
-                return;
+                selectedId = context.Zwierzeta.Where(z => z.Typ == Constants.AnimalType[0]).FirstOrDefault().Id;
             }
 
+            animalDataForm.Controls.Clear();
+            Zwierze zwierze = context.Zwierzeta.Where(z => z.Id == selectedId).FirstOrDefault();
+            var view = new AnimalAddForm(this._mainForm, zwierze.Imie, zwierze.Gatunek, zwierze.WlascicielId, zwierze.Wiek, zwierze.Typ);
+            view.Dock = DockStyle.Fill;
+            animalDataForm.Controls.Add(view);
 
         }
 
@@ -149,11 +153,33 @@ namespace VetClinic
                 return;
             }
 
+            var selectedAnimal = context.Zwierzeta.FirstOrDefault(z => z.Id == selectedId);
+            if (selectedAnimal == null) { return; }
+
+            string typ = selectedAnimal.Typ;
+
+            var wizyty = context.Wizyty.Where(w => w.ZwierzeId == selectedId).FirstOrDefault();
+            if (wizyty != null)
+            {
+                var result = MessageBox.Show(
+                    "Nie zaleca się usuwania zwierząt z zarejestrowanymi wizytami. Czy na pewno chcesz kontynuować?",
+                    "Potwierdzenie usunięcia",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             Zwierze zwierze = context.Zwierzeta.Where(z => z.Id == selectedId).FirstOrDefault();
 
             context.Zwierzeta.Remove(zwierze);
             context.SaveChanges();
-            RefreshCurrentTab();
+
+            RefreshCurrentTab(typ);
         }
 
         private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -186,40 +212,41 @@ namespace VetClinic
             animalNameLabel.Text = zwierze.Imie;
             animalTypeLabel.Text = zwierze.Typ;
             animalSpeciesLabel.Text = zwierze.Gatunek;
+            animalAge.Text = zwierze.Wiek.ToString();
             int ownerId = zwierze.WlascicielId;
             Osoba owner = context.Osoby.Where(o => o.Id == ownerId).FirstOrDefault();
             animalOwnerNameLabel.Text = $"{owner.Imie} {owner.Nazwisko}";
 
         }
 
-        public void RefreshCurrentTab()
+        public void RefreshCurrentTab(string typ)
         {
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            TabPage selectedTab = animalTabControl.SelectedTab;
-            if (selectedTab == null) return;
+            var targetTab = animalTabControl.TabPages
+                .Cast<TabPage>()
+                .FirstOrDefault(tab => tab.Text == typ);
 
-            if (selectedTab == searchTab)
-            {
-                searchBox_TextChanged(null, null);
-                return;
-            }
+            if (targetTab == null) return;
 
-            string tabType = selectedTab.Text;
-            var updated = context.Zwierzeta.Where(z => z.Typ == tabType).ToList();
+            var updatedAnimals = context.Zwierzeta
+                .Where(z => z.Typ == typ)
+                .ToList();
 
-            var listBox = selectedTab.Controls.OfType<ListBox>().FirstOrDefault();
+            var listBox = targetTab.Controls.OfType<ListBox>().FirstOrDefault();
             if (listBox == null) return;
 
             listBox.Items.Clear();
-            foreach (var zwierze in updated)
+
+            foreach (var zwierze in updatedAnimals.OrderBy(z => z.Id))
             {
                 listBox.Items.Add($"{zwierze.Id}. {zwierze.Imie}  -  {zwierze.Gatunek}");
             }
 
             LoadData();
         }
+
 
         private void LoadAnimalVisitDataGrid()
         {
@@ -251,7 +278,10 @@ namespace VetClinic
 
         private void animalAddVisitButtton_Click(object sender, EventArgs e)
         {
-
+            animalDataForm.Controls.Clear();
+            var view = new VisitAddForm(this._mainForm);
+            view.Dock = DockStyle.Fill;
+            animalDataForm.Controls.Add(view);
         }
     }
 }

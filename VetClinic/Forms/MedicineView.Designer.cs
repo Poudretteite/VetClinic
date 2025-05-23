@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             mainTableLayout = new TableLayoutPanel();
             medSearchBox = new TextBox();
             medOrderButton = new Button();
@@ -103,6 +103,7 @@
             medOrderButton.TabIndex = 14;
             medOrderButton.Text = "Zamów";
             medOrderButton.UseVisualStyleBackColor = false;
+            medOrderButton.Click += medOrderButton_Click;
             // 
             // medDeleteButton
             // 
@@ -116,6 +117,7 @@
             medDeleteButton.TabIndex = 13;
             medDeleteButton.Text = "Usuń";
             medDeleteButton.UseVisualStyleBackColor = false;
+            medDeleteButton.Click += medDeleteButton_Click;
             // 
             // medEditButton
             // 
@@ -129,6 +131,7 @@
             medEditButton.TabIndex = 12;
             medEditButton.Text = "Edytuj";
             medEditButton.UseVisualStyleBackColor = false;
+            medEditButton.Click += medEditButton_Click;
             // 
             // medAddButton
             // 
@@ -142,6 +145,7 @@
             medAddButton.TabIndex = 11;
             medAddButton.Text = "Dodaj";
             medAddButton.UseVisualStyleBackColor = false;
+            medAddButton.Click += medAddButton_Click;
             // 
             // medicineList
             // 
@@ -169,18 +173,18 @@
             // 
             // visitCountChart
             // 
-            chartArea1.Name = "ChartArea1";
-            visitCountChart.ChartAreas.Add(chartArea1);
+            chartArea4.Name = "ChartArea1";
+            visitCountChart.ChartAreas.Add(chartArea4);
             visitCountChart.Dock = DockStyle.Fill;
-            legend1.Name = "Legend1";
-            visitCountChart.Legends.Add(legend1);
+            legend4.Name = "Legend1";
+            visitCountChart.Legends.Add(legend4);
             visitCountChart.Location = new Point(476, 3);
             visitCountChart.Name = "visitCountChart";
             mainTableLayout.SetRowSpan(visitCountChart, 4);
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            visitCountChart.Series.Add(series1);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            visitCountChart.Series.Add(series4);
             visitCountChart.Size = new Size(321, 215);
             visitCountChart.TabIndex = 4;
             visitCountChart.Text = "chart1";

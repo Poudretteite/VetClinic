@@ -10,18 +10,18 @@ namespace VetClinic.Seeders
 {
     internal class LekSeeder
     {
-        internal static IEnumerable<Lek> GetSeedData(int liczbaRekordow)
+        internal static IEnumerable<Lek> GetSeedData()
         {
             var faker = new Faker();
             var Leki = new List<Lek>();
 
-            for (int i = 1; i <= liczbaRekordow; i++)
+            for (int i = 1; i <= Constants.Medicines.Count; i++)
             {
                 Leki.Add(new Lek
                 {
                     Id = i,
                     Nazwa = Constants.Medicines[i-1],
-                    Ilosc = faker.Random.Int(1, 100),
+                    Ilosc = faker.Random.Int(1, 100)
                 });
             }
 

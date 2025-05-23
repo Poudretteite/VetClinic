@@ -44,7 +44,6 @@
             visitDataPlaceholder = new Panel();
             visitDataPanel = new FlowLayoutPanel();
             visitDateLabel = new Label();
-            visitPlaceLabel = new Label();
             visitDescription = new Label();
             visitEditButton = new Button();
             visitDeleteButton = new Button();
@@ -235,7 +234,6 @@
             // visitDataPanel
             // 
             visitDataPanel.Controls.Add(visitDateLabel);
-            visitDataPanel.Controls.Add(visitPlaceLabel);
             visitDataPanel.Controls.Add(visitDescription);
             visitDataPanel.Dock = DockStyle.Fill;
             visitDataPanel.FlowDirection = FlowDirection.TopDown;
@@ -254,20 +252,10 @@
             visitDateLabel.TabIndex = 0;
             visitDateLabel.Text = "Data";
             // 
-            // visitPlaceLabel
-            // 
-            visitPlaceLabel.AutoSize = true;
-            visitPlaceLabel.Font = new Font("Arial", 9F, FontStyle.Italic, GraphicsUnit.Point, 238);
-            visitPlaceLabel.Location = new Point(3, 16);
-            visitPlaceLabel.Name = "visitPlaceLabel";
-            visitPlaceLabel.Size = new Size(31, 15);
-            visitPlaceLabel.TabIndex = 1;
-            visitPlaceLabel.Text = "Tryb";
-            // 
             // visitDescription
             // 
             visitDescription.AutoSize = true;
-            visitDescription.Location = new Point(3, 31);
+            visitDescription.Location = new Point(3, 16);
             visitDescription.Name = "visitDescription";
             visitDescription.Size = new Size(33, 15);
             visitDescription.TabIndex = 2;
@@ -285,6 +273,7 @@
             visitEditButton.TabIndex = 10;
             visitEditButton.Text = "Edytuj";
             visitEditButton.UseVisualStyleBackColor = false;
+            visitEditButton.Click += visitEditButton_Click;
             // 
             // visitDeleteButton
             // 
@@ -298,6 +287,7 @@
             visitDeleteButton.TabIndex = 12;
             visitDeleteButton.Text = "Usuń";
             visitDeleteButton.UseVisualStyleBackColor = false;
+            visitDeleteButton.Click += visitDeleteButton_Click;
             // 
             // VisitView
             // 
@@ -339,7 +329,6 @@
         private Label visitDoctorName;
         private Label visitDoctorSpecialization;
         private Label visitDateLabel;
-        private Label visitPlaceLabel;
         private Label visitDescription;
         private Button visitDeleteButton;
     }

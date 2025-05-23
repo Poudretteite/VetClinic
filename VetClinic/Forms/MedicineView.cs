@@ -53,5 +53,25 @@ namespace VetClinic.Forms
 
             visitDataGrid.DataSource = leki;
         }
+
+        private void medAddButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void medEditButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void medDeleteButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void medOrderButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

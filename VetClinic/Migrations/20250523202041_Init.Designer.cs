@@ -12,7 +12,7 @@ using VetClinic.Data;
 namespace VetClinic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250519132509_Init")]
+    [Migration("20250523202041_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -98,9 +98,6 @@ namespace VetClinic.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<bool>("Lekarz")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Nazwisko")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -128,7 +125,7 @@ namespace VetClinic.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("date");
 
                     b.Property<int>("LekarzId")
                         .HasColumnType("integer");
@@ -137,12 +134,7 @@ namespace VetClinic.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Tryb")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("ZwierzeId")
+                    b.Property<int?>("ZwierzeId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -265,8 +257,7 @@ namespace VetClinic.Migrations
                     b.HasOne("VetClinic.Models.Zwierze", "Zwierze")
                         .WithMany()
                         .HasForeignKey("ZwierzeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Lekarz");
 

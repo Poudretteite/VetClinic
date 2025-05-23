@@ -167,6 +167,7 @@
             doctorAddButton.TabIndex = 10;
             doctorAddButton.Text = "Dodaj";
             doctorAddButton.UseVisualStyleBackColor = false;
+            doctorAddButton.Click += doctorAddButton_Click;
             // 
             // doctorEditButton
             // 
@@ -180,6 +181,7 @@
             doctorEditButton.TabIndex = 11;
             doctorEditButton.Text = "Edytuj";
             doctorEditButton.UseVisualStyleBackColor = false;
+            doctorEditButton.Click += doctorEditButton_Click;
             // 
             // doctorDeleteButton
             // 
@@ -193,6 +195,7 @@
             doctorDeleteButton.TabIndex = 12;
             doctorDeleteButton.Text = "Usuń";
             doctorDeleteButton.UseVisualStyleBackColor = false;
+            doctorDeleteButton.Click += doctorDeleteButton_Click;
             // 
             // doctorList
             // 

@@ -54,33 +54,37 @@
             FormLayoutPanel.Dock = DockStyle.Fill;
             FormLayoutPanel.FlowDirection = FlowDirection.TopDown;
             FormLayoutPanel.Location = new Point(0, 0);
+            FormLayoutPanel.Margin = new Padding(3, 2, 3, 2);
             FormLayoutPanel.Name = "FormLayoutPanel";
-            FormLayoutPanel.Size = new Size(519, 256);
+            FormLayoutPanel.Size = new Size(454, 210);
             FormLayoutPanel.TabIndex = 0;
             // 
             // NameBox
             // 
-            NameBox.Location = new Point(3, 3);
+            NameBox.Location = new Point(3, 2);
+            NameBox.Margin = new Padding(3, 2, 3, 2);
             NameBox.Name = "NameBox";
             NameBox.PlaceholderText = "Wpisz imię zwierzęcia...";
-            NameBox.Size = new Size(216, 27);
+            NameBox.Size = new Size(190, 23);
             NameBox.TabIndex = 0;
             // 
             // ownerSearchBox
             // 
-            ownerSearchBox.Location = new Point(3, 36);
+            ownerSearchBox.Location = new Point(3, 29);
+            ownerSearchBox.Margin = new Padding(3, 2, 3, 2);
             ownerSearchBox.Name = "ownerSearchBox";
             ownerSearchBox.PlaceholderText = "Wyszukaj właściciela...";
-            ownerSearchBox.Size = new Size(216, 27);
+            ownerSearchBox.Size = new Size(190, 23);
             ownerSearchBox.TabIndex = 3;
             ownerSearchBox.TextChanged += ownerSearchBox_TextChanged;
             // 
             // typBox
             // 
             typBox.FormattingEnabled = true;
-            typBox.Location = new Point(3, 69);
+            typBox.Location = new Point(3, 56);
+            typBox.Margin = new Padding(3, 2, 3, 2);
             typBox.Name = "typBox";
-            typBox.Size = new Size(216, 28);
+            typBox.Size = new Size(190, 23);
             typBox.TabIndex = 1;
             typBox.Text = "Typ zwierzęcia";
             typBox.SelectedIndexChanged += LoadToGatunekBox;
@@ -89,9 +93,10 @@
             // 
             gatunekBox.Enabled = false;
             gatunekBox.FormattingEnabled = true;
-            gatunekBox.Location = new Point(3, 103);
+            gatunekBox.Location = new Point(3, 83);
+            gatunekBox.Margin = new Padding(3, 2, 3, 2);
             gatunekBox.Name = "gatunekBox";
-            gatunekBox.Size = new Size(216, 28);
+            gatunekBox.Size = new Size(190, 23);
             gatunekBox.TabIndex = 2;
             gatunekBox.Text = "Gatunek";
             gatunekBox.SelectedIndexChanged += gatunekBox_SelectedIndexChanged;
@@ -99,24 +104,26 @@
             // ageLabel
             // 
             ageLabel.AutoSize = true;
-            ageLabel.Location = new Point(3, 134);
+            ageLabel.Location = new Point(3, 108);
             ageLabel.Name = "ageLabel";
-            ageLabel.Size = new Size(45, 20);
+            ageLabel.Size = new Size(36, 15);
             ageLabel.TabIndex = 6;
             ageLabel.Text = "Wiek:";
             // 
             // ageBox
             // 
-            ageBox.Location = new Point(3, 157);
+            ageBox.Location = new Point(3, 125);
+            ageBox.Margin = new Padding(3, 2, 3, 2);
             ageBox.Name = "ageBox";
-            ageBox.Size = new Size(150, 27);
+            ageBox.Size = new Size(131, 23);
             ageBox.TabIndex = 5;
             // 
             // acceptButton
             // 
-            acceptButton.Location = new Point(3, 190);
+            acceptButton.Location = new Point(3, 152);
+            acceptButton.Margin = new Padding(3, 2, 3, 2);
             acceptButton.Name = "acceptButton";
-            acceptButton.Size = new Size(94, 29);
+            acceptButton.Size = new Size(82, 22);
             acceptButton.TabIndex = 4;
             acceptButton.Text = "Zatwierdź";
             acceptButton.UseVisualStyleBackColor = true;
@@ -124,9 +131,10 @@
             // 
             // cancelButton
             // 
-            cancelButton.Location = new Point(225, 3);
+            cancelButton.Location = new Point(3, 178);
+            cancelButton.Margin = new Padding(3, 2, 3, 2);
             cancelButton.Name = "cancelButton";
-            cancelButton.Size = new Size(94, 29);
+            cancelButton.Size = new Size(82, 22);
             cancelButton.TabIndex = 7;
             cancelButton.Text = "Anuluj";
             cancelButton.UseVisualStyleBackColor = true;
@@ -134,11 +142,12 @@
             // 
             // AnimalAddForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(FormLayoutPanel);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "AnimalAddForm";
-            Size = new Size(519, 256);
+            Size = new Size(454, 210);
             FormLayoutPanel.ResumeLayout(false);
             FormLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)ageBox).EndInit();

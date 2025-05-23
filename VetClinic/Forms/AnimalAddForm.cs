@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using VetClinic.Models;
 
 namespace VetClinic.Forms
@@ -14,19 +15,49 @@ namespace VetClinic.Forms
     public partial class AnimalAddForm : UserControl
     {
         private ListBox resultBox;
-        private Osoba selectedOwner;
+        private int selectedOwnerId;
         private readonly MainForm _mainForm;
         private string chosenTyp = null;
         private string chosenGatunek = null;
+        private int mode;
 
         public AnimalAddForm(MainForm mainForm)
         {
             _mainForm = mainForm;
             InitializeComponent();
+            initializeView();
+            this.mode = 1;
+        }
+
+        public AnimalAddForm(MainForm mainForm, string imie, string gatunek, int? ownerId, int wiek, string typ)
+        {
+            _mainForm = mainForm;
+            InitializeComponent();
+            initializeView();
+
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
+
+            if (ownerId.HasValue)
+            {
+                Osoba osoba = context.Osoby.Where(o => o.Id == ownerId).FirstOrDefault();
+
+                this.selectedOwnerId = ownerId.Value;
+                ownerSearchBox.Text = $"{osoba.Imie} {osoba.Nazwisko}";
+            }
+
+            NameBox.Text = imie;
+            typBox.SelectedItem = typ;
+            gatunekBox.SelectedItem = gatunek;
+            ageBox.Value = wiek;
+            this.mode = 0;
+        }
+
+        private void initializeView()
+        {
             InitializeSearchControls();
             LoadToTypBox();
             LoadToGatunekBox(null, EventArgs.Empty);
-            gatunekBox.Enabled = false;
         }
 
         private void InitializeSearchControls()
@@ -77,7 +108,7 @@ namespace VetClinic.Forms
         {
             if (resultBox.SelectedItem is Osoba osoba)
             {
-                selectedOwner = osoba;
+                selectedOwnerId = osoba.Id;
                 ownerSearchBox.Text = $"{osoba.Imie} {osoba.Nazwisko}";
                 resultBox.Visible = false;
             }
@@ -135,25 +166,47 @@ namespace VetClinic.Forms
         {
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
-            int maxId = context.Zwierzeta.Max(z => z.Id);
 
-            var newAnimal = new Zwierze()
+            Zwierze zwierze;
+
+            if(mode == 1)
             {
-                Id = maxId + 1,
-                Imie = NameBox.Text,
-                Typ = chosenTyp,
-                Gatunek = chosenGatunek,
-                Wiek = (int)ageBox.Value,
-                WlascicielId = selectedOwner.Id
-            };
+                int maxId = context.Zwierzeta.Max(z => z.Id);
 
-            context.Zwierzeta.Add(newAnimal);
-            context.SaveChanges();
+                zwierze = new Zwierze()
+                {
+                    Id = maxId + 1,
+                    Imie = NameBox.Text,
+                    Typ = chosenTyp,
+                    Gatunek = chosenGatunek,
+                    Wiek = (int)ageBox.Value,
+                    WlascicielId = selectedOwnerId
+                };
+
+                context.Zwierzeta.Add(zwierze);
+                context.SaveChanges();
+                MainForm.animalview.selectedId = zwierze.Id;
+            }
+            else
+            {
+                zwierze = context.Zwierzeta.Where(z => z.Id == MainForm.animalview.selectedId).FirstOrDefault();
+                if (zwierze == null) return;
+
+                zwierze.Imie = NameBox.Text;
+                zwierze.Typ = chosenTyp;
+                zwierze.Gatunek = chosenGatunek;
+                zwierze.Wiek = (int)ageBox.Value;
+                zwierze.WlascicielId = selectedOwnerId;
+
+                context.Zwierzeta.Update(zwierze);
+                context.SaveChanges();
+            }
 
             MainForm.animalview.panelReturn();
             MainForm.animalview.LoadToAnimalTabControl();
 
-
+            string typ = zwierze.Typ;
+            MainForm.animalview.RefreshCurrentTab(typ);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

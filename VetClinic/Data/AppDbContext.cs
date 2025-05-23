@@ -34,7 +34,17 @@ namespace VetClinic.Data
                 j => j.HasOne<Lek>().WithMany().HasForeignKey("LekId"),
                 j => j.HasOne<Wizyta>().WithMany().HasForeignKey("WizytaId"),
                 j => j.ToTable("WizytaLek"));
-        }
+
+            modelBuilder.Entity<Wizyta>()
+            .Property(w => w.Data)
+            .HasColumnType("date");
+
+            modelBuilder.Entity<Wizyta>()
+           .HasOne(w => w.Zwierze)
+           .WithMany()
+           .HasForeignKey(w => w.ZwierzeId)
+           .OnDelete(DeleteBehavior.SetNull);
+            }
 
     }
 }

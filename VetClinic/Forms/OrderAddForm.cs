@@ -12,9 +12,11 @@ namespace VetClinic.Forms
 {
     public partial class OrderAddForm : UserControl
     {
-        public OrderAddForm()
+        private readonly MainForm _mainForm;
+        public OrderAddForm(MainForm mainForm)
         {
             InitializeComponent();
+            _mainForm = mainForm;
         }
     }
 }

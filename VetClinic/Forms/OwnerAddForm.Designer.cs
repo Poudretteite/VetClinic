@@ -34,6 +34,8 @@
             ownerBirthDayPicker = new DateTimePicker();
             ownerEmailTextbox = new TextBox();
             ownerPhoneTextBox = new TextBox();
+            acceptButton = new Button();
+            cancelButton = new Button();
             ownerAddMainLayout.SuspendLayout();
             SuspendLayout();
             // 
@@ -44,11 +46,13 @@
             ownerAddMainLayout.Controls.Add(ownerBirthDayPicker);
             ownerAddMainLayout.Controls.Add(ownerEmailTextbox);
             ownerAddMainLayout.Controls.Add(ownerPhoneTextBox);
+            ownerAddMainLayout.Controls.Add(acceptButton);
+            ownerAddMainLayout.Controls.Add(cancelButton);
             ownerAddMainLayout.Dock = DockStyle.Fill;
             ownerAddMainLayout.FlowDirection = FlowDirection.TopDown;
             ownerAddMainLayout.Location = new Point(0, 0);
             ownerAddMainLayout.Name = "ownerAddMainLayout";
-            ownerAddMainLayout.Size = new Size(150, 150);
+            ownerAddMainLayout.Size = new Size(150, 207);
             ownerAddMainLayout.TabIndex = 0;
             // 
             // ownerNameTextBox
@@ -70,11 +74,12 @@
             // ownerBirthDayPicker
             // 
             ownerBirthDayPicker.Location = new Point(3, 61);
-            ownerBirthDayPicker.MaxDate = new DateTime(2025, 12, 31, 0, 0, 0, 0);
-            ownerBirthDayPicker.MinDate = new DateTime(2025, 5, 23, 0, 0, 0, 0);
+            ownerBirthDayPicker.MaxDate = new DateTime(2007, 12, 31, 0, 0, 0, 0);
+            ownerBirthDayPicker.MinDate = new DateTime(1900, 1, 1, 0, 0, 0, 0);
             ownerBirthDayPicker.Name = "ownerBirthDayPicker";
             ownerBirthDayPicker.Size = new Size(200, 23);
             ownerBirthDayPicker.TabIndex = 7;
+            ownerBirthDayPicker.Value = new DateTime(2007, 12, 31, 0, 0, 0, 0);
             // 
             // ownerEmailTextbox
             // 
@@ -92,12 +97,33 @@
             ownerPhoneTextBox.Size = new Size(144, 23);
             ownerPhoneTextBox.TabIndex = 9;
             // 
+            // acceptButton
+            // 
+            acceptButton.Location = new Point(3, 147);
+            acceptButton.Margin = new Padding(3, 2, 3, 2);
+            acceptButton.Name = "acceptButton";
+            acceptButton.Size = new Size(82, 22);
+            acceptButton.TabIndex = 10;
+            acceptButton.Text = "Zatwierdź";
+            acceptButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            cancelButton.Location = new Point(3, 173);
+            cancelButton.Margin = new Padding(3, 2, 3, 2);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(82, 22);
+            cancelButton.TabIndex = 11;
+            cancelButton.Text = "Anuluj";
+            cancelButton.UseVisualStyleBackColor = true;
+            // 
             // OwnerAddForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(ownerAddMainLayout);
             Name = "OwnerAddForm";
+            Size = new Size(150, 207);
             ownerAddMainLayout.ResumeLayout(false);
             ownerAddMainLayout.PerformLayout();
             ResumeLayout(false);
@@ -111,5 +137,7 @@
         private DateTimePicker ownerBirthDayPicker;
         private TextBox ownerEmailTextbox;
         private TextBox ownerPhoneTextBox;
+        private Button acceptButton;
+        private Button cancelButton;
     }
 }

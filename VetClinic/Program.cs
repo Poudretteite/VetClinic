@@ -32,7 +32,7 @@ namespace VetClinic
                 List<Lek> leki = null;
                 if (!context.Leki.Any())
                 {
-                    leki = LekSeeder.GetSeedData(60).ToList();
+                    leki = LekSeeder.GetSeedData().ToList();
                     context.Leki.AddRange(leki);
                     context.SaveChanges();
                 }

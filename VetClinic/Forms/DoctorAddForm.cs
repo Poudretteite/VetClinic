@@ -12,8 +12,10 @@ namespace VetClinic.Forms
 {
     public partial class DoctorAddForm : UserControl
     {
-        public DoctorAddForm()
+        private readonly MainForm _mainForm;
+        public DoctorAddForm(MainForm mainForm)
         {
+            _mainForm = mainForm;
             InitializeComponent();
         }
     }

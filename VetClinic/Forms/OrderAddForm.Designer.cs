@@ -31,6 +31,8 @@
             orderAddMainLayout = new FlowLayoutPanel();
             medAmountPickerLabel = new Label();
             medAmountPicker = new NumericUpDown();
+            acceptButton = new Button();
+            cancelButton = new Button();
             orderAddMainLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)medAmountPicker).BeginInit();
             SuspendLayout();
@@ -39,11 +41,13 @@
             // 
             orderAddMainLayout.Controls.Add(medAmountPickerLabel);
             orderAddMainLayout.Controls.Add(medAmountPicker);
+            orderAddMainLayout.Controls.Add(acceptButton);
+            orderAddMainLayout.Controls.Add(cancelButton);
             orderAddMainLayout.Dock = DockStyle.Fill;
             orderAddMainLayout.FlowDirection = FlowDirection.TopDown;
             orderAddMainLayout.Location = new Point(0, 0);
             orderAddMainLayout.Name = "orderAddMainLayout";
-            orderAddMainLayout.Size = new Size(180, 70);
+            orderAddMainLayout.Size = new Size(180, 110);
             orderAddMainLayout.TabIndex = 0;
             // 
             // medAmountPickerLabel
@@ -62,13 +66,33 @@
             medAmountPicker.Size = new Size(71, 23);
             medAmountPicker.TabIndex = 4;
             // 
+            // acceptButton
+            // 
+            acceptButton.Location = new Point(3, 46);
+            acceptButton.Margin = new Padding(3, 2, 3, 2);
+            acceptButton.Name = "acceptButton";
+            acceptButton.Size = new Size(82, 22);
+            acceptButton.TabIndex = 8;
+            acceptButton.Text = "Zatwierdź";
+            acceptButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelButton
+            // 
+            cancelButton.Location = new Point(3, 72);
+            cancelButton.Margin = new Padding(3, 2, 3, 2);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(82, 22);
+            cancelButton.TabIndex = 9;
+            cancelButton.Text = "Anuluj";
+            cancelButton.UseVisualStyleBackColor = true;
+            // 
             // OrderAddForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(orderAddMainLayout);
             Name = "OrderAddForm";
-            Size = new Size(180, 70);
+            Size = new Size(180, 110);
             orderAddMainLayout.ResumeLayout(false);
             orderAddMainLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)medAmountPicker).EndInit();
@@ -80,5 +104,7 @@
         private FlowLayoutPanel orderAddMainLayout;
         private Label medAmountPickerLabel;
         private NumericUpDown medAmountPicker;
+        private Button acceptButton;
+        private Button cancelButton;
     }
 }
