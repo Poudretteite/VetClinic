@@ -7,6 +7,9 @@ namespace VetClinic
         public static AnimalView animalview = null;
         public static VisitView visitview = null;
         public static OwnerView ownerview = null;
+        public static DoctorView doctorview = null;
+        public static MedicineView medview = null;
+        public static OrderView orderview = null;
 
         public MainForm()
         {
@@ -47,18 +50,18 @@ namespace VetClinic
 
         public void vetButton_Click(object sender, EventArgs e)
         {
-            var doctorview = new DoctorView(this);
+            doctorview = new DoctorView(this);
             LoadView(doctorview);
         }
 
         public void orderButton_Click(object sender, EventArgs e)
         {
-            var orderview = new OrderView(this);
+            orderview = new OrderView(this);
             LoadView(orderview);
         }
         public void medButton_Click(object sender, EventArgs e)
         {
-            var medview = new MedicineView(this);
+            medview = new MedicineView(this);
             LoadView(medview);
         }
     }

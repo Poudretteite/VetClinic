@@ -207,7 +207,7 @@ namespace VetClinic.Forms
 
                 var newVisit = new Wizyta()
                 {
-                    Id = maxId,
+                    Id = maxId+1,
                     ZwierzeId = selectedAnimalId,
                     LekarzId = lekarzId,
                     Data = data,

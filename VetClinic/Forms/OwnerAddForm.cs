@@ -59,19 +59,19 @@ namespace VetClinic.Forms
                 MessageBox.Show("Numer telefonu powinien zawierać tylko liczby.");
             }
 
-            if (!IsValidEmail(ownerEmailTextbox.Text))
+            if (!Constants.IsValidEmail(ownerEmailTextbox.Text))
             {
                 MessageBox.Show("Niepoprawny email.");
             }
 
-            var emailCheck = context.Osoby.Where(o => o.Email == ownerEmailTextbox.Text).FirstOrDefault();
+            var emailCheck = context.Osoby.Where(o => o.Email == ownerEmailTextbox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();
             if (emailCheck != null)
             {
                 MessageBox.Show($"Powtarzajacy się email: {ownerEmailTextbox.Text}");
                 return;
             }
 
-            var phoneCheck = context.Osoby.Where(o => o.Telefon == ownerPhoneTextBox.Text).FirstOrDefault();
+            var phoneCheck = context.Osoby.Where(o => o.Telefon == ownerPhoneTextBox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();
             if (phoneCheck != null)
             {
                 MessageBox.Show($"Powtarzajacy się numer Telefonu: {ownerEmailTextbox.Text}");
@@ -84,10 +84,10 @@ namespace VetClinic.Forms
 
                 wlasciciel = new Osoba()
                 {
-                    Id = maxId,
+                    Id = maxId+1,
                     Imie = ownerNameTextBox.Text,
                     Nazwisko = ownerSurnameTextBox.Text,
-                    Data_ur = ownerBirthDayPicker.Value,
+                    Data_ur = ownerBirthDayPicker.Value.ToUniversalTime(),
                     Email = ownerEmailTextbox.Text,
                     Telefon = ownerPhoneTextBox.Text
                 };
@@ -100,7 +100,7 @@ namespace VetClinic.Forms
 
                 wlasciciel.Imie = ownerNameTextBox.Text;
                 wlasciciel.Nazwisko = ownerSurnameTextBox.Text;
-                wlasciciel.Data_ur = ownerBirthDayPicker.Value;
+                wlasciciel.Data_ur = ownerBirthDayPicker.Value.ToUniversalTime();
                 wlasciciel.Email = ownerEmailTextbox.Text;
                 wlasciciel.Telefon = ownerPhoneTextBox.Text;
 
@@ -111,15 +111,6 @@ namespace VetClinic.Forms
 
             MainForm.ownerview.panelReturn();
             MainForm.ownerview.refreshList();
-        }
-
-        public bool IsValidEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
-
-            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            return Regex.IsMatch(email, pattern);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

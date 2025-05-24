@@ -34,12 +34,15 @@
             doctorDataLayoutPanel = new FlowLayoutPanel();
             doctorNameLabel = new Label();
             doctorSpecialization = new Label();
+            doctorPhoneLabel = new Label();
+            doctorEmailLabel = new Label();
             pastVisitCount = new Label();
             futureVisitCount = new Label();
             doctorAddButton = new Button();
             doctorEditButton = new Button();
             doctorDeleteButton = new Button();
             doctorList = new ListBox();
+            doctorWorkplaceLabel = new Label();
             doctorMainTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)doctorVisitTable).BeginInit();
             doctorDataPanel.SuspendLayout();
@@ -104,6 +107,9 @@
             // 
             doctorDataLayoutPanel.Controls.Add(doctorNameLabel);
             doctorDataLayoutPanel.Controls.Add(doctorSpecialization);
+            doctorDataLayoutPanel.Controls.Add(doctorWorkplaceLabel);
+            doctorDataLayoutPanel.Controls.Add(doctorPhoneLabel);
+            doctorDataLayoutPanel.Controls.Add(doctorEmailLabel);
             doctorDataLayoutPanel.Controls.Add(pastVisitCount);
             doctorDataLayoutPanel.Controls.Add(futureVisitCount);
             doctorDataLayoutPanel.Dock = DockStyle.Fill;
@@ -137,10 +143,28 @@
             doctorSpecialization.TabIndex = 7;
             doctorSpecialization.Text = "Specjalizacja";
             // 
+            // doctorPhoneLabel
+            // 
+            doctorPhoneLabel.AutoSize = true;
+            doctorPhoneLabel.Location = new Point(3, 57);
+            doctorPhoneLabel.Name = "doctorPhoneLabel";
+            doctorPhoneLabel.Size = new Size(44, 15);
+            doctorPhoneLabel.TabIndex = 10;
+            doctorPhoneLabel.Text = "telefon";
+            // 
+            // doctorEmailLabel
+            // 
+            doctorEmailLabel.AutoSize = true;
+            doctorEmailLabel.Location = new Point(3, 72);
+            doctorEmailLabel.Name = "doctorEmailLabel";
+            doctorEmailLabel.Size = new Size(38, 15);
+            doctorEmailLabel.TabIndex = 11;
+            doctorEmailLabel.Text = "email";
+            // 
             // pastVisitCount
             // 
             pastVisitCount.AutoSize = true;
-            pastVisitCount.Location = new Point(3, 42);
+            pastVisitCount.Location = new Point(3, 87);
             pastVisitCount.Name = "pastVisitCount";
             pastVisitCount.Size = new Size(154, 15);
             pastVisitCount.TabIndex = 8;
@@ -149,7 +173,7 @@
             // futureVisitCount
             // 
             futureVisitCount.AutoSize = true;
-            futureVisitCount.Location = new Point(3, 57);
+            futureVisitCount.Location = new Point(3, 102);
             futureVisitCount.Name = "futureVisitCount";
             futureVisitCount.Size = new Size(145, 15);
             futureVisitCount.TabIndex = 9;
@@ -207,6 +231,16 @@
             doctorMainTableLayout.SetRowSpan(doctorList, 3);
             doctorList.Size = new Size(644, 162);
             doctorList.TabIndex = 13;
+            doctorList.SelectedIndexChanged += doctorList_SelectedIndexChanged;
+            // 
+            // doctorWorkplaceLabel
+            // 
+            doctorWorkplaceLabel.AutoSize = true;
+            doctorWorkplaceLabel.Location = new Point(3, 42);
+            doctorWorkplaceLabel.Name = "doctorWorkplaceLabel";
+            doctorWorkplaceLabel.Size = new Size(58, 15);
+            doctorWorkplaceLabel.TabIndex = 12;
+            doctorWorkplaceLabel.Text = "tryb pracy";
             // 
             // DoctorView
             // 
@@ -237,5 +271,8 @@
         private Button doctorEditButton;
         private Button doctorDeleteButton;
         private ListBox doctorList;
+        private Label doctorPhoneLabel;
+        private Label doctorEmailLabel;
+        private Label doctorWorkplaceLabel;
     }
 }

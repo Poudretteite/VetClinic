@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,6 +26,13 @@ namespace VetClinic.Forms
 
         private void ownerEditButton_Click(object sender, EventArgs e)
         {
+
+            if (selectedOwnerId == -1)
+            {
+                MessageBox.Show("Nie można modyfikować wybranego rekordu");
+                return;
+            }
+
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 

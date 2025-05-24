@@ -69,7 +69,7 @@
             doctorNameTextBox.Location = new Point(3, 3);
             doctorNameTextBox.Name = "doctorNameTextBox";
             doctorNameTextBox.PlaceholderText = "Podaj imię...";
-            doctorNameTextBox.Size = new Size(144, 21);
+            doctorNameTextBox.Size = new Size(200, 21);
             doctorNameTextBox.TabIndex = 0;
             // 
             // doctorSurnameTextBox
@@ -77,7 +77,7 @@
             doctorSurnameTextBox.Location = new Point(3, 30);
             doctorSurnameTextBox.Name = "doctorSurnameTextBox";
             doctorSurnameTextBox.PlaceholderText = "Podaj nazwisko...";
-            doctorSurnameTextBox.Size = new Size(144, 21);
+            doctorSurnameTextBox.Size = new Size(200, 21);
             doctorSurnameTextBox.TabIndex = 1;
             // 
             // doctorBirthDayPicker
@@ -95,7 +95,7 @@
             doctorEmailTextbox.Location = new Point(3, 84);
             doctorEmailTextbox.Name = "doctorEmailTextbox";
             doctorEmailTextbox.PlaceholderText = "Podaj email...";
-            doctorEmailTextbox.Size = new Size(144, 21);
+            doctorEmailTextbox.Size = new Size(200, 21);
             doctorEmailTextbox.TabIndex = 3;
             // 
             // doctorPhoneTextBox
@@ -103,7 +103,7 @@
             doctorPhoneTextBox.Location = new Point(3, 111);
             doctorPhoneTextBox.Name = "doctorPhoneTextBox";
             doctorPhoneTextBox.PlaceholderText = "Podaj numer telefonu...";
-            doctorPhoneTextBox.Size = new Size(144, 21);
+            doctorPhoneTextBox.Size = new Size(200, 21);
             doctorPhoneTextBox.TabIndex = 4;
             // 
             // doctorSpecializationChoiceLabel
@@ -121,7 +121,7 @@
             doctorSpecializationChoice.FormattingEnabled = true;
             doctorSpecializationChoice.Location = new Point(3, 153);
             doctorSpecializationChoice.Name = "doctorSpecializationChoice";
-            doctorSpecializationChoice.Size = new Size(144, 23);
+            doctorSpecializationChoice.Size = new Size(200, 23);
             doctorSpecializationChoice.TabIndex = 6;
             // 
             // doctorWorkPlaceChoiceLabel
@@ -138,7 +138,7 @@
             doctorWorkPlaceChoice.FormattingEnabled = true;
             doctorWorkPlaceChoice.Location = new Point(3, 197);
             doctorWorkPlaceChoice.Name = "doctorWorkPlaceChoice";
-            doctorWorkPlaceChoice.Size = new Size(144, 23);
+            doctorWorkPlaceChoice.Size = new Size(200, 23);
             doctorWorkPlaceChoice.TabIndex = 5;
             // 
             // acceptButton
@@ -150,6 +150,7 @@
             acceptButton.TabIndex = 9;
             acceptButton.Text = "Zatwierdź";
             acceptButton.UseVisualStyleBackColor = true;
+            acceptButton.Click += acceptButton_Click;
             // 
             // cancelButton
             // 
@@ -160,6 +161,7 @@
             cancelButton.TabIndex = 10;
             cancelButton.Text = "Anuluj";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
             // 
             // DoctorAddForm
             // 
