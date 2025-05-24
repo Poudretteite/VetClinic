@@ -103,11 +103,13 @@ namespace VetClinic.Forms
             if (!doctorPhoneTextBox.Text.All(char.IsDigit))
             {
                 MessageBox.Show("Numer telefonu powinien zawierać tylko liczby.");
+                return;
             }
 
             if (!Constants.IsValidEmail(doctorEmailTextbox.Text))
             {
                 MessageBox.Show("Niepoprawny email.");
+                return;
             }
 
             var emailCheck = context.Osoby.Where(o => o.Email == doctorEmailTextbox.Text && o.Id != MainForm.doctorview.selectedLekarzId).FirstOrDefault();
@@ -124,9 +126,9 @@ namespace VetClinic.Forms
                 return;
             }
 
-            if (mode == 0)
+            if (mode == 1)
             {
-                int maxId = context.Lekarze.Max(lekarz => lekarz.Id);
+                int maxId = context.Osoby.Max(o => o.Id);
 
                 lekarz = new Lekarz()
                 {

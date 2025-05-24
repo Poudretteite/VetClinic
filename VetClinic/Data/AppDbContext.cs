@@ -17,8 +17,6 @@ namespace VetClinic.Data
         public DbSet<Osoba> Osoby {  get; set; }
         public DbSet<Lekarz> Lekarze { get; set; }
         public DbSet<Zwierze> Zwierzeta { get; set; }
-
-        public DbSet<Adres> Adresy { get; set; }
         public DbSet<Zamowienie> Zamowienia { get; set; }
         public DbSet<Lek> Leki { get; set; }
 

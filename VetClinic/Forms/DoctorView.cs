@@ -31,6 +31,8 @@ namespace VetClinic.Forms
 
             var lekarze = context.Lekarze.ToList();
 
+            doctorList.Items.Clear();
+
             foreach (var lekarz in lekarze)
             {
                 doctorList.Items.Add(lekarz.ToString());
@@ -91,6 +93,8 @@ namespace VetClinic.Forms
             var view = new DoctorAddForm(this._mainForm);
             doctorDataPanel.Controls.Add(view);
             view.Dock = DockStyle.Fill;
+
+            
         }
 
         private void doctorEditButton_Click(object sender, EventArgs e)
@@ -124,6 +128,7 @@ namespace VetClinic.Forms
                 context.Lekarze.Remove(lekarz);
                 context.SaveChanges();
 
+                LoadToDoctorList();
                 LoadDoctorData();
                 LoadToDoctorVisitTable();
             }

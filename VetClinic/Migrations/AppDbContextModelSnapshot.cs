@@ -22,35 +22,6 @@ namespace VetClinic.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("VetClinic.Models.Adres", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Miasto")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int?>("Nr_lokalu")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Nr_ulicy")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Ulica")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("adresy");
-                });
-
             modelBuilder.Entity("VetClinic.Models.Lek", b =>
                 {
                     b.Property<int>("Id")
@@ -80,9 +51,6 @@ namespace VetClinic.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdresId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Data_ur")
                         .HasColumnType("timestamp with time zone");
 
@@ -105,8 +73,6 @@ namespace VetClinic.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdresId");
 
                     b.ToTable("osoby");
 
@@ -150,6 +116,9 @@ namespace VetClinic.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Ilosc")
                         .HasColumnType("integer");
@@ -232,17 +201,6 @@ namespace VetClinic.Migrations
                     b.ToTable("lekarze");
                 });
 
-            modelBuilder.Entity("VetClinic.Models.Osoba", b =>
-                {
-                    b.HasOne("VetClinic.Models.Adres", "Adres")
-                        .WithMany()
-                        .HasForeignKey("AdresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Adres");
-                });
-
             modelBuilder.Entity("VetClinic.Models.Wizyta", b =>
                 {
                     b.HasOne("VetClinic.Models.Lekarz", "Lekarz")
@@ -263,13 +221,13 @@ namespace VetClinic.Migrations
 
             modelBuilder.Entity("VetClinic.Models.Zamowienie", b =>
                 {
-                    b.HasOne("VetClinic.Models.Lek", "lek")
+                    b.HasOne("VetClinic.Models.Lek", "Lek")
                         .WithMany()
                         .HasForeignKey("LekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("lek");
+                    b.Navigation("Lek");
                 });
 
             modelBuilder.Entity("VetClinic.Models.Zwierze", b =>

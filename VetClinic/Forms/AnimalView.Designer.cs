@@ -115,7 +115,7 @@
             // 
             animalVisitDataGrid.AllowUserToAddRows = false;
             animalVisitDataGrid.AllowUserToDeleteRows = false;
-            animalVisitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            animalVisitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             animalVisitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             mainTableLayout.SetColumnSpan(animalVisitDataGrid, 4);
             animalVisitDataGrid.Dock = DockStyle.Fill;
@@ -291,10 +291,6 @@
             animalDeleteButton.Text = "Usuń";
             animalDeleteButton.UseVisualStyleBackColor = false;
             animalDeleteButton.Click += animalDeleteButton_Click;
-            // 
-            // initBindingSource
-            // 
-            //initBindingSource.DataSource = typeof(Migrations.Init);
             // 
             // AnimalView
             // 

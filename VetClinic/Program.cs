@@ -21,8 +21,6 @@ namespace VetClinic
                     context.Database.Migrate();
                 }
 
-                if (!context.Adresy.Any()) { context.Adresy.AddRange(AdresSeeder.GetSeedData(20)); }
-                context.SaveChanges();
                 if (!context.Osoby.Any()) { context.Osoby.AddRange(OsobaSeeder.GetSeedData(30)); }
                 context.SaveChanges();
                 if (!context.Lekarze.Any()) { context.Lekarze.AddRange(LekarzSeeder.GetSeedData()); }

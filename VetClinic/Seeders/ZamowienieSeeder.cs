@@ -21,7 +21,8 @@ namespace VetClinic.Seeders
                 {
                     Id = i,
                     LekId = faker.Random.Int(1, 40),
-                    Ilosc = faker.Random.Int(20, 80)
+                    Ilosc = faker.Random.Int(20, 80),
+                    Data = faker.Date.Between(new DateTime(2024, 1, 1), DateTime.UtcNow).ToUniversalTime().Date
                 });
             }
 

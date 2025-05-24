@@ -32,8 +32,7 @@
             orderDataGrid = new DataGridView();
             orderViewTitle = new Label();
             orderStatsFlowLayout = new FlowLayoutPanel();
-            label1 = new Label();
-            orderLastMonthCount = new Label();
+            orderCount = new Label();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)orderDataGrid).BeginInit();
             orderStatsFlowLayout.SuspendLayout();
@@ -55,8 +54,8 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 6;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 6.16666651F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 13.833333F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
@@ -65,13 +64,14 @@
             // 
             // orderDataGrid
             // 
+            orderDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             orderDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             tableLayoutPanel1.SetColumnSpan(orderDataGrid, 5);
             orderDataGrid.Dock = DockStyle.Fill;
-            orderDataGrid.Location = new Point(3, 123);
+            orderDataGrid.Location = new Point(3, 100);
             orderDataGrid.Name = "orderDataGrid";
             tableLayoutPanel1.SetRowSpan(orderDataGrid, 4);
-            orderDataGrid.Size = new Size(794, 474);
+            orderDataGrid.Size = new Size(794, 497);
             orderDataGrid.TabIndex = 0;
             // 
             // orderViewTitle
@@ -90,34 +90,24 @@
             // 
             // orderStatsFlowLayout
             // 
-            orderStatsFlowLayout.Controls.Add(label1);
-            orderStatsFlowLayout.Controls.Add(orderLastMonthCount);
+            orderStatsFlowLayout.Controls.Add(orderCount);
             orderStatsFlowLayout.Dock = DockStyle.Fill;
             orderStatsFlowLayout.FlowDirection = FlowDirection.TopDown;
             orderStatsFlowLayout.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
             orderStatsFlowLayout.Location = new Point(3, 63);
             orderStatsFlowLayout.Name = "orderStatsFlowLayout";
-            orderStatsFlowLayout.Size = new Size(200, 54);
+            orderStatsFlowLayout.Size = new Size(200, 31);
             orderStatsFlowLayout.TabIndex = 13;
             // 
-            // label1
+            // orderCount
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            label1.Location = new Point(3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(133, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Wszystkie zamówienia:";
-            // 
-            // orderLastMonthCount
-            // 
-            orderLastMonthCount.AutoSize = true;
-            orderLastMonthCount.Location = new Point(3, 15);
-            orderLastMonthCount.Name = "orderLastMonthCount";
-            orderLastMonthCount.Size = new Size(175, 30);
-            orderLastMonthCount.TabIndex = 1;
-            orderLastMonthCount.Text = "Liczba zamówień przez ostatni miesiąc:";
+            orderCount.AutoSize = true;
+            orderCount.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            orderCount.Location = new Point(3, 0);
+            orderCount.Name = "orderCount";
+            orderCount.Size = new Size(133, 15);
+            orderCount.TabIndex = 0;
+            orderCount.Text = "Wszystkie zamówienia:";
             // 
             // OrderView
             // 
@@ -140,7 +130,6 @@
         private DataGridView orderDataGrid;
         private Label orderViewTitle;
         private FlowLayoutPanel orderStatsFlowLayout;
-        private Label label1;
-        private Label orderLastMonthCount;
+        private Label orderCount;
     }
 }

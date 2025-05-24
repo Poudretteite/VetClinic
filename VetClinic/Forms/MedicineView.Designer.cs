@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             mainTableLayout = new TableLayoutPanel();
             medSearchBox = new TextBox();
             medOrderButton = new Button();
@@ -39,7 +36,6 @@
             medAddButton = new Button();
             medicineList = new ListBox();
             visitDataGrid = new DataGridView();
-            visitCountChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             medDataPlaceholder = new Panel();
             statsPanel = new FlowLayoutPanel();
             StatsLabel = new Label();
@@ -47,7 +43,6 @@
             medVisitCount = new Label();
             mainTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)visitDataGrid).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)visitCountChart).BeginInit();
             medDataPlaceholder.SuspendLayout();
             statsPanel.SuspendLayout();
             SuspendLayout();
@@ -55,10 +50,10 @@
             // mainTableLayout
             // 
             mainTableLayout.ColumnCount = 4;
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50.65666F));
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.5778618F));
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 24.7654781F));
-            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 326F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.88372F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34.0531578F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.0631237F));
+            mainTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 196F));
             mainTableLayout.Controls.Add(medSearchBox, 0, 0);
             mainTableLayout.Controls.Add(medOrderButton, 2, 3);
             mainTableLayout.Controls.Add(medDeleteButton, 1, 3);
@@ -66,17 +61,16 @@
             mainTableLayout.Controls.Add(medAddButton, 1, 2);
             mainTableLayout.Controls.Add(medicineList, 0, 1);
             mainTableLayout.Controls.Add(visitDataGrid, 1, 4);
-            mainTableLayout.Controls.Add(visitCountChart, 3, 0);
             mainTableLayout.Controls.Add(medDataPlaceholder, 1, 0);
             mainTableLayout.Dock = DockStyle.Fill;
             mainTableLayout.Location = new Point(0, 0);
             mainTableLayout.Name = "mainTableLayout";
             mainTableLayout.RowCount = 5;
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 6.54885674F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 16.5F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 7.16666651F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 7.16666651F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 63F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20.5F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 7.83333349F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 7.83333349F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 57.6666679F));
             mainTableLayout.Size = new Size(800, 600);
             mainTableLayout.TabIndex = 0;
             // 
@@ -87,7 +81,7 @@
             medSearchBox.Margin = new Padding(3, 2, 3, 2);
             medSearchBox.Name = "medSearchBox";
             medSearchBox.PlaceholderText = "Wyszukaj po nazwie leku...";
-            medSearchBox.Size = new Size(234, 21);
+            medSearchBox.Size = new Size(204, 21);
             medSearchBox.TabIndex = 15;
             // 
             // medOrderButton
@@ -96,7 +90,7 @@
             medOrderButton.BackColor = Color.FromArgb(34, 56, 67);
             medOrderButton.FlatStyle = FlatStyle.Flat;
             medOrderButton.ForeColor = Color.White;
-            medOrderButton.Location = new Point(370, 183);
+            medOrderButton.Location = new Point(464, 213);
             medOrderButton.Margin = new Padding(3, 2, 3, 2);
             medOrderButton.Name = "medOrderButton";
             medOrderButton.Size = new Size(88, 33);
@@ -110,7 +104,7 @@
             medDeleteButton.Anchor = AnchorStyles.None;
             medDeleteButton.BackColor = Color.Salmon;
             medDeleteButton.FlatStyle = FlatStyle.Flat;
-            medDeleteButton.Location = new Point(254, 183);
+            medDeleteButton.Location = new Point(268, 213);
             medDeleteButton.Margin = new Padding(3, 2, 3, 2);
             medDeleteButton.Name = "medDeleteButton";
             medDeleteButton.Size = new Size(88, 33);
@@ -124,7 +118,7 @@
             medEditButton.Anchor = AnchorStyles.None;
             medEditButton.BackColor = Color.FromArgb(219, 211, 216);
             medEditButton.FlatStyle = FlatStyle.Flat;
-            medEditButton.Location = new Point(370, 141);
+            medEditButton.Location = new Point(464, 167);
             medEditButton.Margin = new Padding(3, 2, 3, 2);
             medEditButton.Name = "medEditButton";
             medEditButton.Size = new Size(88, 33);
@@ -138,7 +132,7 @@
             medAddButton.Anchor = AnchorStyles.None;
             medAddButton.BackColor = Color.FromArgb(219, 211, 216);
             medAddButton.FlatStyle = FlatStyle.Flat;
-            medAddButton.Location = new Point(254, 141);
+            medAddButton.Location = new Point(268, 167);
             medAddButton.Margin = new Padding(3, 2, 3, 2);
             medAddButton.Name = "medAddButton";
             medAddButton.Size = new Size(88, 33);
@@ -157,47 +151,31 @@
             medicineList.Location = new Point(3, 42);
             medicineList.Name = "medicineList";
             mainTableLayout.SetRowSpan(medicineList, 4);
-            medicineList.Size = new Size(234, 555);
+            medicineList.Size = new Size(204, 555);
             medicineList.Sorted = true;
             medicineList.TabIndex = 0;
+            medicineList.SelectedIndexChanged += medicineList_SelectedIndexChanged;
             // 
             // visitDataGrid
             // 
+            visitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             visitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             mainTableLayout.SetColumnSpan(visitDataGrid, 3);
             visitDataGrid.Dock = DockStyle.Fill;
-            visitDataGrid.Location = new Point(243, 224);
+            visitDataGrid.Location = new Point(213, 256);
             visitDataGrid.Name = "visitDataGrid";
-            visitDataGrid.Size = new Size(554, 373);
+            visitDataGrid.Size = new Size(584, 341);
             visitDataGrid.TabIndex = 1;
-            // 
-            // visitCountChart
-            // 
-            chartArea4.Name = "ChartArea1";
-            visitCountChart.ChartAreas.Add(chartArea4);
-            visitCountChart.Dock = DockStyle.Fill;
-            legend4.Name = "Legend1";
-            visitCountChart.Legends.Add(legend4);
-            visitCountChart.Location = new Point(476, 3);
-            visitCountChart.Name = "visitCountChart";
-            mainTableLayout.SetRowSpan(visitCountChart, 4);
-            series4.ChartArea = "ChartArea1";
-            series4.Legend = "Legend1";
-            series4.Name = "Series1";
-            visitCountChart.Series.Add(series4);
-            visitCountChart.Size = new Size(321, 215);
-            visitCountChart.TabIndex = 4;
-            visitCountChart.Text = "chart1";
             // 
             // medDataPlaceholder
             // 
-            mainTableLayout.SetColumnSpan(medDataPlaceholder, 2);
+            mainTableLayout.SetColumnSpan(medDataPlaceholder, 3);
             medDataPlaceholder.Controls.Add(statsPanel);
             medDataPlaceholder.Dock = DockStyle.Fill;
-            medDataPlaceholder.Location = new Point(243, 3);
+            medDataPlaceholder.Location = new Point(213, 3);
             medDataPlaceholder.Name = "medDataPlaceholder";
             mainTableLayout.SetRowSpan(medDataPlaceholder, 2);
-            medDataPlaceholder.Size = new Size(227, 131);
+            medDataPlaceholder.Size = new Size(584, 155);
             medDataPlaceholder.TabIndex = 5;
             // 
             // statsPanel
@@ -209,7 +187,7 @@
             statsPanel.FlowDirection = FlowDirection.TopDown;
             statsPanel.Location = new Point(0, 0);
             statsPanel.Name = "statsPanel";
-            statsPanel.Size = new Size(227, 131);
+            statsPanel.Size = new Size(584, 155);
             statsPanel.TabIndex = 3;
             // 
             // StatsLabel
@@ -252,7 +230,6 @@
             mainTableLayout.ResumeLayout(false);
             mainTableLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)visitDataGrid).EndInit();
-            ((System.ComponentModel.ISupportInitialize)visitCountChart).EndInit();
             medDataPlaceholder.ResumeLayout(false);
             statsPanel.ResumeLayout(false);
             statsPanel.PerformLayout();
@@ -267,7 +244,6 @@
         private FlowLayoutPanel statsPanel;
         private Label StatsLabel;
         private Label medCount;
-        private System.Windows.Forms.DataVisualization.Charting.Chart visitCountChart;
         private Label medVisitCount;
         private Panel medDataPlaceholder;
         private Button medAddButton;

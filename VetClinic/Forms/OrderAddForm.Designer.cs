@@ -62,9 +62,11 @@
             // medAmountPicker
             // 
             medAmountPicker.Location = new Point(3, 18);
+            medAmountPicker.Minimum = new decimal(new int[] { 5, 0, 0, 0 });
             medAmountPicker.Name = "medAmountPicker";
             medAmountPicker.Size = new Size(71, 23);
             medAmountPicker.TabIndex = 4;
+            medAmountPicker.Value = new decimal(new int[] { 5, 0, 0, 0 });
             // 
             // acceptButton
             // 
@@ -75,6 +77,7 @@
             acceptButton.TabIndex = 8;
             acceptButton.Text = "Zatwierdź";
             acceptButton.UseVisualStyleBackColor = true;
+            acceptButton.Click += acceptButton_Click;
             // 
             // cancelButton
             // 
@@ -85,6 +88,7 @@
             cancelButton.TabIndex = 9;
             cancelButton.Text = "Anuluj";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
             // 
             // OrderAddForm
             // 

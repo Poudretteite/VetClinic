@@ -30,8 +30,7 @@ namespace VetClinic.Seeders
                     Nazwisko = faker.Name.LastName(),
                     Email = faker.Internet.Email(),
                     Data_ur = faker.Date.Between(minDate, maxDate).ToUniversalTime(),
-                    Telefon = faker.Phone.PhoneNumber("#########"),
-                    AdresId = faker.Random.Int(1, 20)
+                    Telefon = faker.Phone.PhoneNumber("#########")
                 });
             }
 
@@ -42,8 +41,7 @@ namespace VetClinic.Seeders
                 Nazwisko = "Opieki Zwierzat",
                 Email = "carecenter@vetclinic.local",
                 Data_ur = DateTime.UtcNow,
-                Telefon = "123456789",
-                AdresId = -1
+                Telefon = "123456789"
             });
 
             return osoby;

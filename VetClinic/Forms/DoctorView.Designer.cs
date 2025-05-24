@@ -34,6 +34,7 @@
             doctorDataLayoutPanel = new FlowLayoutPanel();
             doctorNameLabel = new Label();
             doctorSpecialization = new Label();
+            doctorWorkplaceLabel = new Label();
             doctorPhoneLabel = new Label();
             doctorEmailLabel = new Label();
             pastVisitCount = new Label();
@@ -42,7 +43,6 @@
             doctorEditButton = new Button();
             doctorDeleteButton = new Button();
             doctorList = new ListBox();
-            doctorWorkplaceLabel = new Label();
             doctorMainTableLayout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)doctorVisitTable).BeginInit();
             doctorDataPanel.SuspendLayout();
@@ -83,6 +83,7 @@
             // 
             // doctorVisitTable
             // 
+            doctorVisitTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             doctorVisitTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             doctorMainTableLayout.SetColumnSpan(doctorVisitTable, 3);
             doctorVisitTable.Dock = DockStyle.Fill;
@@ -142,6 +143,15 @@
             doctorSpecialization.Size = new Size(79, 15);
             doctorSpecialization.TabIndex = 7;
             doctorSpecialization.Text = "Specjalizacja";
+            // 
+            // doctorWorkplaceLabel
+            // 
+            doctorWorkplaceLabel.AutoSize = true;
+            doctorWorkplaceLabel.Location = new Point(3, 42);
+            doctorWorkplaceLabel.Name = "doctorWorkplaceLabel";
+            doctorWorkplaceLabel.Size = new Size(58, 15);
+            doctorWorkplaceLabel.TabIndex = 12;
+            doctorWorkplaceLabel.Text = "tryb pracy";
             // 
             // doctorPhoneLabel
             // 
@@ -232,15 +242,6 @@
             doctorList.Size = new Size(644, 162);
             doctorList.TabIndex = 13;
             doctorList.SelectedIndexChanged += doctorList_SelectedIndexChanged;
-            // 
-            // doctorWorkplaceLabel
-            // 
-            doctorWorkplaceLabel.AutoSize = true;
-            doctorWorkplaceLabel.Location = new Point(3, 42);
-            doctorWorkplaceLabel.Name = "doctorWorkplaceLabel";
-            doctorWorkplaceLabel.Size = new Size(58, 15);
-            doctorWorkplaceLabel.TabIndex = 12;
-            doctorWorkplaceLabel.Text = "tryb pracy";
             // 
             // DoctorView
             // 

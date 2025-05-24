@@ -86,6 +86,7 @@
             acceptButton.TabIndex = 8;
             acceptButton.Text = "Zatwierdź";
             acceptButton.UseVisualStyleBackColor = true;
+            acceptButton.Click += acceptButton_Click;
             // 
             // cancelButton
             // 
@@ -96,6 +97,7 @@
             cancelButton.TabIndex = 9;
             cancelButton.Text = "Anuluj";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
             // 
             // MedicineAddForm
             // 

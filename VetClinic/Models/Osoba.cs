@@ -34,12 +34,6 @@ namespace VetClinic.Models
         [Phone]
         public string Telefon { get; set; }
 
-        [Required]
-        public int AdresId {  get; set; }
-
-        [ForeignKey("AdresId")]
-        public Adres Adres {  get; set; }
-
         public override string ToString()
         {
             return $"{Id}. {Imie} {Nazwisko}";

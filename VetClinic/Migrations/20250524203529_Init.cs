@@ -13,22 +13,6 @@ namespace VetClinic.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "adresy",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Miasto = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Ulica = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Nr_ulicy = table.Column<int>(type: "integer", nullable: false),
-                    Nr_lokalu = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_adresy", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "leki",
                 columns: table => new
                 {
@@ -52,18 +36,11 @@ namespace VetClinic.Migrations
                     Nazwisko = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Data_ur = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Telefon = table.Column<string>(type: "text", nullable: false),
-                    AdresId = table.Column<int>(type: "integer", nullable: false)
+                    Telefon = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_osoby", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_osoby_adresy_AdresId",
-                        column: x => x.AdresId,
-                        principalTable: "adresy",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,7 +50,8 @@ namespace VetClinic.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     LekId = table.Column<int>(type: "integer", nullable: false),
-                    Ilosc = table.Column<int>(type: "integer", nullable: false)
+                    Ilosc = table.Column<int>(type: "integer", nullable: false),
+                    Data = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,11 +159,6 @@ namespace VetClinic.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_osoby_AdresId",
-                table: "osoby",
-                column: "AdresId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_WizytaLek_WizytaId",
                 table: "WizytaLek",
                 column: "WizytaId");
@@ -234,9 +207,6 @@ namespace VetClinic.Migrations
 
             migrationBuilder.DropTable(
                 name: "osoby");
-
-            migrationBuilder.DropTable(
-                name: "adresy");
         }
     }
 }

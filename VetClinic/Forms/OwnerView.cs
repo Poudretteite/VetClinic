@@ -22,6 +22,7 @@ namespace VetClinic.Forms
             this.selectedOwnerId = selectedOwnerId;
             LoadToOwnerList();
             LoadOwnerData();
+            LoadToOwnerAnimalList();
         }
 
         private void ownerEditButton_Click(object sender, EventArgs e)
@@ -76,10 +77,26 @@ namespace VetClinic.Forms
             refreshList();
         }
 
+        private void LoadToOwnerAnimalList()
+        {
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
+
+            var zwierzeta = context.Zwierzeta.Where(z => z.WlascicielId == selectedOwnerId).ToList();
+
+            ownerAnimalList.Items.Clear();
+
+            foreach (var zwierze in zwierzeta)
+            {
+                ownerAnimalList.Items.Add(zwierze);
+            }
+        }
+
         public void refreshList()
         {
             ownerList.Items.Clear();
             LoadToOwnerList();
+            LoadToOwnerAnimalList();
         }
 
         private void ownerAddButton_Click(object sender, EventArgs e)
@@ -166,6 +183,7 @@ namespace VetClinic.Forms
             selectedOwnerId = int.Parse(selectedItem.Split('.')[0]);
 
             LoadOwnerData();
+            LoadToOwnerAnimalList();
         }
 
         public void panelReturn()

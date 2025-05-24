@@ -57,11 +57,13 @@ namespace VetClinic.Forms
             if (!ownerPhoneTextBox.Text.All(char.IsDigit))
             {
                 MessageBox.Show("Numer telefonu powinien zawierać tylko liczby.");
+                return;
             }
 
             if (!Constants.IsValidEmail(ownerEmailTextbox.Text))
             {
                 MessageBox.Show("Niepoprawny email.");
+                return;
             }
 
             var emailCheck = context.Osoby.Where(o => o.Email == ownerEmailTextbox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();

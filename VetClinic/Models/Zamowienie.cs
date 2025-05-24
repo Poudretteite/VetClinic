@@ -18,10 +18,14 @@ namespace VetClinic.Models
         public int LekId { get; set; }
 
         [ForeignKey("LekId")]
-        public Lek lek { get; set; }
+        public Lek Lek { get; set; }
 
         [Required]
         public int Ilosc {  get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime Data { get; set; }
 
     }
 }
