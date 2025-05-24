@@ -50,11 +50,10 @@
             visitChart.Dock = DockStyle.Fill;
             legend1.Name = "Legend1";
             visitChart.Legends.Add(legend1);
-            visitChart.Location = new Point(86, 4);
-            visitChart.Margin = new Padding(3, 4, 3, 4);
+            visitChart.Location = new Point(75, 3);
             visitChart.Name = "visitChart";
             visitChart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Chocolate;
-            visitChart.Size = new Size(492, 192);
+            visitChart.Size = new Size(430, 179);
             visitChart.TabIndex = 2;
             visitChart.Text = "Ilość wizyt w ostatnich miesiącach";
             // 
@@ -65,12 +64,11 @@
             medCount.Dock = DockStyle.Fill;
             legend2.Name = "Legend1";
             medCount.Legends.Add(legend2);
-            medCount.Location = new Point(584, 4);
-            medCount.Margin = new Padding(3, 4, 3, 4);
+            medCount.Location = new Point(511, 3);
             medCount.Name = "medCount";
             medCount.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Chocolate;
             mainTableLayout.SetRowSpan(medCount, 5);
-            medCount.Size = new Size(327, 792);
+            medCount.Size = new Size(286, 594);
             medCount.TabIndex = 3;
             medCount.Text = "Ilość leków";
             // 
@@ -82,14 +80,13 @@
             VisitScheduleGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             VisitScheduleGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             VisitScheduleGrid.Dock = DockStyle.Fill;
-            VisitScheduleGrid.Location = new Point(86, 244);
-            VisitScheduleGrid.Margin = new Padding(3, 4, 3, 4);
+            VisitScheduleGrid.Location = new Point(75, 219);
             VisitScheduleGrid.Name = "VisitScheduleGrid";
             VisitScheduleGrid.ReadOnly = true;
             VisitScheduleGrid.RowHeadersVisible = false;
             VisitScheduleGrid.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             mainTableLayout.SetRowSpan(VisitScheduleGrid, 2);
-            VisitScheduleGrid.Size = new Size(492, 472);
+            VisitScheduleGrid.Size = new Size(430, 318);
             VisitScheduleGrid.TabIndex = 0;
             // 
             // mainTableLayout
@@ -104,15 +101,14 @@
             mainTableLayout.Controls.Add(medCount, 2, 0);
             mainTableLayout.Dock = DockStyle.Fill;
             mainTableLayout.Location = new Point(0, 0);
-            mainTableLayout.Margin = new Padding(3, 4, 3, 4);
             mainTableLayout.Name = "mainTableLayout";
             mainTableLayout.RowCount = 5;
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 25F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30.833334F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 5.16666651F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 24F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            mainTableLayout.Size = new Size(914, 800);
+            mainTableLayout.Size = new Size(800, 600);
             mainTableLayout.TabIndex = 3;
             // 
             // visitGridTitle
@@ -121,21 +117,21 @@
             visitGridTitle.Dock = DockStyle.Fill;
             visitGridTitle.Font = new Font("Arial Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
             visitGridTitle.ForeColor = Color.FromArgb(215, 122, 97);
-            visitGridTitle.Location = new Point(86, 200);
+            visitGridTitle.Location = new Point(75, 185);
             visitGridTitle.Name = "visitGridTitle";
-            visitGridTitle.Size = new Size(492, 40);
+            visitGridTitle.Size = new Size(430, 31);
             visitGridTitle.TabIndex = 3;
             visitGridTitle.Text = "Najbliższe wizyty";
             visitGridTitle.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // MainMenuView
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(mainTableLayout);
             Margin = new Padding(0);
             Name = "MainMenuView";
-            Size = new Size(914, 800);
+            Size = new Size(800, 600);
             ((System.ComponentModel.ISupportInitialize)visitChart).EndInit();
             ((System.ComponentModel.ISupportInitialize)medCount).EndInit();
             ((System.ComponentModel.ISupportInitialize)VisitScheduleGrid).EndInit();

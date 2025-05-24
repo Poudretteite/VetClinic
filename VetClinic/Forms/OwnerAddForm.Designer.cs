@@ -52,7 +52,7 @@
             ownerAddMainLayout.FlowDirection = FlowDirection.TopDown;
             ownerAddMainLayout.Location = new Point(0, 0);
             ownerAddMainLayout.Name = "ownerAddMainLayout";
-            ownerAddMainLayout.Size = new Size(150, 207);
+            ownerAddMainLayout.Size = new Size(219, 207);
             ownerAddMainLayout.TabIndex = 0;
             // 
             // ownerNameTextBox
@@ -60,7 +60,7 @@
             ownerNameTextBox.Location = new Point(3, 3);
             ownerNameTextBox.Name = "ownerNameTextBox";
             ownerNameTextBox.PlaceholderText = "Podaj imię...";
-            ownerNameTextBox.Size = new Size(144, 23);
+            ownerNameTextBox.Size = new Size(200, 23);
             ownerNameTextBox.TabIndex = 5;
             // 
             // ownerSurnameTextBox
@@ -68,7 +68,7 @@
             ownerSurnameTextBox.Location = new Point(3, 32);
             ownerSurnameTextBox.Name = "ownerSurnameTextBox";
             ownerSurnameTextBox.PlaceholderText = "Podaj nazwisko...";
-            ownerSurnameTextBox.Size = new Size(144, 23);
+            ownerSurnameTextBox.Size = new Size(200, 23);
             ownerSurnameTextBox.TabIndex = 6;
             // 
             // ownerBirthDayPicker
@@ -86,7 +86,7 @@
             ownerEmailTextbox.Location = new Point(3, 90);
             ownerEmailTextbox.Name = "ownerEmailTextbox";
             ownerEmailTextbox.PlaceholderText = "Podaj email...";
-            ownerEmailTextbox.Size = new Size(144, 23);
+            ownerEmailTextbox.Size = new Size(200, 23);
             ownerEmailTextbox.TabIndex = 8;
             // 
             // ownerPhoneTextBox
@@ -94,7 +94,7 @@
             ownerPhoneTextBox.Location = new Point(3, 119);
             ownerPhoneTextBox.Name = "ownerPhoneTextBox";
             ownerPhoneTextBox.PlaceholderText = "Podaj numer telefonu...";
-            ownerPhoneTextBox.Size = new Size(144, 23);
+            ownerPhoneTextBox.Size = new Size(200, 23);
             ownerPhoneTextBox.TabIndex = 9;
             // 
             // acceptButton
@@ -106,6 +106,7 @@
             acceptButton.TabIndex = 10;
             acceptButton.Text = "Zatwierdź";
             acceptButton.UseVisualStyleBackColor = true;
+            acceptButton.Click += acceptButton_Click;
             // 
             // cancelButton
             // 
@@ -116,6 +117,7 @@
             cancelButton.TabIndex = 11;
             cancelButton.Text = "Anuluj";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += cancelButton_Click;
             // 
             // OwnerAddForm
             // 
@@ -123,7 +125,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(ownerAddMainLayout);
             Name = "OwnerAddForm";
-            Size = new Size(150, 207);
+            Size = new Size(219, 207);
             ownerAddMainLayout.ResumeLayout(false);
             ownerAddMainLayout.PerformLayout();
             ResumeLayout(false);

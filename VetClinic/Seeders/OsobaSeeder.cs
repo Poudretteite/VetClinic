@@ -15,6 +15,8 @@ namespace VetClinic.Seeders
         {
             var faker = new Faker();
             var osoby = new List<Osoba>();
+            var maxDate = new DateTime(2007, 12, 31);
+            var minDate = new DateTime(1900, 1, 1);
             int[] lekarzIds = { 1, 3, 6, 9, 12 };
 
             for (int i = 1; i <= liczbaRekordow; i++)
@@ -27,7 +29,7 @@ namespace VetClinic.Seeders
                     Imie = faker.Name.FirstName(),
                     Nazwisko = faker.Name.LastName(),
                     Email = faker.Internet.Email(),
-                    Data_ur = faker.Date.Past(50, DateTime.Today.AddYears(-20)).ToUniversalTime(),
+                    Data_ur = faker.Date.Between(minDate, maxDate).ToUniversalTime(),
                     Telefon = faker.Phone.PhoneNumber("#########"),
                     AdresId = faker.Random.Int(1, 20)
                 });

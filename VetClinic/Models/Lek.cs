@@ -22,5 +22,10 @@ namespace VetClinic.Models
         public int Ilosc {  get; set; }
 
         public ICollection<Wizyta> Wizyty { get; set; } = new List<Wizyta>();
+
+        public override string ToString()
+        {
+            return $"{Id}. {Nazwa}";
+        }
     }
 }

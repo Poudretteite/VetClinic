@@ -5,6 +5,8 @@ namespace VetClinic
     public partial class MainForm : Form
     {
         public static AnimalView animalview = null;
+        public static VisitView visitview = null;
+        public static OwnerView ownerview = null;
 
         public MainForm()
         {
@@ -19,42 +21,42 @@ namespace VetClinic
             viewPanel.Controls.Add(view);
         }
 
-        private void MainPageButton_Click(object sender, EventArgs e)
+        public void MainPageButton_Click(object sender, EventArgs e)
         {
             var mainview = new MainMenuView(this);
             LoadView(mainview);
         }
 
-        private void visitButton_Click(object sender, EventArgs e)
+        public void visitButton_Click(object sender, EventArgs e)
         {
-            var visitview = new VisitView(this);
+            visitview = new VisitView(this);
             LoadView(visitview);
         }
 
-        private void animalButton_Click(object sender, EventArgs e)
+        public void animalButton_Click(object sender, EventArgs e)
         {
             animalview = new AnimalView(this);
             LoadView(animalview);
         }
 
-        private void ownerButton_Click(object sender, EventArgs e)
+        public void ownerButton_Click(object sender, EventArgs e)
         {
-            var ownerview = new OwnerView(this);
+            ownerview = new OwnerView(this);
             LoadView(ownerview);
         }
 
-        private void vetButton_Click(object sender, EventArgs e)
+        public void vetButton_Click(object sender, EventArgs e)
         {
             var doctorview = new DoctorView(this);
             LoadView(doctorview);
         }
 
-        private void orderButton_Click(object sender, EventArgs e)
+        public void orderButton_Click(object sender, EventArgs e)
         {
             var orderview = new OrderView(this);
             LoadView(orderview);
         }
-        private void medButton_Click(object sender, EventArgs e)
+        public void medButton_Click(object sender, EventArgs e)
         {
             var medview = new MedicineView(this);
             LoadView(medview);

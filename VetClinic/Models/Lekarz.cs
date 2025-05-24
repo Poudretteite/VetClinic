@@ -21,7 +21,7 @@ namespace VetClinic.Models
 
         public override string ToString()
         {
-            return $"{Id}. {Imie} {Nazwisko} - {Specjalizacja}";
+            return $"{Id}. {Imie} {Nazwisko} - Lekarz: {Specjalizacja}";
         }
     }
 }

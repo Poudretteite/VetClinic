@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             visitFormLayout = new FlowLayoutPanel();
+            AnimalSearchBox = new TextBox();
             visitDoctorChoice = new ComboBox();
             visitDatePicker = new DateTimePicker();
-            visitDescription = new Label();
             visitDescriptionBox = new TextBox();
+            medCheckedList = new CheckedListBox();
             acceptButton = new Button();
             cancelButton = new Button();
             visitFormLayout.SuspendLayout();
@@ -40,30 +41,39 @@
             // 
             // visitFormLayout
             // 
+            visitFormLayout.Controls.Add(AnimalSearchBox);
             visitFormLayout.Controls.Add(visitDoctorChoice);
             visitFormLayout.Controls.Add(visitDatePicker);
-            visitFormLayout.Controls.Add(visitDescription);
             visitFormLayout.Controls.Add(visitDescriptionBox);
+            visitFormLayout.Controls.Add(medCheckedList);
             visitFormLayout.Controls.Add(acceptButton);
             visitFormLayout.Controls.Add(cancelButton);
             visitFormLayout.Dock = DockStyle.Fill;
             visitFormLayout.FlowDirection = FlowDirection.TopDown;
             visitFormLayout.Location = new Point(0, 0);
             visitFormLayout.Name = "visitFormLayout";
-            visitFormLayout.Size = new Size(304, 170);
+            visitFormLayout.Size = new Size(304, 281);
             visitFormLayout.TabIndex = 0;
+            // 
+            // AnimalSearchBox
+            // 
+            AnimalSearchBox.Location = new Point(3, 3);
+            AnimalSearchBox.Name = "AnimalSearchBox";
+            AnimalSearchBox.PlaceholderText = "Wyszukaj zwierze...";
+            AnimalSearchBox.Size = new Size(200, 23);
+            AnimalSearchBox.TabIndex = 14;
             // 
             // visitDoctorChoice
             // 
             visitDoctorChoice.FormattingEnabled = true;
-            visitDoctorChoice.Location = new Point(3, 3);
+            visitDoctorChoice.Location = new Point(3, 32);
             visitDoctorChoice.Name = "visitDoctorChoice";
             visitDoctorChoice.Size = new Size(200, 23);
             visitDoctorChoice.TabIndex = 0;
             // 
             // visitDatePicker
             // 
-            visitDatePicker.Location = new Point(3, 32);
+            visitDatePicker.Location = new Point(3, 61);
             visitDatePicker.MaxDate = new DateTime(2025, 12, 31, 0, 0, 0, 0);
             visitDatePicker.MinDate = new DateTime(2025, 5, 23, 0, 0, 0, 0);
             visitDatePicker.Name = "visitDatePicker";
@@ -71,25 +81,27 @@
             visitDatePicker.TabIndex = 2;
             visitDatePicker.Value = new DateTime(2025, 5, 23, 0, 0, 0, 0);
             // 
-            // visitDescription
-            // 
-            visitDescription.AutoSize = true;
-            visitDescription.Location = new Point(3, 58);
-            visitDescription.Name = "visitDescription";
-            visitDescription.Size = new Size(31, 15);
-            visitDescription.TabIndex = 3;
-            visitDescription.Text = "Opis";
-            // 
             // visitDescriptionBox
             // 
-            visitDescriptionBox.Location = new Point(3, 76);
+            visitDescriptionBox.Location = new Point(3, 90);
             visitDescriptionBox.Name = "visitDescriptionBox";
+            visitDescriptionBox.PlaceholderText = "Opis...";
             visitDescriptionBox.Size = new Size(200, 23);
             visitDescriptionBox.TabIndex = 13;
             // 
+            // medCheckedList
+            // 
+            medCheckedList.CheckOnClick = true;
+            medCheckedList.FormattingEnabled = true;
+            medCheckedList.Location = new Point(3, 119);
+            medCheckedList.Name = "medCheckedList";
+            medCheckedList.Size = new Size(200, 94);
+            medCheckedList.Sorted = true;
+            medCheckedList.TabIndex = 15;
+            // 
             // acceptButton
             // 
-            acceptButton.Location = new Point(3, 104);
+            acceptButton.Location = new Point(3, 218);
             acceptButton.Margin = new Padding(3, 2, 3, 2);
             acceptButton.Name = "acceptButton";
             acceptButton.Size = new Size(82, 22);
@@ -100,7 +112,7 @@
             // 
             // cancelButton
             // 
-            cancelButton.Location = new Point(3, 130);
+            cancelButton.Location = new Point(3, 244);
             cancelButton.Margin = new Padding(3, 2, 3, 2);
             cancelButton.Name = "cancelButton";
             cancelButton.Size = new Size(82, 22);
@@ -115,7 +127,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(visitFormLayout);
             Name = "VisitAddForm";
-            Size = new Size(304, 170);
+            Size = new Size(304, 281);
             visitFormLayout.ResumeLayout(false);
             visitFormLayout.PerformLayout();
             ResumeLayout(false);
@@ -126,9 +138,10 @@
         private FlowLayoutPanel visitFormLayout;
         private ComboBox visitDoctorChoice;
         private DateTimePicker visitDatePicker;
-        private Label visitDescription;
         private Button acceptButton;
         private Button cancelButton;
         private TextBox visitDescriptionBox;
+        private TextBox AnimalSearchBox;
+        private CheckedListBox medCheckedList;
     }
 }

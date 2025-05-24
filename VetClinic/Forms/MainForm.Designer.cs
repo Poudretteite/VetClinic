@@ -56,7 +56,7 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(884, 561);
+            tableLayoutPanel1.Size = new Size(884, 661);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // leftTableLayout
@@ -75,7 +75,7 @@
             leftTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             leftTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 70F));
             leftTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            leftTableLayout.Size = new Size(200, 561);
+            leftTableLayout.Size = new Size(200, 661);
             leftTableLayout.TabIndex = 1;
             // 
             // buttonFlowLayout
@@ -87,10 +87,10 @@
             buttonFlowLayout.Controls.Add(orderButton);
             buttonFlowLayout.Controls.Add(medButton);
             buttonFlowLayout.Dock = DockStyle.Fill;
-            buttonFlowLayout.Location = new Point(0, 112);
+            buttonFlowLayout.Location = new Point(0, 132);
             buttonFlowLayout.Margin = new Padding(0);
             buttonFlowLayout.Name = "buttonFlowLayout";
-            buttonFlowLayout.Size = new Size(200, 392);
+            buttonFlowLayout.Size = new Size(200, 462);
             buttonFlowLayout.TabIndex = 1;
             // 
             // visitButton
@@ -204,10 +204,10 @@
             MainPageButton.FlatStyle = FlatStyle.Flat;
             MainPageButton.Font = new Font("Arial", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
             MainPageButton.ForeColor = Color.White;
-            MainPageButton.Location = new Point(0, 56);
+            MainPageButton.Location = new Point(0, 66);
             MainPageButton.Margin = new Padding(0);
             MainPageButton.Name = "MainPageButton";
-            MainPageButton.Size = new Size(200, 56);
+            MainPageButton.Size = new Size(200, 66);
             MainPageButton.TabIndex = 0;
             MainPageButton.Text = "Strona główna";
             MainPageButton.TextAlign = ContentAlignment.MiddleLeft;
@@ -219,16 +219,16 @@
             viewPanel.Dock = DockStyle.Fill;
             viewPanel.Location = new Point(203, 3);
             viewPanel.Name = "viewPanel";
-            viewPanel.Size = new Size(678, 555);
+            viewPanel.Size = new Size(678, 655);
             viewPanel.TabIndex = 2;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(884, 561);
+            ClientSize = new Size(884, 661);
             Controls.Add(tableLayoutPanel1);
-            MinimumSize = new Size(600, 450);
+            MinimumSize = new Size(600, 700);
             Name = "MainForm";
             Text = "Klinika Weterynaryjna";
             tableLayoutPanel1.ResumeLayout(false);

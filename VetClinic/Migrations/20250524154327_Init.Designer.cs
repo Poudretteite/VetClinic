@@ -12,7 +12,7 @@ using VetClinic.Data;
 namespace VetClinic.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250523202041_Init")]
+    [Migration("20250524154327_Init")]
     partial class Init
     {
         /// <inheritdoc />

@@ -23,6 +23,7 @@ namespace VetClinic
         private ListBox searchList;
         public int selectedId;
         public int mode;
+        private int ownerId;
 
         public AnimalView(MainForm mainForm)
         {
@@ -214,7 +215,7 @@ namespace VetClinic
             animalTypeLabel.Text = zwierze.Typ;
             animalSpeciesLabel.Text = zwierze.Gatunek;
             animalAge.Text = zwierze.Wiek.ToString();
-            int ownerId = zwierze.WlascicielId;
+            ownerId = zwierze.WlascicielId;
             Osoba owner = context.Osoby.Where(o => o.Id == ownerId).FirstOrDefault();
             animalOwnerNameLabel.Text = $"{owner.Imie} {owner.Nazwisko}";
 
@@ -255,15 +256,15 @@ namespace VetClinic
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
             var wizyty = context.Wizyty
-            .Where(w => w.ZwierzeId == selectedId)
-            .Include(w => w.Lekarz)
-            .Select(w => new
-            {
-                Data = w.Data.ToString("yyyy-MM-dd"),
-                Opis = w.Opis,
-                Lekarz = w.Lekarz.Imie + " " + w.Lekarz.Nazwisko
-            })
-            .ToList();
+                .Where(w => w.ZwierzeId == selectedId)
+                .Include(w => w.Lekarz)
+                .Select(w => new
+                {
+                    Data = w.Data.ToString("yyyy-MM-dd"),
+                    Opis = w.Opis,
+                    Lekarz = w.Lekarz.Imie + " " + w.Lekarz.Nazwisko
+                })
+                .ToList();
 
             animalVisitDataGrid.DataSource = null;
             animalVisitDataGrid.Rows.Clear();
@@ -278,15 +279,15 @@ namespace VetClinic
             }
 
             animalVisitDataGrid.DataSource = wizyty;
-
-            animalVisitDataGrid.Columns[0].HeaderText = "Data wizyty";
-            animalVisitDataGrid.Columns[1].HeaderText = "Opis";
-            animalVisitDataGrid.Columns[2].HeaderText = "Lekarz prowadzący";
         }
 
         private void animalOwnerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
 
+            MainForm.ownerview = new OwnerView(this._mainForm, ownerId);
+            _mainForm.LoadView(MainForm.ownerview);
         }
 
         private void animalAddButton_Click(object sender, EventArgs e)

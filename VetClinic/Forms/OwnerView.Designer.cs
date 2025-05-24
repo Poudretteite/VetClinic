@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             ownerMainTableLayout = new TableLayoutPanel();
+            ownerSearchBox = new TextBox();
             ownerDeleteButton = new Button();
             ownerEditButton = new Button();
             ownerList = new ListBox();
@@ -43,7 +44,6 @@
             ownerPhone = new Label();
             ownerEmail = new Label();
             ownerAnimalList = new ListBox();
-            ownerSearchBox = new TextBox();
             ownerMainTableLayout.SuspendLayout();
             ownerDataPanel.SuspendLayout();
             ownerDataFlowLayout.SuspendLayout();
@@ -76,6 +76,18 @@
             ownerMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             ownerMainTableLayout.Size = new Size(714, 379);
             ownerMainTableLayout.TabIndex = 0;
+            // 
+            // ownerSearchBox
+            // 
+            ownerMainTableLayout.SetColumnSpan(ownerSearchBox, 2);
+            ownerSearchBox.Dock = DockStyle.Top;
+            ownerSearchBox.Location = new Point(3, 2);
+            ownerSearchBox.Margin = new Padding(3, 2, 3, 2);
+            ownerSearchBox.Name = "ownerSearchBox";
+            ownerSearchBox.PlaceholderText = "Wyszukaj po imieniu lub nazwisku...";
+            ownerSearchBox.Size = new Size(278, 23);
+            ownerSearchBox.TabIndex = 13;
+            ownerSearchBox.TextChanged += ownerSearchBox_TextChanged;
             // 
             // ownerDeleteButton
             // 
@@ -114,6 +126,7 @@
             ownerMainTableLayout.SetRowSpan(ownerList, 4);
             ownerList.Size = new Size(278, 338);
             ownerList.TabIndex = 0;
+            ownerList.SelectedIndexChanged += ownerList_SelectedIndexChanged;
             // 
             // ownerAddButton
             // 
@@ -239,17 +252,6 @@
             ownerMainTableLayout.SetRowSpan(ownerAnimalList, 2);
             ownerAnimalList.Size = new Size(424, 150);
             ownerAnimalList.TabIndex = 12;
-            // 
-            // ownerSearchBox
-            // 
-            ownerMainTableLayout.SetColumnSpan(ownerSearchBox, 2);
-            ownerSearchBox.Dock = DockStyle.Top;
-            ownerSearchBox.Location = new Point(3, 2);
-            ownerSearchBox.Margin = new Padding(3, 2, 3, 2);
-            ownerSearchBox.Name = "ownerSearchBox";
-            ownerSearchBox.PlaceholderText = "Wyszukaj po imieniu lub nazwisku...";
-            ownerSearchBox.Size = new Size(278, 23);
-            ownerSearchBox.TabIndex = 13;
             // 
             // OwnerView
             // 

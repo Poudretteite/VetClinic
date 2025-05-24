@@ -76,8 +76,8 @@
             mainTableLayout.Name = "mainTableLayout";
             mainTableLayout.RowCount = 4;
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 7.894737F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 33.4476852F));
-            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 19.0394516F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 42.6369858F));
+            mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 9.931507F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 39.4736862F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
             mainTableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 15F));
@@ -108,7 +108,7 @@
             animalTabControl.Name = "animalTabControl";
             mainTableLayout.SetRowSpan(animalTabControl, 3);
             animalTabControl.SelectedIndex = 0;
-            animalTabControl.Size = new Size(394, 533);
+            animalTabControl.Size = new Size(394, 534);
             animalTabControl.TabIndex = 2;
             // 
             // animalVisitDataGrid
@@ -119,13 +119,13 @@
             animalVisitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             mainTableLayout.SetColumnSpan(animalVisitDataGrid, 4);
             animalVisitDataGrid.Dock = DockStyle.Fill;
-            animalVisitDataGrid.Location = new Point(403, 243);
+            animalVisitDataGrid.Location = new Point(403, 297);
             animalVisitDataGrid.Margin = new Padding(3, 2, 3, 2);
             animalVisitDataGrid.Name = "animalVisitDataGrid";
             animalVisitDataGrid.RowHeadersVisible = false;
             animalVisitDataGrid.RowHeadersWidth = 51;
             mainTableLayout.SetRowSpan(animalVisitDataGrid, 3);
-            animalVisitDataGrid.Size = new Size(394, 355);
+            animalVisitDataGrid.Size = new Size(394, 301);
             animalVisitDataGrid.TabIndex = 3;
             // 
             // searchBox
@@ -161,7 +161,7 @@
             animalDataForm.Location = new Point(403, 48);
             animalDataForm.Margin = new Padding(3, 2, 3, 2);
             animalDataForm.Name = "animalDataForm";
-            animalDataForm.Size = new Size(394, 191);
+            animalDataForm.Size = new Size(394, 245);
             animalDataForm.TabIndex = 9;
             // 
             // animalDataLayout
@@ -180,7 +180,7 @@
             animalDataLayout.Location = new Point(0, 0);
             animalDataLayout.Margin = new Padding(3, 2, 3, 2);
             animalDataLayout.Name = "animalDataLayout";
-            animalDataLayout.Size = new Size(394, 191);
+            animalDataLayout.Size = new Size(394, 245);
             animalDataLayout.TabIndex = 4;
             // 
             // animalNameLabel
@@ -294,7 +294,7 @@
             // 
             // initBindingSource
             // 
-            initBindingSource.DataSource = typeof(Migrations.Init);
+            //initBindingSource.DataSource = typeof(Migrations.Init);
             // 
             // AnimalView
             // 

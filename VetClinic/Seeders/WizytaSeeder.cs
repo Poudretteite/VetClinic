@@ -66,7 +66,7 @@ internal class WizytaSeeder
         {
             attempts++;
 
-            var wizyta = GenerateVisit(DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
+            var wizyta = GenerateVisit(new DateTime(2024,1,1), DateTime.UtcNow);
             if (wizyta == null)
                 continue;
 

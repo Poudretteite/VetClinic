@@ -35,5 +35,10 @@ namespace VetClinic.Models
 
         [ForeignKey("WlascicielId")]
         public Osoba Wlasciciel {  get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}. {Imie} - {Gatunek}";
+        }
     }
 }

@@ -8,10 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
+using Microsoft.EntityFrameworkCore;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Reflection;
 using System.Security.Cryptography.Xml;
 using System.Xml.Linq;
+using VetClinic.Models;
 
 namespace VetClinic
 {
@@ -41,7 +43,18 @@ namespace VetClinic
             var factory = new AppDbContextFactory();
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            var wizyty = context.Wizyty.ToList();
+            var wizyty = context.Wizyty
+                .Where(w => w.Data > DateTime.Now)
+                .Include(w => w.Lekarz)
+                .Include(w => w.Zwierze)
+                .Select(w => new
+                {
+                    Data = w.Data.ToString("dd-MM-yyyy"),
+                    Lekarz = w.Lekarz.Imie + " " + w.Lekarz.Nazwisko,
+                    Zwierze = w.Zwierze.Imie,
+                    Opis = w.Opis
+                })
+                .ToList();
 
             VisitScheduleGrid.DataSource = wizyty;
         }
@@ -81,58 +94,31 @@ namespace VetClinic
 
         public void LoadDataToChart()
         {
-            /*
-            string connStr = ConfigHelper.GetConnectionString();
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            List<(DateTime Month, int Count)> visitCounts = new();
+            Series visitCount = new Series("Liczba wizyt");
 
-            using var conn = new NpgsqlConnection(connStr);
-            try
+            var wizytyMiesiac = context.Wizyty
+                .GroupBy(w => new { w.Data.Year, w.Data.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Count = g.Count()
+                })
+                .ToList();
+
+            foreach (var visit in wizytyMiesiac)
             {
-                conn.Open();
-                string query = @"
-                    SELECT 
-                        DATE_TRUNC('month', data) AS month,
-                        COUNT(*) AS visit_count
-                    FROM wizyty
-                    GROUP BY month
-                    ORDER BY month;
-                ";
-
-                using var cmd = new NpgsqlCommand(query, conn);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var month = reader.GetDateTime(0);
-                        var count = reader.GetInt32(1);
-                        visitCounts.Add((month, count));
-                    }
-                }
-
-                conn.Close();
-
-                Series series = new Series("Liczba wizyt")
-                {
-                    ChartType = SeriesChartType.Column,
-                    XValueType = ChartValueType.DateTime
-                };
-
-                foreach (var (month, count) in visitCounts)
-                {
-                    series.Points.AddXY(month, count);
-                }
-
-                visitChart.Series.Clear();
-                visitChart.Series.Add(series);
-                visitChart.ChartAreas[0].AxisX.LabelStyle.Format = "yyyy-MM";
-                visitChart.ChartAreas[0].AxisX.LabelStyle.Angle = -45;
+                DateTime date = new DateTime(visit.Year, visit.Month, 1);
+                visitCount.Points.AddXY(date, visit.Count);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
-            */
+
+            visitChart.Series.Clear();
+            visitChart.Series.Add(visitCount);
+
+            visitChart.ChartAreas[0].AxisX.LabelStyle.Angle = -30;
         }
 
 

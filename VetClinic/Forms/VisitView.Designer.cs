@@ -78,9 +78,9 @@
             visitMainTableLayout.Name = "visitMainTableLayout";
             visitMainTableLayout.RowCount = 6;
             visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 7F));
-            visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 19.833334F));
-            visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 6.5F));
-            visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 17.333334F));
+            visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 36.5F));
+            visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 5.16666651F));
+            visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 2F));
             visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 15.7962294F));
             visitMainTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3695335F));
             visitMainTableLayout.Size = new Size(800, 600);
@@ -137,7 +137,7 @@
             visitDoctorPanel.FlowDirection = FlowDirection.TopDown;
             visitDoctorPanel.Location = new Point(581, 45);
             visitDoctorPanel.Name = "visitDoctorPanel";
-            visitDoctorPanel.Size = new Size(216, 113);
+            visitDoctorPanel.Size = new Size(216, 213);
             visitDoctorPanel.TabIndex = 3;
             // 
             // visitDoctorName
@@ -161,14 +161,21 @@
             // 
             // visitDataGrid
             // 
+            visitDataGrid.AllowUserToAddRows = false;
+            visitDataGrid.AllowUserToDeleteRows = false;
+            visitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             visitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             visitMainTableLayout.SetColumnSpan(visitDataGrid, 6);
             visitDataGrid.Dock = DockStyle.Fill;
-            visitDataGrid.Location = new Point(3, 203);
+            visitDataGrid.Location = new Point(3, 295);
+            visitDataGrid.MultiSelect = false;
             visitDataGrid.Name = "visitDataGrid";
+            visitDataGrid.RowHeadersVisible = false;
             visitMainTableLayout.SetRowSpan(visitDataGrid, 3);
-            visitDataGrid.Size = new Size(794, 394);
+            visitDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            visitDataGrid.Size = new Size(794, 302);
             visitDataGrid.TabIndex = 0;
+            visitDataGrid.CellClick += visitDataGrid_CellClick;
             // 
             // visitAnimalPanel
             // 
@@ -181,7 +188,7 @@
             visitAnimalPanel.FlowDirection = FlowDirection.TopDown;
             visitAnimalPanel.Location = new Point(3, 45);
             visitAnimalPanel.Name = "visitAnimalPanel";
-            visitAnimalPanel.Size = new Size(199, 113);
+            visitAnimalPanel.Size = new Size(199, 213);
             visitAnimalPanel.TabIndex = 1;
             // 
             // visitAnimalName
@@ -228,7 +235,7 @@
             visitDataPlaceholder.Dock = DockStyle.Fill;
             visitDataPlaceholder.Location = new Point(208, 45);
             visitDataPlaceholder.Name = "visitDataPlaceholder";
-            visitDataPlaceholder.Size = new Size(367, 113);
+            visitDataPlaceholder.Size = new Size(367, 213);
             visitDataPlaceholder.TabIndex = 11;
             // 
             // visitDataPanel
@@ -239,7 +246,7 @@
             visitDataPanel.FlowDirection = FlowDirection.TopDown;
             visitDataPanel.Location = new Point(0, 0);
             visitDataPanel.Name = "visitDataPanel";
-            visitDataPanel.Size = new Size(367, 113);
+            visitDataPanel.Size = new Size(367, 213);
             visitDataPanel.TabIndex = 2;
             // 
             // visitDateLabel
@@ -266,10 +273,10 @@
             visitEditButton.Anchor = AnchorStyles.None;
             visitEditButton.BackColor = Color.FromArgb(219, 211, 216);
             visitEditButton.FlatStyle = FlatStyle.Flat;
-            visitEditButton.Location = new Point(444, 163);
+            visitEditButton.Location = new Point(444, 263);
             visitEditButton.Margin = new Padding(3, 2, 3, 2);
             visitEditButton.Name = "visitEditButton";
-            visitEditButton.Size = new Size(88, 35);
+            visitEditButton.Size = new Size(88, 27);
             visitEditButton.TabIndex = 10;
             visitEditButton.Text = "Edytuj";
             visitEditButton.UseVisualStyleBackColor = false;
@@ -280,10 +287,10 @@
             visitDeleteButton.Anchor = AnchorStyles.None;
             visitDeleteButton.BackColor = Color.Salmon;
             visitDeleteButton.FlatStyle = FlatStyle.Flat;
-            visitDeleteButton.Location = new Point(258, 163);
+            visitDeleteButton.Location = new Point(258, 263);
             visitDeleteButton.Margin = new Padding(3, 2, 3, 2);
             visitDeleteButton.Name = "visitDeleteButton";
-            visitDeleteButton.Size = new Size(88, 35);
+            visitDeleteButton.Size = new Size(88, 27);
             visitDeleteButton.TabIndex = 12;
             visitDeleteButton.Text = "Usuń";
             visitDeleteButton.UseVisualStyleBackColor = false;
