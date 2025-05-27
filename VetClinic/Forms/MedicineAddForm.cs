@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,36 +33,50 @@ namespace VetClinic.Forms
             medAmountPicker.Value = ilosc;
         }
 
-        private void acceptButton_Click(object sender, EventArgs e)
+        private async Task AddMed(Lek lek)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
+            using var context = Constants.CreateContext();
 
-            Lek lek;
+            context.Leki.Add(lek);
+            await context.SaveChangesAsync();
 
+            MainForm.leki = await context.Leki.ToListAsync();
+        }
+
+        private async Task EditMed(Lek lek)
+        {
+            using var context = Constants.CreateContext();
+
+            context.Leki.Update(lek);
+            await context.SaveChangesAsync();
+
+            MainForm.leki = await context.Leki.ToListAsync();
+        }
+
+        private async void acceptButton_Click(object sender, EventArgs e)
+        {
             if (mode == 1)
             {
-                var maxId = context.Leki.Max(l => l.Id);
+                var maxId = MainForm.leki.Max(l => l.Id);
 
-                lek = new Lek()
+                var lek = new Lek()
                 {
                     Id = maxId+1,
                     Nazwa = medNameTextBox.Text,
                     Ilosc = (int)medAmountPicker.Value
                 };
 
-                context.Leki.Add(lek);
+                await AddMed(lek);
             }
             else
             {
-                lek = context.Leki.Where(l => l.Id == MainForm.medview.selectedMedId).FirstOrDefault();
+                var lek = MainForm.leki.Where(l => l.Id == MainForm.medview.selectedMedId).FirstOrDefault();
 
                 lek.Nazwa = medNameTextBox.Text;
                 lek.Ilosc = (int)medAmountPicker.Value;
 
-                context.Leki.Update(lek);
+                await EditMed(lek);
             }
-            context.SaveChanges();
 
             MainForm.medview.panelReturn();
             MainForm.medview.refresh();

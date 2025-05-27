@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VetClinic.Models
 {
-    internal class DBSettings
+    public class DBSettings
     {
         public string Host { get; set; }
         public int Port { get; set; }

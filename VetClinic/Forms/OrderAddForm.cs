@@ -22,8 +22,7 @@ namespace VetClinic.Forms
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
+            using var context = Constants.CreateContext();
 
             int maxId = context.Zamowienia.Max(z => z.Id);
             int medId = MainForm.medview.selectedMedId;
@@ -36,7 +35,7 @@ namespace VetClinic.Forms
                 Data = DateTime.UtcNow
             };
 
-            var lek = context.Leki.Where(l => l.Id == medId).First();
+            var lek = context.Leki.Where(l => l.Id == medId).FirstOrDefault();
             lek.Ilosc += (int)medAmountPicker.Value;
 
             context.Leki.Update(lek);

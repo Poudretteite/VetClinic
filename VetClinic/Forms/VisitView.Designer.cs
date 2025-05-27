@@ -163,6 +163,7 @@
             // 
             visitDataGrid.AllowUserToAddRows = false;
             visitDataGrid.AllowUserToDeleteRows = false;
+            visitDataGrid.AllowUserToResizeRows = false;
             visitDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             visitDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             visitMainTableLayout.SetColumnSpan(visitDataGrid, 6);

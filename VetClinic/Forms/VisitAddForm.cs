@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using VetClinic.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using Microsoft.IdentityModel.Tokens;
 
 namespace VetClinic.Forms
 {
@@ -19,7 +20,6 @@ namespace VetClinic.Forms
     {
         private readonly MainForm _mainForm;
         private ListBox resultBox;
-        private int selectedAnimalId;
         private int mode;
         private List<int> selectedMedIds;
 
@@ -27,11 +27,12 @@ namespace VetClinic.Forms
         {
             _mainForm = mainForm;
             InitializeComponent();
-            LoadToMedCheckedList();
+            Load += async (_, _) => await LoadDoctorData();
+            Load += async (_, _) => await LoadToMedCheckedList();
+
             visitDatePicker.MinDate = new DateTime(2024, 1, 1);
             visitDatePicker.MaxDate = DateTime.Now.AddDays(30);
 
-            LoadDoctorData();
             AnimalSearchBox.Enabled = false;
             AnimalSearchBox.Visible = false;
             mode = 1;
@@ -42,7 +43,9 @@ namespace VetClinic.Forms
             _mainForm = mainForm;
             this.selectedMedIds = selectedMedicineIds;
             InitializeComponent();
-            LoadToMedCheckedList();
+
+            Load += async (_, _) => await LoadDoctorData();
+            Load += async (_, _) => await LoadToMedCheckedList();
             visitDatePicker.MinDate = new DateTime(2024, 1, 1);
             visitDatePicker.MaxDate = DateTime.Now.AddDays(30);
 
@@ -52,46 +55,44 @@ namespace VetClinic.Forms
 
             AnimalSearchBox.Enabled = true;
             AnimalSearchBox.Visible = true;
-            
-            LoadDoctorData();
             visitDoctorChoice.SelectedItem = doctor;
 
             InitializeSearchControls();
             mode = 0;
         }
 
-        private void LoadDoctorData()
+        private async Task LoadDoctorData()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             visitDoctorChoice.Items.Clear();
-            if (MainForm.animalview == null)
+            if (!AnimalSearchBox.Text.IsNullOrEmpty())
             {
-                selectedAnimalId = int.Parse(AnimalSearchBox.Text.Split('.')[0].Trim());
-            }
-            else
-            {
-                selectedAnimalId = MainForm.animalview.selectedId;
+                MainForm.animalview.selectedAnimalId = int.Parse(AnimalSearchBox.Text.Split('.')[0].Trim());
             }
 
-            var zwierze = context.Zwierzeta.Where(z => z.Id == selectedAnimalId).FirstOrDefault();
 
-            var lekarze = context.Lekarze.Where(l => l.Specjalizacja == zwierze.Typ);
+            var zwierze = await context.Zwierzeta.FirstAsync(z => z.Id == MainForm.animalview.selectedAnimalId);
+            if (zwierze == null) return;
+
+            var lekarze = await context.Lekarze
+                .Where(l => l.Specjalizacja == zwierze.Typ)
+                .ToListAsync();
 
             foreach (var lekarz in lekarze)
             {
                 visitDoctorChoice.Items.Add(lekarz.ToString());
             }
-            visitDoctorChoice.SelectedIndex = 0;
+
+            if (visitDoctorChoice.Items.Count > 0)
+                visitDoctorChoice.SelectedIndex = 0;
         }
 
-        private void LoadToMedCheckedList()
+        private async Task LoadToMedCheckedList()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
-            var leki = context.Leki.ToList();
+            var leki = await context.Leki.ToListAsync();
 
             medCheckedList.Items.Clear();
             foreach (var lek in leki)
@@ -123,18 +124,18 @@ namespace VetClinic.Forms
             resultBox.Click += ResultBox_Click;
         }
 
-        private void animalSearchBox_TextChanged(object sender, EventArgs e)
+        private async void animalSearchBox_TextChanged(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             var zwierzeta = context.Zwierzeta.Take(10);
 
             string searchText = AnimalSearchBox.Text.ToLower();
-            var filtered = zwierzeta
+
+            var filtered = await zwierzeta
                 .Where(z => z.Imie.ToLower().Contains(searchText) ||
                             z.Gatunek.ToLower().Contains(searchText))
-                .ToList();
+                .ToListAsync();
 
             UpdateResultBox(filtered);
         }
@@ -154,7 +155,7 @@ namespace VetClinic.Forms
         {
             if (resultBox.SelectedItem is Zwierze zwierze)
             {
-                selectedAnimalId = zwierze.Id;
+                MainForm.animalview.selectedAnimalId = zwierze.Id;
                 AnimalSearchBox.Text = zwierze.ToString();
                 resultBox.Visible = false;
             }
@@ -162,16 +163,17 @@ namespace VetClinic.Forms
             visitDoctorChoice.SelectedIndex = -1;
         }
 
-        private void acceptButton_Click(object sender, EventArgs e)
+        private async void acceptButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             List<Lek> leki = new List<Lek>();
 
             foreach (string lek in medCheckedList.CheckedItems)
             {
-                leki.Add(context.Leki.Where(l => l.Nazwa == lek).FirstOrDefault());
+                var med = await context.Leki.FirstAsync(l => l.Nazwa == lek);
+                if (med != null)
+                    leki.Add(med);
             }
 
             if (visitDoctorChoice.SelectedItem == null)
@@ -185,9 +187,9 @@ namespace VetClinic.Forms
 
             var data = visitDatePicker.Value.Date;
 
-            int visitCount = context.Wizyty
-            .Where(w => w.LekarzId == lekarzId && w.Data.Date == data)
-            .Count();
+            int visitCount = await context.Wizyty
+                .Where(w => w.LekarzId == lekarzId && w.Data.Date == data)
+                .CountAsync();
 
             if (visitCount >= 5)
             {
@@ -203,35 +205,44 @@ namespace VetClinic.Forms
 
             if (mode == 1)
             {
-                int maxId = context.Wizyty.Max(w => w.Id) + 1;
+                int maxId = 0;
+                if (await context.Wizyty.AnyAsync())
+                {
+                    maxId = await context.Wizyty.MaxAsync(w => w.Id);
+                }
 
                 var newVisit = new Wizyta()
                 {
-                    Id = maxId+1,
-                    ZwierzeId = selectedAnimalId,
+                    Id = maxId + 1,
+                    ZwierzeId = MainForm.animalview.selectedAnimalId,
                     LekarzId = lekarzId,
                     Data = data,
                     Opis = visitDescriptionBox.Text,
                     Leki = leki
                 };
 
-                context.Wizyty.Add(newVisit);
-                context.SaveChanges();
+                await context.Wizyty.AddAsync(newVisit);
+                await context.SaveChangesAsync();
             }
             else
             {
-                var wizyta = context.Wizyty.Where(w => w.Id == MainForm.visitview.visitID).Include(w => w.Leki).FirstOrDefault();
+                var wizyta = await context.Wizyty
+                    .Where(w => w.Id == MainForm.visitview.visitID)
+                    .Include(w => w.Leki)
+                    .FirstAsync();
+
                 if (wizyta == null) { return; }
 
-                wizyta.ZwierzeId = selectedAnimalId;
+                wizyta.ZwierzeId = MainForm.animalview.selectedAnimalId;
                 wizyta.LekarzId = lekarzId;
                 wizyta.Data = data;
                 wizyta.Opis = visitDescriptionBox.Text;
+
                 wizyta.Leki.Clear();
                 wizyta.Leki = leki;
 
                 context.Wizyty.Update(wizyta);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             if (MainForm.animalview == null)
@@ -241,6 +252,7 @@ namespace VetClinic.Forms
             }
             else
             {
+                MainForm.animalview.LoadAnimalVisitDataGrid();
                 MainForm.animalview.panelReturn();
             }
         }

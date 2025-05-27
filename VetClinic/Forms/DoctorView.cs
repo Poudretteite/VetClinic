@@ -1,13 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using VetClinic.Models;
 
 namespace VetClinic.Forms
 {
@@ -15,21 +8,43 @@ namespace VetClinic.Forms
     {
         private readonly MainForm _mainForm;
         public int selectedLekarzId;
+
         public DoctorView(MainForm mainForm)
         {
             _mainForm = mainForm;
             InitializeComponent();
+            this.Load += DoctorView_Load;
+        }
+
+        private async void DoctorView_Load(object sender, EventArgs e)
+        {
+            await LoadToLists();
+
             LoadToDoctorList();
             LoadDoctorData();
-            LoadToDoctorVisitTable();
+            await LoadToDoctorVisitTable();
+        }
+
+        private async Task LoadToLists()
+        {
+            using var context = Constants.CreateContext();
+            if (MainForm.lekarze == null) MainForm.lekarze = await context.Lekarze.ToListAsync();
+            if (MainForm.wizyty == null) MainForm.wizyty = await context.Wizyty.ToListAsync();
+        }
+
+        private async Task DeleteDoctor(Lekarz lekarz)
+        {
+            using var context = Constants.CreateContext();
+
+            context.Lekarze.Remove(lekarz);
+            await context.SaveChangesAsync();
+
+            MainForm.lekarze = await context.Lekarze.ToListAsync();
         }
 
         public void LoadToDoctorList()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var lekarze = context.Lekarze.ToList();
+            var lekarze = MainForm.lekarze.ToList();
 
             doctorList.Items.Clear();
 
@@ -53,12 +68,9 @@ namespace VetClinic.Forms
 
         private void LoadDoctorData()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var lekarz = context.Lekarze.Where(l => l.Id == selectedLekarzId).FirstOrDefault();
-            var pastCount = context.Wizyty.Count(w => w.LekarzId == selectedLekarzId && w.Data <= DateTime.UtcNow);
-            var futureCount = context.Wizyty.Count(w => w.LekarzId == selectedLekarzId && w.Data > DateTime.UtcNow);
+            var lekarz = MainForm.lekarze.Where(l => l.Id == selectedLekarzId).FirstOrDefault();
+            var pastCount = MainForm.wizyty.Count(w => w.LekarzId == selectedLekarzId && w.Data <= DateTime.UtcNow);
+            var futureCount = MainForm.wizyty.Count(w => w.LekarzId == selectedLekarzId && w.Data > DateTime.UtcNow);
 
             doctorNameLabel.Text = $"{lekarz.Imie} {lekarz.Nazwisko}";
             doctorSpecialization.Text = "Specjalizacja: " + lekarz.Specjalizacja;
@@ -69,10 +81,9 @@ namespace VetClinic.Forms
             futureVisitCount.Text = "Przyszłe wizyty: " + futureCount.ToString();
         }
 
-        public void LoadToDoctorVisitTable()
+        public async Task LoadToDoctorVisitTable()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             var wizyty = context.Wizyty.Where(w => w.LekarzId == selectedLekarzId)
                 .Include(w => w.Leki)
@@ -96,13 +107,9 @@ namespace VetClinic.Forms
 
             
         }
-
         private void doctorEditButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var lekarz = context.Lekarze.Where(l => l.Id == selectedLekarzId).First();
+            var lekarz = MainForm.lekarze.Where(l => l.Id == selectedLekarzId).FirstOrDefault();
 
             doctorDataPanel.Controls.Clear();
             var view = new DoctorAddForm(this._mainForm, lekarz.Imie, lekarz.Nazwisko, lekarz.Data_ur, lekarz.Email, lekarz.Telefon, lekarz.Specjalizacja, lekarz.Tryb);
@@ -110,31 +117,27 @@ namespace VetClinic.Forms
             view.Dock = DockStyle.Fill;
         }
 
-        private void doctorDeleteButton_Click(object sender, EventArgs e)
+        private async void doctorDeleteButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var wizyty = context.Wizyty.Count(w => w.LekarzId == selectedLekarzId);
+            var wizyty = MainForm.wizyty.Count(w => w.LekarzId == selectedLekarzId);
             if (wizyty > 0)
             {
                 MessageBox.Show("Nie można usunąć lekarza z odbytymi wizytami");
                 return;
             }
 
-            var lekarz = context.Lekarze.Where(l => l.Id == selectedLekarzId).FirstOrDefault();
+            var lekarz = MainForm.lekarze.Where(l => l.Id == selectedLekarzId).FirstOrDefault();
             if (lekarz != null)
             {
-                context.Lekarze.Remove(lekarz);
-                context.SaveChanges();
+                await DeleteDoctor(lekarz);
 
                 LoadToDoctorList();
                 LoadDoctorData();
-                LoadToDoctorVisitTable();
+                await LoadToDoctorVisitTable();
             }
         }
 
-        private void doctorList_SelectedIndexChanged(object sender, EventArgs e)
+        private async void doctorList_SelectedIndexChanged(object sender, EventArgs e)
         {
             var listBox = sender as ListBox;
             if (listBox?.SelectedItem == null) return;
@@ -143,7 +146,7 @@ namespace VetClinic.Forms
             selectedLekarzId = int.Parse(selectedItem.Split('.')[0]);
 
             LoadDoctorData();
-            LoadToDoctorVisitTable();
+            await LoadToDoctorVisitTable();
         }
 
         public void panelReturn()

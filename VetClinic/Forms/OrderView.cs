@@ -31,12 +31,12 @@ namespace VetClinic.Forms
             var zamowienia = context.Zamowienia.
                 Include(z => z.Lek).
                 Select(z => new
-            {
-                Id = z.Id,
-                Lek = z.Lek.Nazwa,
-                Ilość = z.Ilosc,
-                Data = z.Data
-            }).
+                {
+                    Id = z.Id,
+                    Lek = z.Lek.Nazwa,
+                    Ilość = z.Ilosc,
+                    Data = z.Data
+                }).
             ToList();
 
             orderDataGrid.DataSource = zamowienia;
@@ -48,6 +48,25 @@ namespace VetClinic.Forms
             using var context = factory.CreateDbContext(Array.Empty<string>());
 
             orderCount.Text = "Wszystkie zamówienia: " + context.Zamowienia.Count().ToString();
+        }
+
+        private void orderDeleteButton_Click(object sender, EventArgs e)
+        {
+            var factory = new AppDbContextFactory();
+            using var context = factory.CreateDbContext(Array.Empty<string>());
+
+            if (orderDataGrid.SelectedRows.Count == 0)
+                return;
+
+            int selectedId = (int)orderDataGrid.SelectedRows[0].Cells["Id"].Value;
+
+            var order = context.Zamowienia.FirstOrDefault(z => z.Id == selectedId);
+            if (order != null)
+            {
+                context.Zamowienia.Remove(order);
+                context.SaveChanges();
+                LoadToOrderDataGrid();
+            }
         }
     }
 }

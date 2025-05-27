@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using VetClinic.Models;
 
 namespace VetClinic.Forms
@@ -35,12 +27,11 @@ namespace VetClinic.Forms
             InitializeComponent();
             initializeView();
 
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             if (ownerId.HasValue)
             {
-                Osoba osoba = context.Osoby.Where(o => o.Id == ownerId).FirstOrDefault();
+                var osoba = MainForm.osoby.Where(o => o.Id == ownerId).FirstOrDefault();
 
                 this.selectedOwnerId = ownerId.Value;
                 ownerSearchBox.Text = $"{osoba.Imie} {osoba.Nazwisko}";
@@ -52,8 +43,27 @@ namespace VetClinic.Forms
             ageBox.Value = wiek;
             this.mode = 0;
         }
+        private async Task AddAnimal(Zwierze zwierze)
+        {
+			using var context = Constants.CreateContext();
 
-        private void initializeView()
+			context.Zwierzeta.Add(zwierze);
+            await context.SaveChangesAsync();
+
+            MainForm.zwierzeta = await context.Zwierzeta.ToListAsync();
+		}
+
+        private async Task EditAnimal(Zwierze zwierze)
+        {
+			using var context = Constants.CreateContext();
+
+			context.Zwierzeta.Update(zwierze);
+			await context.SaveChangesAsync();
+
+            MainForm.zwierzeta = await context.Zwierzeta.ToListAsync();
+		}
+
+        private async void initializeView()
         {
             InitializeSearchControls();
             LoadToTypBox();
@@ -79,10 +89,9 @@ namespace VetClinic.Forms
 
         private void ownerSearchBox_TextChanged(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
-            var wlasciciele = context.Osoby.Take(10);
+            var wlasciciele = MainForm.osoby.Take(10);
 
             string searchText = ownerSearchBox.Text.ToLower();
             var filtered = wlasciciele
@@ -162,18 +171,13 @@ namespace VetClinic.Forms
             }
         }
 
-        private void acceptButton_Click(object sender, EventArgs e)
+        private async void acceptButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            Zwierze zwierze;
-
             if(mode == 1)
             {
-                int maxId = context.Zwierzeta.Max(z => z.Id);
+                int maxId = MainForm.zwierzeta.Max(z => z.Id);
 
-                zwierze = new Zwierze()
+                var zwierze = new Zwierze()
                 {
                     Id = maxId + 1,
                     Imie = NameBox.Text,
@@ -183,30 +187,31 @@ namespace VetClinic.Forms
                     WlascicielId = selectedOwnerId
                 };
 
-                context.Zwierzeta.Add(zwierze);
-                context.SaveChanges();
-                MainForm.animalview.selectedId = zwierze.Id;
-            }
+                await AddAnimal(zwierze);
+
+				MainForm.animalview.selectedAnimalId = zwierze.Id;
+				string typ = zwierze.Typ;
+				MainForm.animalview.RefreshCurrentTab(typ);
+			}
             else
             {
-                zwierze = context.Zwierzeta.Where(z => z.Id == MainForm.animalview.selectedId).FirstOrDefault();
-                if (zwierze == null) return;
+				var zwierze = MainForm.zwierzeta.FirstOrDefault(z => z.Id == MainForm.animalview.selectedAnimalId);
+				if (zwierze == null) return;
 
-                zwierze.Imie = NameBox.Text;
+				zwierze.Imie = NameBox.Text;
                 zwierze.Typ = chosenTyp;
                 zwierze.Gatunek = chosenGatunek;
                 zwierze.Wiek = (int)ageBox.Value;
                 zwierze.WlascicielId = selectedOwnerId;
 
-                context.Zwierzeta.Update(zwierze);
-                context.SaveChanges();
-            }
+                await EditAnimal(zwierze);
+
+				string typ = zwierze.Typ;
+				MainForm.animalview.RefreshCurrentTab(typ);
+			}
 
             MainForm.animalview.panelReturn();
             MainForm.animalview.LoadToAnimalTabControl();
-
-            string typ = zwierze.Typ;
-            MainForm.animalview.RefreshCurrentTab(typ);
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

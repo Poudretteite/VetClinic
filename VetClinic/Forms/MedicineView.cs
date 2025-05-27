@@ -25,19 +25,35 @@ namespace VetClinic.Forms
             this.Load += MedicineView_Load;
         }
 
-        private void MedicineView_Load(object sender, EventArgs e)
+        private async void MedicineView_Load(object sender, EventArgs e)
         {
+            await LoadToLists();
             LoadToMedicineList();
-            LoadToVisitDataGrid();
+            await LoadToVisitDataGrid();
             LoadMedData();
+        }
+
+        private async Task LoadToLists()
+        {
+            using var context = Constants.CreateContext();
+
+            if (MainForm.leki == null) MainForm.leki = await context.Leki.ToListAsync();
+            if (MainForm.wizyty == null) MainForm.wizyty = await context.Wizyty.ToListAsync();
+        }
+
+        private async Task DeleteMed(Lek lek)
+        {
+            using var context = Constants.CreateContext();
+
+            context.Leki.Remove(lek);
+            await context.SaveChangesAsync();
+
+            MainForm.leki = await context.Leki.ToListAsync();
         }
 
         private void LoadToMedicineList()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
-
-            var leki = context.Leki.ToList();
+            var leki = MainForm.leki.ToList();
 
             medicineList.Items.Clear();
 
@@ -46,15 +62,14 @@ namespace VetClinic.Forms
                 medicineList.Items.Add(lek.Nazwa);
             }
 
-            selectedMedId = context.Leki.Min(l => l.Id);
+            selectedMedId = MainForm.leki.Min(l => l.Id);
         }
 
-        private void LoadToVisitDataGrid()
+        private async Task LoadToVisitDataGrid()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
+            using var context = Constants.CreateContext();
 
-            var wizyty = context.Wizyty
+            var wizyty = await context.Wizyty
                 .Where(w => w.Leki.Any(l => l.Id == selectedMedId))
                 .Include(w => w.Lekarz)
                 .Select(w => new
@@ -64,7 +79,7 @@ namespace VetClinic.Forms
                     Lekarz = $"{w.Lekarz.Imie} {w.Lekarz.Nazwisko}"
 
                 })
-                .ToList();
+                .ToListAsync();
 
             visitDataGrid.DataSource = null;
             visitDataGrid.Rows.Clear();
@@ -83,13 +98,10 @@ namespace VetClinic.Forms
 
         private void LoadMedData()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
-
-            var lek = context.Leki.Where(l => l.Id == selectedMedId).First();
+            var lek = MainForm.leki.Where(l => l.Id == selectedMedId).FirstOrDefault();
             StatsLabel.Text = lek.Nazwa;
             medCount.Text = "Ilość: " + lek.Ilosc;
-            medVisitCount.Text = "Liczba wizyt, na których został użyty: " + context.Wizyty.Count(w => w.Leki.Any(l => l.Id == selectedMedId));
+            medVisitCount.Text = "Liczba wizyt, na których został użyty: " + MainForm.wizyty.Count(w => w.Leki.Any(l => l.Id == selectedMedId));
         }
 
         private void medAddButton_Click(object sender, EventArgs e)
@@ -102,10 +114,7 @@ namespace VetClinic.Forms
 
         private void medEditButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
-
-            var lek = context.Leki.Where(l => l.Id == selectedMedId).First();
+            var lek = MainForm.leki.Where(l => l.Id == selectedMedId).FirstOrDefault();
 
             medDataPlaceholder.Controls.Clear();
             var view = new MedicineAddForm(this._mainForm, lek.Nazwa, lek.Ilosc);
@@ -113,23 +122,18 @@ namespace VetClinic.Forms
             view.Dock = DockStyle.Fill;
         }
 
-        private void medDeleteButton_Click(object sender, EventArgs e)
+        private async void medDeleteButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<String>());
-
-            if (context.Wizyty.Count(w => w.Leki.Any(l => l.Id == selectedMedId)) > 0)
+            if (MainForm.wizyty.Count(w => w.Leki.Any(l => l.Id == selectedMedId)) > 0)
             {
                 MessageBox.Show("Usuwanie leków, które były już wykorzystane jest niemożliwe");
                 return;
             }
             
-            var lek = context.Leki.Where(l => l.Id == selectedMedId).First();
+            var lek = MainForm.leki.Where(l => l.Id == selectedMedId).FirstOrDefault();
             if (lek != null)
             {
-                context.Leki.Remove(lek);
-                context.SaveChanges();
-
+                await DeleteMed(lek);
                 refresh();
             }
         }
@@ -142,7 +146,7 @@ namespace VetClinic.Forms
             view.Dock = DockStyle.Fill;
         }
 
-        private void medicineList_SelectedIndexChanged(object sender, EventArgs e)
+        private async void medicineList_SelectedIndexChanged(object sender, EventArgs e)
         {
             var listBox = sender as ListBox;
             if (listBox?.SelectedItem == null) return;
@@ -151,10 +155,10 @@ namespace VetClinic.Forms
             using var context = factory.CreateDbContext(Array.Empty<String>());
 
             string selectedItem = listBox.SelectedItem.ToString();
-            selectedMedId = context.Leki.Where(l => l.Nazwa == selectedItem).First().Id;
+            selectedMedId = MainForm.leki.Where(l => l.Nazwa == selectedItem).FirstOrDefault().Id;
 
             LoadMedData();
-            LoadToVisitDataGrid();
+            await LoadToVisitDataGrid();
         }
 
         public void panelReturn()
@@ -163,11 +167,11 @@ namespace VetClinic.Forms
             medDataPlaceholder.Controls.Add(statsPanel);
         }
 
-        public void refresh()
+        public async void refresh()
         {
             LoadToMedicineList();
             LoadMedData();
-            LoadToVisitDataGrid();
+            await LoadToVisitDataGrid();
         }
     }
 }

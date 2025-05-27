@@ -40,8 +40,7 @@ namespace VetClinic.Forms
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             Osoba wlasciciel;
 

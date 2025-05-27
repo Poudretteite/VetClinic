@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace VetClinic.Models
 {
     [Table("wizyty")]
-    internal class Wizyta
+    public class Wizyta
     {
         [Key]
         public int Id { get; set; }

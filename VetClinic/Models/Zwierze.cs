@@ -10,7 +10,7 @@ using System.ComponentModel;
 namespace VetClinic.Models
 {
     [Table("zwierzeta")]
-    internal class Zwierze
+    public class Zwierze
     {
         [Key]
         public int Id { get; set; }

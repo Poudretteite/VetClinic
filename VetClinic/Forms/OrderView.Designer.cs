@@ -33,6 +33,7 @@
             orderViewTitle = new Label();
             orderStatsFlowLayout = new FlowLayoutPanel();
             orderCount = new Label();
+            orderDeleteButton = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)orderDataGrid).BeginInit();
             orderStatsFlowLayout.SuspendLayout();
@@ -49,6 +50,7 @@
             tableLayoutPanel1.Controls.Add(orderDataGrid, 0, 2);
             tableLayoutPanel1.Controls.Add(orderViewTitle, 1, 0);
             tableLayoutPanel1.Controls.Add(orderStatsFlowLayout, 0, 1);
+            tableLayoutPanel1.Controls.Add(orderDeleteButton, 2, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -64,13 +66,17 @@
             // 
             // orderDataGrid
             // 
+            orderDataGrid.AllowUserToResizeRows = false;
             orderDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             orderDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             tableLayoutPanel1.SetColumnSpan(orderDataGrid, 5);
             orderDataGrid.Dock = DockStyle.Fill;
             orderDataGrid.Location = new Point(3, 100);
+            orderDataGrid.MultiSelect = false;
             orderDataGrid.Name = "orderDataGrid";
+            orderDataGrid.RowHeadersVisible = false;
             tableLayoutPanel1.SetRowSpan(orderDataGrid, 4);
+            orderDataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             orderDataGrid.Size = new Size(794, 497);
             orderDataGrid.TabIndex = 0;
             // 
@@ -109,6 +115,20 @@
             orderCount.TabIndex = 0;
             orderCount.Text = "Wszystkie zamówienia:";
             // 
+            // orderDeleteButton
+            // 
+            orderDeleteButton.Anchor = AnchorStyles.None;
+            orderDeleteButton.BackColor = Color.Salmon;
+            orderDeleteButton.FlatStyle = FlatStyle.Flat;
+            orderDeleteButton.Location = new Point(355, 65);
+            orderDeleteButton.Margin = new Padding(3, 2, 3, 2);
+            orderDeleteButton.Name = "orderDeleteButton";
+            orderDeleteButton.Size = new Size(88, 27);
+            orderDeleteButton.TabIndex = 15;
+            orderDeleteButton.Text = "Usuń";
+            orderDeleteButton.UseVisualStyleBackColor = false;
+            orderDeleteButton.Click += orderDeleteButton_Click;
+            // 
             // OrderView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -131,5 +151,6 @@
         private Label orderViewTitle;
         private FlowLayoutPanel orderStatsFlowLayout;
         private Label orderCount;
+        private Button orderDeleteButton;
     }
 }

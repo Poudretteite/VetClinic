@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
 using VetClinic.Models;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace VetClinic.Forms
 {
@@ -28,8 +19,6 @@ namespace VetClinic.Forms
 
             doctorSpecializationChoice.Visible = true;
             doctorSpecializationChoiceLabel.Visible = true;
-
-            
         }
 
         public DoctorAddForm(MainForm mainForm, string imie, string nazwisko, DateTime data, string email, string phone, string specjalizacja, string tryb)
@@ -47,17 +36,31 @@ namespace VetClinic.Forms
             doctorPhoneTextBox.Text = phone;
             doctorSpecializationChoice.SelectedItem = specjalizacja;
             doctorWorkPlaceChoice.SelectedItem = tryb;
+        }
 
-            
+        private async Task AddDoctor(Lekarz lekarz)
+        {
+            using var context = Constants.CreateContext();
 
+            await context.Lekarze.AddAsync(lekarz);
+            await context.SaveChangesAsync();
+
+            MainForm.lekarze = await context.Lekarze.ToListAsync();
+        }
+
+        private async Task EditDoctor(Lekarz lekarz)
+        {
+            using var context = Constants.CreateContext();
+
+            await context.Lekarze.AddAsync(lekarz);
+            await context.SaveChangesAsync();
+
+            MainForm.lekarze = await context.Lekarze.ToListAsync();
         }
 
         private void LoadToDoctorSpecializationChoice()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var wizyty = context.Wizyty.Count(w => w.LekarzId == MainForm.doctorview.selectedLekarzId);
+            var wizyty = MainForm.wizyty.Count(w => w.LekarzId == MainForm.doctorview.selectedLekarzId);
             if (mode == 0 && wizyty > 0)
             {
                 MessageBox.Show("Nie można edytować specjalizacji lekarza z odbytymi wizytami");
@@ -84,13 +87,8 @@ namespace VetClinic.Forms
             }
         }
 
-        private void acceptButton_Click(object sender, EventArgs e)
+        private async Task acceptButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            Lekarz lekarz;
-
             if (string.IsNullOrWhiteSpace(doctorNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(doctorSurnameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(doctorEmailTextbox.Text) ||
@@ -112,14 +110,14 @@ namespace VetClinic.Forms
                 return;
             }
 
-            var emailCheck = context.Osoby.Where(o => o.Email == doctorEmailTextbox.Text && o.Id != MainForm.doctorview.selectedLekarzId).FirstOrDefault();
+            var emailCheck = MainForm.osoby.FirstOrDefault(o => o.Email == doctorEmailTextbox.Text && o.Id != MainForm.doctorview.selectedLekarzId);
             if (emailCheck != null)
             {
                 MessageBox.Show($"Powtarzajacy się email: {doctorEmailTextbox.Text}");
                 return;
             }
 
-            var phoneCheck = context.Osoby.Where(o => o.Telefon == doctorPhoneTextBox.Text && o.Id != MainForm.doctorview.selectedLekarzId).FirstOrDefault();
+            var phoneCheck = MainForm.osoby.FirstOrDefault(o => o.Telefon == doctorPhoneTextBox.Text && o.Id != MainForm.doctorview.selectedLekarzId);
             if (phoneCheck != null)
             {
                 MessageBox.Show($"Powtarzajacy się numer Telefonu: {doctorPhoneTextBox.Text}");
@@ -128,9 +126,9 @@ namespace VetClinic.Forms
 
             if (mode == 1)
             {
-                int maxId = context.Osoby.Max(o => o.Id);
+                int maxId = MainForm.osoby.Max(o => o.Id);
 
-                lekarz = new Lekarz()
+                var lekarz = new Lekarz()
                 {
                     Id = maxId + 1,
                     Imie = doctorNameTextBox.Text,
@@ -141,12 +139,11 @@ namespace VetClinic.Forms
                     Specjalizacja = doctorSpecializationChoice.SelectedItem.ToString(),
                     Tryb = doctorWorkPlaceChoice.SelectedItem.ToString()
                 };
-
-                context.Lekarze.Add(lekarz);
+                await AddDoctor(lekarz);
             }
             else
             {
-                lekarz = context.Lekarze.Where(l => l.Id == MainForm.doctorview.selectedLekarzId).FirstOrDefault();
+                var lekarz = MainForm.lekarze.Where(l => l.Id == MainForm.doctorview.selectedLekarzId).FirstOrDefault();
 
                 lekarz.Imie = doctorNameTextBox.Text;
                 lekarz.Nazwisko = doctorSurnameTextBox.Text;
@@ -159,13 +156,12 @@ namespace VetClinic.Forms
                 }
                 lekarz.Tryb = doctorWorkPlaceChoice.SelectedItem.ToString();
 
-                context.Lekarze.Update(lekarz);
+                await EditDoctor(lekarz);
             }
 
-            context.SaveChanges();
             MainForm.doctorview.panelReturn();
             MainForm.doctorview.LoadToDoctorList();
-            MainForm.doctorview.LoadToDoctorVisitTable();
+            await MainForm.doctorview.LoadToDoctorVisitTable();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)

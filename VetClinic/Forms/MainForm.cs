@@ -1,4 +1,5 @@
 using VetClinic.Forms;
+using VetClinic.Models;
 
 namespace VetClinic
 {
@@ -10,6 +11,14 @@ namespace VetClinic
         public static DoctorView doctorview = null;
         public static MedicineView medview = null;
         public static OrderView orderview = null;
+        public static MainMenuView mainmenuview = null;
+
+        static public List<Zwierze> zwierzeta;
+        static public List<Wizyta> wizyty;
+        static public List<Osoba> osoby;
+        static public List<Zamowienie> zamowienia;
+        static public List<Lek> leki;
+        static public List<Lekarz> lekarze;
 
         public MainForm()
         {
@@ -26,42 +35,63 @@ namespace VetClinic
 
         public void MainPageButton_Click(object sender, EventArgs e)
         {
-            var mainview = new MainMenuView(this);
-            LoadView(mainview);
+            if (mainmenuview == null)
+            {
+                mainmenuview = new MainMenuView(this);
+            }
+            LoadView(mainmenuview);
         }
 
         public void visitButton_Click(object sender, EventArgs e)
         {
-            visitview = new VisitView(this);
+            if (visitview == null)
+            {
+                visitview = new VisitView(this);
+            }
             LoadView(visitview);
         }
 
         public void animalButton_Click(object sender, EventArgs e)
         {
-            animalview = new AnimalView(this);
+            if (animalview == null)
+            {
+                animalview = new AnimalView(this);
+            }
             LoadView(animalview);
         }
 
         public void ownerButton_Click(object sender, EventArgs e)
         {
-            ownerview = new OwnerView(this);
+            if (ownerview == null)
+            {
+                ownerview = new OwnerView(this);
+            }
             LoadView(ownerview);
         }
 
         public void vetButton_Click(object sender, EventArgs e)
         {
-            doctorview = new DoctorView(this);
+            if (doctorview == null)
+            {
+                doctorview = new DoctorView(this);
+            }
             LoadView(doctorview);
         }
 
         public void orderButton_Click(object sender, EventArgs e)
         {
-            orderview = new OrderView(this);
+            if (orderview == null)
+            {
+                orderview = new OrderView(this);
+            }
             LoadView(orderview);
         }
         public void medButton_Click(object sender, EventArgs e)
         {
-            medview = new MedicineView(this);
+            if (medview == null)
+            {
+                medview = new MedicineView(this);
+            }
             LoadView(medview);
         }
     }

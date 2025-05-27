@@ -9,7 +9,7 @@ using VetClinic.Models;
 
 namespace VetClinic.Data
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions options) : base(options) {}
 

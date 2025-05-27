@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace VetClinic.Models
 {
     [Table("zamowienia")]
-    internal class Zamowienie
+    public class Zamowienie
     {
         [Key]
         public int Id { get; set; }

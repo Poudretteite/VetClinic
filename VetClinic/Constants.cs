@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using VetClinic.Data;
 
 namespace VetClinic
 {
@@ -123,6 +125,22 @@ namespace VetClinic
 
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern);
+        }
+
+        public static string CurrentConnectionString { get; set; } =
+            "Host=localhost;Port=5432;Database=VetClinic;Username=postgres;Password=haslo";
+        public static string username;
+        public static string password;
+        public static string name;
+
+        public static AppDbContext CreateContext()
+        {
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseNpgsql(CurrentConnectionString)
+                .EnableSensitiveDataLogging()
+                .Options;
+
+            return new AppDbContext(options);
         }
     }
 }

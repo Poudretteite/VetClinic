@@ -83,12 +83,17 @@
             // 
             // doctorVisitTable
             // 
+            doctorVisitTable.AllowUserToAddRows = false;
+            doctorVisitTable.AllowUserToDeleteRows = false;
+            doctorVisitTable.AllowUserToOrderColumns = true;
+            doctorVisitTable.AllowUserToResizeRows = false;
             doctorVisitTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             doctorVisitTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             doctorMainTableLayout.SetColumnSpan(doctorVisitTable, 3);
             doctorVisitTable.Dock = DockStyle.Fill;
             doctorVisitTable.Location = new Point(301, 171);
             doctorVisitTable.Name = "doctorVisitTable";
+            doctorVisitTable.RowHeadersVisible = false;
             doctorMainTableLayout.SetRowSpan(doctorVisitTable, 3);
             doctorVisitTable.Size = new Size(442, 167);
             doctorVisitTable.TabIndex = 2;

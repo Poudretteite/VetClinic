@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace VetClinic.Models
 {
     [Table("lekarze")]
-    internal class Lekarz : Osoba
+    public class Lekarz : Osoba
     {
         [Required]
         [StringLength(50)]

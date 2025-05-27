@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Security.Cryptography.Xml;
 using System.Xml.Linq;
 using VetClinic.Models;
+using VetClinic.Data;
 
 namespace VetClinic
 {
@@ -26,24 +27,32 @@ namespace VetClinic
             _mainForm = mainForm;
             InitializeComponent();
             this.Load += MainMenuView_Load;
-
+            databaseUsername.Text = "postgres";
+            databasePassword.Text = "haslo";
+            databaseName.Text = "VetClinic";
         }
 
-        private void MainMenuView_Load(object sender, EventArgs e)
+        private async void MainMenuView_Load(object sender, EventArgs e)
         {
-            LoadDataToGrid();
+            await LoadToLists();
+            await LoadDataToGrid();
             LoadDataToChart();
             LoadMedQuantityChart();
         }
 
-
-        public void LoadDataToGrid()
+        private async Task LoadToLists()
         {
+            using var context = Constants.CreateContext();
 
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            if (MainForm.leki == null) MainForm.leki = await context.Leki.ToListAsync();
+            if (MainForm.wizyty == null) MainForm.wizyty = await context.Wizyty.ToListAsync();
+        }
 
-            var wizyty = context.Wizyty
+        public async Task LoadDataToGrid()
+        {
+            using var context = Constants.CreateContext();
+
+            var wizyty = await context.Wizyty
                 .Where(w => w.Data > DateTime.Now)
                 .Include(w => w.Lekarz)
                 .Include(w => w.Zwierze)
@@ -54,24 +63,25 @@ namespace VetClinic
                     Zwierze = w.Zwierze.Imie,
                     Opis = w.Opis
                 })
-                .ToList();
+                .ToListAsync();
 
             VisitScheduleGrid.DataSource = wizyty;
+
+            foreach (DataGridViewColumn column in VisitScheduleGrid.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.Automatic;
+            }
         }
 
         public void LoadMedQuantityChart()
         {
-
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             Series medinfo = new Series("Liczba wizyt")
             {
                 ChartType = SeriesChartType.Bar,
                 XValueType = ChartValueType.String,
             };
 
-            var leki = context.Leki.ToList();
+            var leki = MainForm.leki;
             leki.Sort((a, b) => b.Ilosc.CompareTo(a.Ilosc));
 
             int n = 1;
@@ -94,12 +104,9 @@ namespace VetClinic
 
         public void LoadDataToChart()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             Series visitCount = new Series("Liczba wizyt");
 
-            var wizytyMiesiac = context.Wizyty
+            var wizytyMiesiac = MainForm.wizyty
                 .GroupBy(w => new { w.Data.Year, w.Data.Month })
                 .Select(g => new
                 {
@@ -121,8 +128,40 @@ namespace VetClinic
             visitChart.ChartAreas[0].AxisX.LabelStyle.Angle = -30;
         }
 
+        private async void connectButton_Click(object sender, EventArgs e)
+        {
+            Constants.username = databaseUsername.Text;
+            Constants.password = databasePassword.Text;
+            Constants.name = databaseName.Text;
 
+            Constants.CurrentConnectionString = $"Host=localhost;Port=5432;Database={Constants.name};Username={Constants.username};Password={Constants.password}";
 
+            databaseUsername.Text = Constants.username;
+            databasePassword.Text = Constants.password;
+            databaseName.Text = Constants.name;
 
+            try
+            {
+                using var context = Constants.CreateContext();
+                DbSeeder.SeedDatabase(context);
+
+                if (context.Database.CanConnect())
+                {
+                    MessageBox.Show("Połączenie z bazą danych powiodło się.");
+
+                    await LoadDataToGrid();
+                    LoadDataToChart();
+                    LoadMedQuantityChart();
+                }
+                else
+                {
+                    MessageBox.Show("Nie udało się połączyć z bazą danych.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd połączenia: " + ex.Message);
+            }
+        }
     }
 }

@@ -1,27 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using VetClinic.Forms;
 using VetClinic.Models;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace VetClinic
 {
     public partial class AnimalView : UserControl
     {
         private readonly MainForm _mainForm;
-        private int tabIndex = 0;
-        private TabPage searchTab;
+        private TabPage searchTab = new TabPage("Wyszukiwanie");
         private ListBox searchList;
-        public int selectedId;
+        public int selectedAnimalId;
         public int mode;
         private int ownerId;
 
@@ -32,80 +22,43 @@ namespace VetClinic
             this.Load += AnimalView_Load;
         }
 
-        private void AnimalView_Load(object sender, EventArgs e)
+        private async void AnimalView_Load(object sender, EventArgs e)
         {
+            await LoadToLists();
             LoadToAnimalTabControl();
             LoadData();
-            LoadAnimalVisitDataGrid();
+            await LoadAnimalVisitDataGrid();
 
-            searchTab = new TabPage("Wyszukiwanie");
             searchList = new ListBox { Dock = DockStyle.Fill };
             searchTab.Controls.Add(searchList);
             animalTabControl.TabPages.Add(searchTab);
         }
 
-
-        public void LoadToAnimalTabControl()
+        private async Task LoadToLists()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            foreach (var typ in Constants.AnimalType)
-            {
-                var newTab = new TabPage(typ);
-                var list = new ListBox();
-                list.SelectedIndexChanged += ListBox_SelectedIndexChanged;
-                var zwierzeta = context.Zwierzeta.Where(z => z.Typ == typ).ToList();
-                if (zwierzeta.Count > 0)
-                {
-                    foreach (var zwierze in zwierzeta.OrderBy(z => z.Id))
-                    {
-                        list.Items.Add($"{zwierze.Id}. {zwierze.Imie}  -  {zwierze.Gatunek}");
-                    }
-
-                    list.Dock = DockStyle.Fill;
-                    newTab.Controls.Add(list);
-                }
-                else
-                {
-                    var nullLabel = new Label();
-                    nullLabel.Text = "Brak rekordów";
-                    nullLabel.Dock = DockStyle.Fill;
-
-                    newTab.Controls.Add(nullLabel);
-                }
-                animalTabControl.TabPages.Add(newTab);
-            }
-
-            animalTabControl.TabPages[0].Controls.OfType<ListBox>().First().SelectedIndex = 0;
+            using var context = Constants.CreateContext();
+            if (MainForm.zwierzeta == null) MainForm.zwierzeta = await context.Zwierzeta.ToListAsync();
+            if (MainForm.wizyty == null) MainForm.wizyty = await context.Wizyty.ToListAsync();
+            if (MainForm.osoby == null) MainForm.osoby = await context.Osoby.ToListAsync();
         }
 
-        private int? GetSelectedAnimalId()
+        private async Task DeleteAnimal(int deleteId)
         {
-            if (animalTabControl.SelectedTab.Controls.Count == 0)
-                return null;
+            using var context = Constants.CreateContext();
 
-            var listBox = animalTabControl.SelectedTab.Controls[0] as ListBox;
-            if (listBox == null || listBox.SelectedItem == null)
-                return null;
+            var zwierze = MainForm.zwierzeta.Where(z => z.Id == deleteId).FirstOrDefault();
 
-            var selectedItem = listBox.SelectedItem.ToString();
-            var idPart = selectedItem.Split('.')[0];
+            context.Zwierzeta.Remove(zwierze);
+            await context.SaveChangesAsync();
 
-            if (int.TryParse(idPart, out int id))
-                return id;
-
-            return null;
+            MainForm.zwierzeta = await context.Zwierzeta.ToListAsync();
         }
 
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             string searchText = searchBox.Text.ToLower();
 
-            var filtered = context.Zwierzeta
+            var filtered = MainForm.zwierzeta
                 .Where(z => z.Imie.ToLower().Contains(searchText) ||
                             z.Gatunek.ToLower().Contains(searchText))
                 .ToList();
@@ -126,42 +79,29 @@ namespace VetClinic
 
         private void animalEditButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            int? selectedId = GetSelectedAnimalId();
-            if (selectedId == null)
-            {
-                selectedId = context.Zwierzeta.Where(z => z.Typ == Constants.AnimalType[0]).FirstOrDefault().Id;
-            }
+            int selectedId = GetSelectedAnimalId();
+            selectedId = MainForm.zwierzeta.Where(z => z.Typ == Constants.AnimalType[0]).FirstOrDefault().Id;
 
             animalDataForm.Controls.Clear();
-            Zwierze zwierze = context.Zwierzeta.Where(z => z.Id == selectedId).FirstOrDefault();
+            Zwierze zwierze = MainForm.zwierzeta.Where(z => z.Id == selectedId).FirstOrDefault();
             var view = new AnimalAddForm(this._mainForm, zwierze.Imie, zwierze.Gatunek, zwierze.WlascicielId, zwierze.Wiek, zwierze.Typ);
             view.Dock = DockStyle.Fill;
             animalDataForm.Controls.Add(view);
 
         }
 
-        private void animalDeleteButton_Click(object sender, EventArgs e)
+        private async void animalDeleteButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
 
-            int? selectedId = GetSelectedAnimalId();
-            if (selectedId == null)
-            {
-                MessageBox.Show("Wybierz zwierzę z listy.");
-                return;
-            }
+            int selectedId = GetSelectedAnimalId();
 
-            var selectedAnimal = context.Zwierzeta.FirstOrDefault(z => z.Id == selectedId);
+            var selectedAnimal = MainForm.zwierzeta.FirstOrDefault(z => z.Id == selectedId);
             if (selectedAnimal == null) { return; }
 
             string typ = selectedAnimal.Typ;
 
-            var wizyty = context.Wizyty.Where(w => w.ZwierzeId == selectedId).FirstOrDefault();
-            if (wizyty != null)
+            var wizytyByZwierze = MainForm.wizyty.FirstOrDefault(w => w.ZwierzeId == selectedId);
+            if (wizytyByZwierze != null)
             {
                 var result = MessageBox.Show(
                     "Nie zaleca się usuwania zwierząt z zarejestrowanymi wizytami. Czy na pewno chcesz kontynuować?",
@@ -176,39 +116,65 @@ namespace VetClinic
                 }
             }
 
-            Zwierze zwierze = context.Zwierzeta.Where(z => z.Id == selectedId).FirstOrDefault();
-
-            context.Zwierzeta.Remove(zwierze);
-            context.SaveChanges();
-
+            await DeleteAnimal(selectedId);
             RefreshCurrentTab(typ);
+            LoadData();
         }
 
-        private void ListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private async void ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var listBox = sender as ListBox;
             if (listBox?.SelectedItem == null) return;
 
             string selectedItem = listBox.SelectedItem.ToString();
-            selectedId = int.Parse(selectedItem.Split('.')[0]);
+            selectedAnimalId = int.Parse(selectedItem.Split('.')[0]);
 
-            LoadAnimalVisitDataGrid();
-            LoadData(selectedId);
+            await LoadAnimalVisitDataGrid();
+            LoadData(selectedAnimalId);
+        }
+
+        private void animalOwnerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MainForm.ownerview = new OwnerView(this._mainForm, ownerId);
+            _mainForm.LoadView(MainForm.ownerview);
+        }
+
+        private void animalAddButton_Click(object sender, EventArgs e)
+        {
+            animalDataForm.Controls.Clear();
+            var view = new AnimalAddForm(this._mainForm);
+            view.Dock = DockStyle.Fill;
+            animalDataForm.Controls.Add(view);
+        }
+
+        private void animalAddVisitButtton_Click(object sender, EventArgs e)
+        {
+            animalDataForm.Controls.Clear();
+            var view = new VisitAddForm(this._mainForm);
+            view.Dock = DockStyle.Fill;
+            animalDataForm.Controls.Add(view);
+        }
+
+        private int GetSelectedAnimalId()
+        {
+            var listBox = (ListBox)animalTabControl.SelectedTab.Controls[0];
+            var selectedItem = listBox.SelectedItem.ToString();
+            var idPart = selectedItem.Split('.')[0];
+
+            return int.Parse(idPart);
         }
 
         private void LoadData(int id = 0)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
             Zwierze zwierze;
 
             if (id == 0)
             {
-                zwierze = context.Zwierzeta.Where(z => z.Typ == Constants.AnimalType[0]).FirstOrDefault();
+                zwierze = MainForm.zwierzeta.Where(z => z.Typ == Constants.AnimalType[0]).FirstOrDefault();
             }
             else
             {
-                zwierze = context.Zwierzeta.Where(z => z.Id == selectedId).FirstOrDefault();
+                zwierze = MainForm.zwierzeta.Where(z => z.Id == selectedAnimalId).FirstOrDefault();
             }
 
             animalNameLabel.Text = zwierze.Imie;
@@ -216,23 +182,20 @@ namespace VetClinic
             animalSpeciesLabel.Text = zwierze.Gatunek;
             animalAge.Text = zwierze.Wiek.ToString();
             ownerId = zwierze.WlascicielId;
-            Osoba owner = context.Osoby.Where(o => o.Id == ownerId).FirstOrDefault();
+            Osoba owner = MainForm.osoby.Where(o => o.Id == ownerId).FirstOrDefault();
             animalOwnerNameLabel.Text = $"{owner.Imie} {owner.Nazwisko}";
 
         }
 
         public void RefreshCurrentTab(string typ)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             var targetTab = animalTabControl.TabPages
                 .Cast<TabPage>()
                 .FirstOrDefault(tab => tab.Text == typ);
 
             if (targetTab == null) return;
 
-            var updatedAnimals = context.Zwierzeta
+            var updatedAnimals = MainForm.zwierzeta
                 .Where(z => z.Typ == typ)
                 .ToList();
 
@@ -249,14 +212,12 @@ namespace VetClinic
             LoadData();
         }
 
-
-        private void LoadAnimalVisitDataGrid()
+        public async Task LoadAnimalVisitDataGrid()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
-            var wizyty = context.Wizyty
-                .Where(w => w.ZwierzeId == selectedId)
+            var wizytyByZwierze = await context.Wizyty
+                .Where(w => w.ZwierzeId == selectedAnimalId)
                 .Include(w => w.Lekarz)
                 .Select(w => new
                 {
@@ -264,13 +225,13 @@ namespace VetClinic
                     Opis = w.Opis,
                     Lekarz = w.Lekarz.Imie + " " + w.Lekarz.Nazwisko
                 })
-                .ToList();
+                .ToListAsync();
 
             animalVisitDataGrid.DataSource = null;
             animalVisitDataGrid.Rows.Clear();
             animalVisitDataGrid.Columns.Clear();
 
-            if (wizyty.Count == 0)
+            if (wizytyByZwierze.Count == 0)
             {
                 animalVisitDataGrid.Columns.Add("Info", "Informacja");
                 animalVisitDataGrid.Rows.Add("Brak wizyt dla wybranego zwierzęcia.");
@@ -278,38 +239,46 @@ namespace VetClinic
                 return;
             }
 
-            animalVisitDataGrid.DataSource = wizyty;
+            animalVisitDataGrid.DataSource = wizytyByZwierze;
         }
 
-        private void animalOwnerLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        public void LoadToAnimalTabControl()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            animalTabControl.TabPages.Clear();
+            foreach (var typ in Constants.AnimalType)
+            {
+                var newTab = new TabPage(typ);
+                var list = new ListBox();
+                list.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+                var zwierzetaByType = MainForm.zwierzeta.Where(z => z.Typ == typ).ToList();
+                if (zwierzetaByType.Count > 0)
+                {
+                    foreach (var zwierze in zwierzetaByType.OrderBy(z => z.Id))
+                    {
+                        list.Items.Add($"{zwierze.Id}. {zwierze.Imie}  -  {zwierze.Gatunek}");
+                    }
 
-            MainForm.ownerview = new OwnerView(this._mainForm, ownerId);
-            _mainForm.LoadView(MainForm.ownerview);
-        }
+                    list.Dock = DockStyle.Fill;
+                    newTab.Controls.Add(list);
+                }
+                else
+                {
+                    var nullLabel = new Label();
+                    nullLabel.Text = "Brak rekordów";
+                    nullLabel.TextAlign = ContentAlignment.MiddleCenter;
+                    nullLabel.Dock = DockStyle.Fill;
+                    newTab.Controls.Add(nullLabel);
+                }
+                animalTabControl.TabPages.Add(newTab);
+            }
 
-        private void animalAddButton_Click(object sender, EventArgs e)
-        {
-            animalDataForm.Controls.Clear();
-            var view = new AnimalAddForm(this._mainForm);
-            view.Dock = DockStyle.Fill;
-            animalDataForm.Controls.Add(view);
+            animalTabControl.TabPages[0].Controls.OfType<ListBox>().FirstOrDefault().SelectedIndex = 0;
         }
 
         public void panelReturn()
         {
             animalDataForm.Controls.Clear();
             animalDataForm.Controls.Add(animalDataLayout);
-        }
-
-        private void animalAddVisitButtton_Click(object sender, EventArgs e)
-        {
-            animalDataForm.Controls.Clear();
-            var view = new VisitAddForm(this._mainForm);
-            view.Dock = DockStyle.Fill;
-            animalDataForm.Controls.Add(view);
         }
     }
 }
