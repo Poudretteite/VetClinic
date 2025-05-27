@@ -17,16 +17,39 @@ namespace VetClinic.Forms
         private readonly MainForm _mainForm;
         public OrderView(MainForm mainForm)
         {
-            InitializeComponent();
             _mainForm = mainForm;
-            LoadToOrderDataGrid();
+            InitializeComponent();
+            this.Load += OrderView_Load;
+        }
+
+        private async void OrderView_Load(object sender, EventArgs e)
+        {
+            await LoadLists();
+            await LoadToOrderDataGrid();
             LoadData();
         }
 
-        private void LoadToOrderDataGrid()
+        private async Task DeleteOrder(Zamowienie zamowienie)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
+
+            context.Zamowienia.Remove(zamowienie);
+            context.SaveChanges();
+
+            MainForm.zamowienia = await context.Zamowienia.ToListAsync();
+        }
+
+        private async Task LoadLists()
+        {
+            using var context = Constants.CreateContext();
+
+            if (MainForm.zamowienia == null) MainForm.zamowienia = await context.Zamowienia.ToListAsync();
+            if (MainForm.leki == null) MainForm.leki = await context.Leki.ToListAsync();
+        }
+
+        private async Task LoadToOrderDataGrid()
+        {
+            using var context = Constants.CreateContext();
 
             var zamowienia = context.Zamowienia.
                 Include(z => z.Lek).
@@ -44,28 +67,21 @@ namespace VetClinic.Forms
 
         private void LoadData()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            orderCount.Text = "Wszystkie zamówienia: " + context.Zamowienia.Count().ToString();
+            orderCount.Text = "Wszystkie zamówienia: " + MainForm.zamowienia.Count().ToString();
         }
 
-        private void orderDeleteButton_Click(object sender, EventArgs e)
+        private async void orderDeleteButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             if (orderDataGrid.SelectedRows.Count == 0)
                 return;
 
             int selectedId = (int)orderDataGrid.SelectedRows[0].Cells["Id"].Value;
 
-            var order = context.Zamowienia.FirstOrDefault(z => z.Id == selectedId);
+            var order = MainForm.zamowienia.FirstOrDefault(z => z.Id == selectedId);
             if (order != null)
             {
-                context.Zamowienia.Remove(order);
-                context.SaveChanges();
-                LoadToOrderDataGrid();
+                await DeleteOrder(order);
+                await LoadToOrderDataGrid();
             }
         }
     }

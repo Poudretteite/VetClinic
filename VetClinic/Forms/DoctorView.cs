@@ -30,6 +30,7 @@ namespace VetClinic.Forms
             using var context = Constants.CreateContext();
             if (MainForm.lekarze == null) MainForm.lekarze = await context.Lekarze.ToListAsync();
             if (MainForm.wizyty == null) MainForm.wizyty = await context.Wizyty.ToListAsync();
+            if (MainForm.osoby == null) MainForm.osoby = await context.Osoby.ToListAsync();
         }
 
         private async Task DeleteDoctor(Lekarz lekarz)
@@ -85,7 +86,7 @@ namespace VetClinic.Forms
         {
             using var context = Constants.CreateContext();
 
-            var wizyty = context.Wizyty.Where(w => w.LekarzId == selectedLekarzId)
+            var wizyty = await context.Wizyty.Where(w => w.LekarzId == selectedLekarzId)
                 .Include(w => w.Leki)
                 .Select(w => new
                 {
@@ -93,7 +94,7 @@ namespace VetClinic.Forms
                     Data = w.Data,
                     Leki = string.Join(",", w.Leki.Select(l => l.Nazwa))
                 })
-                .ToList();
+                .ToListAsync();
 
             doctorVisitTable.DataSource = wizyty;
         }

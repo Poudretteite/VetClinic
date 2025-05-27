@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VetClinic.Models;
 
 namespace VetClinic.Forms
 {
@@ -20,9 +22,39 @@ namespace VetClinic.Forms
             InitializeComponent();
             _mainForm = mainForm;
             this.selectedOwnerId = selectedOwnerId;
+            this.Load += OwnerView_Load;
+        }
+
+        private async void OwnerView_Load(object sender, EventArgs e)
+        {
+            await LoadToLists();
+
             LoadToOwnerList();
             LoadOwnerData();
             LoadToOwnerAnimalList();
+        }
+
+        private async Task LoadToLists()
+        {
+            using var context = Constants.CreateContext();
+
+            if (MainForm.osoby == null) MainForm.osoby = await context.Osoby.ToListAsync();
+            if (MainForm.zwierzeta == null) MainForm.zwierzeta = await context.Zwierzeta.ToListAsync();
+        }
+
+        private async Task DeleteOwner(Osoba osoba, List<Zwierze> zwierzeta)
+        {
+            using var context = Constants.CreateContext();
+
+            foreach (var zwierze in zwierzeta)
+            {
+                zwierze.WlascicielId = -1;
+                context.Zwierzeta.Update(zwierze);
+            }
+            context.SaveChanges();
+
+            context.Osoby.Remove(osoba);
+            context.SaveChanges();
         }
 
         private void ownerEditButton_Click(object sender, EventArgs e)
@@ -34,10 +66,7 @@ namespace VetClinic.Forms
                 return;
             }
 
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var wlasciciel = context.Osoby.Where(o => o.Id == selectedOwnerId).FirstOrDefault();
+            var wlasciciel = MainForm.osoby.FirstOrDefault(o => o.Id == selectedOwnerId);
 
             ownerDataPanel.Controls.Clear();
             var view = new OwnerAddForm(this._mainForm, wlasciciel.Imie, wlasciciel.Nazwisko, wlasciciel.Data_ur, wlasciciel.Email, wlasciciel.Telefon);
@@ -45,44 +74,30 @@ namespace VetClinic.Forms
             view.Dock = DockStyle.Fill;
         }
 
-        private void ownerDeleteButton_Click(object sender, EventArgs e)
+        private async void ownerDeleteButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             if(selectedOwnerId == -1)
             {
                 MessageBox.Show("Nie można usunąć wybranego rekordu.");
                 return;
             }
 
-            var selectedOwner = context.Osoby.Where(o => o.Id == selectedOwnerId).FirstOrDefault();
+            var selectedOwner = MainForm.osoby.FirstOrDefault(o => o.Id == selectedOwnerId);
             if (selectedOwner == null)
             {
                 MessageBox.Show("Nie wybrano rekordu do usunięcia.");
                 return;
             }
 
-            var zwierzeta = context.Zwierzeta.Where(z => z.WlascicielId == selectedOwnerId).ToList();
-            foreach(var zwierze in zwierzeta)
-            {
-                zwierze.WlascicielId = -1;
-                context.Zwierzeta.Update(zwierze);
-            }
-            context.SaveChanges();
-
-            context.Osoby.Remove(selectedOwner);
-            context.SaveChanges();
-
+            var zwierzeta = MainForm.zwierzeta.Where(z => z.WlascicielId == selectedOwnerId).ToList();
+            
+            await DeleteOwner(selectedOwner, zwierzeta);
             refreshList();
         }
 
         private void LoadToOwnerAnimalList()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var zwierzeta = context.Zwierzeta.Where(z => z.WlascicielId == selectedOwnerId).ToList();
+            var zwierzeta = MainForm.zwierzeta.Where(z => z.WlascicielId == selectedOwnerId).ToList();
 
             ownerAnimalList.Items.Clear();
 
@@ -109,12 +124,9 @@ namespace VetClinic.Forms
 
         private void ownerSearchBox_TextChanged(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
             string searchText = ownerSearchBox.Text.ToLower();
 
-            var filtered = context.Osoby
+            var filtered = MainForm.osoby
                 .Where(o => o.Imie.ToLower().Contains(searchText) ||
                             o.Nazwisko.ToLower().Contains(searchText))
                 .OrderBy(o => o.Id)
@@ -130,10 +142,7 @@ namespace VetClinic.Forms
 
         private void LoadToOwnerList()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var wlasciciele = context.Osoby.OrderBy(o => o.Id).ToList();
+            var wlasciciele = MainForm.osoby.OrderBy(o => o.Id).ToList();
             foreach (var owner in wlasciciele)
             {
                 ownerList.Items.Add(owner.ToString());
@@ -152,11 +161,8 @@ namespace VetClinic.Forms
 
         private void LoadOwnerData()
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
-
-            var wlasciciel = context.Osoby.Where(o => o.Id == selectedOwnerId).FirstOrDefault();
-            var zwierzetaCount = context.Zwierzeta.Count(z => z.WlascicielId == selectedOwnerId);
+            var wlasciciel = MainForm.osoby.Where(o => o.Id == selectedOwnerId).FirstOrDefault();
+            var zwierzetaCount = MainForm.zwierzeta.Count(z => z.WlascicielId == selectedOwnerId);
 
             var today = DateTime.Today;
             int age = today.Year - wlasciciel.Data_ur.Year;

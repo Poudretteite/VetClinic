@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,11 +21,23 @@ namespace VetClinic.Forms
             _mainForm = mainForm;
         }
 
-        private void acceptButton_Click(object sender, EventArgs e)
+        private async Task AddOrder(Zamowienie zamowienie, Lek lek)
         {
             using var context = Constants.CreateContext();
 
-            int maxId = context.Zamowienia.Max(z => z.Id);
+            context.Leki.Update(lek);
+            context.Zamowienia.Add(zamowienie);
+            context.SaveChanges();
+
+            MainForm.zamowienia = await context.Zamowienia.ToListAsync();
+            MainForm.leki = await context.Leki.ToListAsync();
+        }
+
+        private async void acceptButton_Click(object sender, EventArgs e)
+        {
+            
+
+            int maxId = MainForm.zamowienia.Max(z => z.Id);
             int medId = MainForm.medview.selectedMedId;
 
             Zamowienie zamowienie = new Zamowienie()
@@ -35,12 +48,11 @@ namespace VetClinic.Forms
                 Data = DateTime.UtcNow
             };
 
-            var lek = context.Leki.Where(l => l.Id == medId).FirstOrDefault();
+            var lek = MainForm.leki.Where(l => l.Id == medId).FirstOrDefault();
             lek.Ilosc += (int)medAmountPicker.Value;
 
-            context.Leki.Update(lek);
-            context.Zamowienia.Add(zamowienie);
-            context.SaveChanges();
+            await AddOrder(zamowienie, lek);
+            
             MainForm.medview.panelReturn();
         }
 

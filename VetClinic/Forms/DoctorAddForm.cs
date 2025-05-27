@@ -52,7 +52,7 @@ namespace VetClinic.Forms
         {
             using var context = Constants.CreateContext();
 
-            await context.Lekarze.AddAsync(lekarz);
+            context.Lekarze.Update(lekarz);
             await context.SaveChangesAsync();
 
             MainForm.lekarze = await context.Lekarze.ToListAsync();
@@ -87,7 +87,7 @@ namespace VetClinic.Forms
             }
         }
 
-        private async Task acceptButton_Click(object sender, EventArgs e)
+        private async void acceptButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(doctorNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(doctorSurnameTextBox.Text) ||
@@ -110,19 +110,39 @@ namespace VetClinic.Forms
                 return;
             }
 
-            var emailCheck = MainForm.osoby.FirstOrDefault(o => o.Email == doctorEmailTextbox.Text && o.Id != MainForm.doctorview.selectedLekarzId);
-            if (emailCheck != null)
+            if (mode == 1)
             {
-                MessageBox.Show($"Powtarzajacy się email: {doctorEmailTextbox.Text}");
-                return;
+                var phoneCheck = MainForm.osoby.FirstOrDefault(o => o.Telefon == doctorPhoneTextBox.Text);
+                if (phoneCheck != null)
+                {
+                    MessageBox.Show($"Powtarzajacy się numer Telefonu: {doctorPhoneTextBox.Text}");
+                    return;
+                }
+
+                var emailCheck = MainForm.osoby.FirstOrDefault(o => o.Email == doctorEmailTextbox.Text);
+                if (emailCheck != null)
+                {
+                    MessageBox.Show($"Powtarzajacy się email: {doctorEmailTextbox.Text}");
+                    return;
+                }
+            }
+            else
+            {
+                var phoneCheck = MainForm.osoby.FirstOrDefault(o => o.Telefon == doctorPhoneTextBox.Text && o.Id != MainForm.doctorview.selectedLekarzId);
+                if (phoneCheck != null)
+                {
+                    MessageBox.Show($"Powtarzajacy się numer Telefonu: {doctorPhoneTextBox.Text}");
+                    return;
+                }
+
+                var emailCheck = MainForm.osoby.FirstOrDefault(o => o.Email == doctorEmailTextbox.Text && o.Id != MainForm.doctorview.selectedLekarzId);
+                if (emailCheck != null)
+                {
+                    MessageBox.Show($"Powtarzajacy się email: {doctorEmailTextbox.Text}");
+                    return;
+                }
             }
 
-            var phoneCheck = MainForm.osoby.FirstOrDefault(o => o.Telefon == doctorPhoneTextBox.Text && o.Id != MainForm.doctorview.selectedLekarzId);
-            if (phoneCheck != null)
-            {
-                MessageBox.Show($"Powtarzajacy się numer Telefonu: {doctorPhoneTextBox.Text}");
-                return;
-            }
 
             if (mode == 1)
             {
@@ -150,7 +170,7 @@ namespace VetClinic.Forms
                 lekarz.Data_ur = doctorBirthDayPicker.Value.ToUniversalTime();
                 lekarz.Email = doctorEmailTextbox.Text;
                 lekarz.Telefon = doctorPhoneTextBox.Text;
-                if(doctorSpecializationChoice.Visible == true)
+                if (doctorSpecializationChoice.Visible == true)
                 {
                     lekarz.Specjalizacja = doctorSpecializationChoice.SelectedItem.ToString();
                 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,12 +39,28 @@ namespace VetClinic.Forms
             mode = 0;
         }
 
-        private void acceptButton_Click(object sender, EventArgs e)
+        private async Task AddOwner(Osoba osoba)
         {
             using var context = Constants.CreateContext();
 
-            Osoba wlasciciel;
+            context.Osoby.Add(osoba);
+            await context.SaveChangesAsync();
 
+            MainForm.osoby = await context.Osoby.ToListAsync();
+        }
+
+        private async Task EditOwner(Osoba osoba)
+        {
+            using var context = Constants.CreateContext();
+
+            context.Osoby.Update(osoba);
+            await context.SaveChangesAsync();
+
+            MainForm.osoby = await context.Osoby.ToListAsync();
+        }
+
+        private async void acceptButton_Click(object sender, EventArgs e)
+        {
             if (string.IsNullOrWhiteSpace(ownerNameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(ownerSurnameTextBox.Text) ||
                 string.IsNullOrWhiteSpace(ownerEmailTextbox.Text) ||
@@ -65,14 +82,14 @@ namespace VetClinic.Forms
                 return;
             }
 
-            var emailCheck = context.Osoby.Where(o => o.Email == ownerEmailTextbox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();
+            var emailCheck = MainForm.osoby.Where(o => o.Email == ownerEmailTextbox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();
             if (emailCheck != null)
             {
                 MessageBox.Show($"Powtarzajacy się email: {ownerEmailTextbox.Text}");
                 return;
             }
 
-            var phoneCheck = context.Osoby.Where(o => o.Telefon == ownerPhoneTextBox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();
+            var phoneCheck = MainForm.osoby.Where(o => o.Telefon == ownerPhoneTextBox.Text && o.Id != MainForm.ownerview.selectedOwnerId).FirstOrDefault();
             if (phoneCheck != null)
             {
                 MessageBox.Show($"Powtarzajacy się numer Telefonu: {ownerEmailTextbox.Text}");
@@ -81,9 +98,9 @@ namespace VetClinic.Forms
 
             if (mode == 1)
             {
-                int maxId = context.Osoby.Max(o => o.Id);
+                int maxId = MainForm.osoby.Max(o => o.Id);
 
-                wlasciciel = new Osoba()
+                var wlasciciel = new Osoba()
                 {
                     Id = maxId+1,
                     Imie = ownerNameTextBox.Text,
@@ -93,11 +110,11 @@ namespace VetClinic.Forms
                     Telefon = ownerPhoneTextBox.Text
                 };
 
-                context.Osoby.Add(wlasciciel);
+                await AddOwner(wlasciciel);
             }
             else
             {
-                wlasciciel = context.Osoby.Where(o => o.Id == MainForm.ownerview.selectedOwnerId).FirstOrDefault();
+                var wlasciciel = MainForm.osoby.Where(o => o.Id == MainForm.ownerview.selectedOwnerId).FirstOrDefault();
 
                 wlasciciel.Imie = ownerNameTextBox.Text;
                 wlasciciel.Nazwisko = ownerSurnameTextBox.Text;
@@ -105,10 +122,8 @@ namespace VetClinic.Forms
                 wlasciciel.Email = ownerEmailTextbox.Text;
                 wlasciciel.Telefon = ownerPhoneTextBox.Text;
 
-                context.Osoby.Update(wlasciciel);
+                await EditOwner(wlasciciel);
             }
-
-            context.SaveChanges();
 
             MainForm.ownerview.panelReturn();
             MainForm.ownerview.refreshList();

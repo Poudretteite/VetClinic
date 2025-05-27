@@ -22,19 +22,43 @@ namespace VetClinic.Forms
         {
             InitializeComponent();
             _mainForm = mainForm;
-            LoadToVisitDataGrid();
+            this.Load += VisitView_Load;
         }
 
-        public void LoadToVisitDataGrid()
+        private async void VisitView_Load(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            await LoadToLists();
+            await LoadToVisitDataGrid();
+        }
+
+        private async Task LoadToLists()
+        {
+            using var context = Constants.CreateContext();
+
+            if (MainForm.wizyty == null) MainForm.wizyty = await context.Wizyty.Include(w => w.Leki).ToListAsync();
+            if (MainForm.lekarze == null) MainForm.lekarze = await context.Lekarze.ToListAsync();
+            if (MainForm.leki == null) MainForm.leki = await context.Leki.ToListAsync();
+        }
+
+        private async Task DeleteVisit(Wizyta wizyta)
+        {
+            using var context = Constants.CreateContext();
+
+            context.Wizyty.Update(wizyta);
+            context.SaveChanges();
+
+            MainForm.wizyty = await context.Wizyty.ToListAsync();
+        }
+
+        public async Task LoadToVisitDataGrid()
+        {
+            using var context = Constants.CreateContext();
 
             visitDataGrid.DataSource = null;
             visitDataGrid.Columns.Clear();
             visitDataGrid.Rows.Clear();
 
-            var wizyty = context.Wizyty
+            var wizyty = await context.Wizyty
                 .Include(w => w.Lekarz)
                 .Include(w => w.Zwierze)
                 .Include(w => w.Leki)
@@ -48,7 +72,7 @@ namespace VetClinic.Forms
                     Leki = string.Join(", ", w.Leki.Select(l => l.Nazwa)),
                     Opis = w.Opis
                 })
-                .ToList();
+                .ToListAsync();
 
             visitDataGrid.DataSource = wizyty;
 
@@ -60,12 +84,11 @@ namespace VetClinic.Forms
             }
         }
 
-        private void LoadVisitInfo(int visitId)
+        private async Task LoadVisitInfo(int visitId)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
-            var wizyta = context.Wizyty
+            var wizyta = await context.Wizyty
                 .Where(w => w.Id == visitId)
                 .Include(w => w.Lekarz)
                 .Include(w => w.Zwierze)
@@ -82,7 +105,7 @@ namespace VetClinic.Forms
                     LekarzSpecjalizacja = w.Lekarz.Specjalizacja,
                     Opis = w.Opis
                 })
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             visitAnimalName.Text = wizyta.ZwierzeImie;
             visitAnimalType.Text = wizyta.ZwierzeTyp;
@@ -96,22 +119,17 @@ namespace VetClinic.Forms
             visitDoctorSpecialization.Text = wizyta.LekarzSpecjalizacja;
         }
 
-        private void visitDeleteButton_Click(object sender, EventArgs e)
+        private async void visitDeleteButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            Wizyta wizyta = MainForm.wizyty.Where(w => w.Id == (int)visitDataGrid.SelectedRows[0].Cells["Id"].Value).FirstOrDefault();
 
-            Wizyta wizyta = context.Wizyty.Where(w => w.Id == (int)visitDataGrid.SelectedRows[0].Cells["Id"].Value).FirstOrDefault();
-
-            context.Wizyty.Remove(wizyta);
-            context.SaveChanges();
-            LoadToVisitDataGrid();
+            await DeleteVisit(wizyta);
+            await LoadToVisitDataGrid();
         }
 
         private void visitEditButton_Click(object sender, EventArgs e)
         {
-            var factory = new AppDbContextFactory();
-            using var context = factory.CreateDbContext(Array.Empty<string>());
+            using var context = Constants.CreateContext();
 
             var wizyta = context.Wizyty
                 .Include(w => w.Lekarz)
