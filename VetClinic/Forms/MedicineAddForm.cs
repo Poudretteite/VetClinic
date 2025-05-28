@@ -55,6 +55,12 @@ namespace VetClinic.Forms
 
         private async void acceptButton_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(medNameTextBox.Text))
+            {
+                MessageBox.Show("Podaj nazwę leku");
+                return;
+            }
+
             if (mode == 1)
             {
                 var maxId = MainForm.leki.Max(l => l.Id);

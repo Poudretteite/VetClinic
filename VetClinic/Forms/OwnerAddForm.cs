@@ -70,9 +70,9 @@ namespace VetClinic.Forms
                 return;
             }
 
-            if (!ownerPhoneTextBox.Text.All(char.IsDigit))
+            if (!Regex.IsMatch(ownerPhoneTextBox.Text, @"^\d{9}$"))
             {
-                MessageBox.Show("Numer telefonu powinien zawierać tylko liczby.");
+                MessageBox.Show("Numer telefonu powinien zawierać 9 liczb.");
                 return;
             }
 

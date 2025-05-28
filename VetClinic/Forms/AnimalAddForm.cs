@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Text.RegularExpressions;
 using VetClinic.Models;
 
 namespace VetClinic.Forms
@@ -173,6 +174,27 @@ namespace VetClinic.Forms
 
         private async void acceptButton_Click(object sender, EventArgs e)
         {
+            if (typBox.SelectedItem == null ||
+                gatunekBox.SelectedItem == null||
+                string.IsNullOrWhiteSpace(NameBox.Text)||
+                string.IsNullOrWhiteSpace(ownerSearchBox.Text))
+            {
+                MessageBox.Show("Wypełnij wszystkie pola.");
+                return;
+            }
+
+            if (!Regex.IsMatch(ownerSearchBox.Text, @"^\d"))
+            {
+                MessageBox.Show("Wybierz poprawnego właściciela.");
+                return;
+            }
+
+            if (!MainForm.osoby.Where(o => o.Id == selectedOwnerId).Any())
+            {
+                MessageBox.Show("Wybierz poprawnego właściciela.");
+                return;
+            }
+
             if(mode == 1)
             {
                 int maxId = MainForm.zwierzeta.Max(z => z.Id);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using VetClinic.Models;
 
@@ -98,9 +99,16 @@ namespace VetClinic.Forms
                 return;
             }
 
-            if (!doctorPhoneTextBox.Text.All(char.IsDigit))
+            if(doctorSpecializationChoice.SelectedItem == null ||
+                doctorWorkPlaceChoice.SelectedItem == null)
             {
-                MessageBox.Show("Numer telefonu powinien zawierać tylko liczby.");
+                MessageBox.Show("Wybierz specjalizację i miejsce pracy lekarza.");
+                return;
+            }
+
+            if (!Regex.IsMatch(doctorPhoneTextBox.Text, @"^\d{9}$"))
+            {
+                MessageBox.Show("Numer telefonu powinien zawierać 9 liczb.");
                 return;
             }
 

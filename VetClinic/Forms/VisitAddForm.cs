@@ -13,6 +13,7 @@ using VetClinic.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 
 namespace VetClinic.Forms
 {
@@ -185,6 +186,32 @@ namespace VetClinic.Forms
 
         private async void acceptButton_Click(object sender, EventArgs e)
         {
+            if (visitDoctorChoice.SelectedItem == null)
+            {
+                MessageBox.Show("Wybierz lekarza.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(AnimalSearchBox.Text) ||
+                string.IsNullOrEmpty(visitDescriptionBox.Text))
+            {
+                MessageBox.Show("Wypełnij wszystkie pola.");
+                return;
+            }
+
+            if (visitDoctorChoice.SelectedItem == null)
+            {
+                MessageBox.Show("Wybierz lekarza.");
+                return;
+            }
+
+            if(!Regex.IsMatch(AnimalSearchBox.Text, @"^\d") ||
+                !MainForm.zwierzeta.Where(z => z.Id == MainForm.animalview.selectedAnimalId).Any())
+            {
+                MessageBox.Show("Wybierz poprawne zwierze.");
+                return;
+            }
+
             using var context = Constants.CreateContext();
 
             List<Lek> leki = new List<Lek>();
@@ -194,12 +221,6 @@ namespace VetClinic.Forms
                 var med = MainForm.leki.First(l => l.Nazwa == lek);
                 if (med != null)
                     leki.Add(med);
-            }
-
-            if (visitDoctorChoice.SelectedItem == null)
-            {
-                MessageBox.Show("Wybierz lekarza.");
-                return;
             }
 
             var lekarz = visitDoctorChoice.SelectedItem.ToString();
